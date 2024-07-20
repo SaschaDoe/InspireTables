@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import {Tab, TabAnchor, TabGroup} from "@skeletonlabs/skeleton";
+	import {Tab, TabGroup} from "@skeletonlabs/skeleton";
+	import TableList from "$lib/TableList.svelte";
 	let isDragging = false;
 	let initialX: number;
 	let initialWidthLeft: number;
@@ -100,15 +100,11 @@
 <div class="flex h-screen">
 	<div id="left-panel" class="w-1/2 border-r border-gray-300">
 		<TabGroup>
-			<Tab class="text-blue-500" bind:group={tabSet} name="tab1" value={0}>
-				<svelte:fragment slot="lead">Tables</svelte:fragment>
-			</Tab>
+			<Tab class="text-blue-500" bind:group={tabSet} name="tab1" value={0}>Tables</Tab>
 			<Tab class="text-blue-500" bind:group={tabSet} name="tab2" value={1}>Entities</Tab>
-			<Tab class="text-blue-500" bind:group={tabSet} name="tab3" value={2}>(label 3)</Tab>
-			<!-- Tab Panels --->
 			<svelte:fragment slot="panel">
 				{#if tabSet === 0}
-					<p class="text-blue-500">Tables</p>
+					<TableList></TableList>
 				{:else if tabSet === 1}
 					<p class="text-blue-500">Entitites</p>
 				{:else if tabSet === 2}
