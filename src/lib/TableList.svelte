@@ -9,7 +9,7 @@
     let activeCategory = "";
     let activeTable = "";
     let showScrollToTop = writable(false);
-    let scrollContainer:HTMLDivElement;
+    let scrollContainer: HTMLDivElement;
 
     function setActiveCategory(categoryName: string) {
         activeCategory = categoryName;
@@ -24,10 +24,14 @@
     }
 
     function scrollToTable(tableName: string) {
-        const tableId = tableName.replace(/\s+/g, '-').toLowerCase();
+        const tableId = `table-${tableName.replace(/\s+/g, '-').toLowerCase()}`;
         const tableElement = document.getElementById(tableId);
         if (tableElement && scrollContainer) {
-            tableElement.scrollIntoView({ behavior: 'smooth' });
+            // Use setTimeout to ensure the scroll happens after the DOM has updated
+            setTimeout(() => {
+                const topOffset = tableElement.offsetTop - scrollContainer.offsetTop;
+                scrollContainer.scrollTo({ top: topOffset, behavior: 'smooth' });
+            }, 0);
         }
     }
 
@@ -39,15 +43,43 @@
 
     function handleScroll() {
         showScrollToTop.set(scrollContainer.scrollTop > 100);
-        console.log("Scroll position:", scrollContainer.scrollTop, "Show button:", $showScrollToTop);
+        updateActiveTableOnScroll();
+    }
+
+    function updateActiveTableOnScroll() {
+        if (!scrollContainer) return;
+
+        const tables = scrollContainer.querySelectorAll('[id^="table-"]');
+        const scrollPosition = scrollContainer.scrollTop;
+        const containerHeight = scrollContainer.clientHeight;
+
+        for (let i = 0; i < tables.length; i++) {
+            const table = tables[i] as HTMLElement;
+            const tableTop = table.offsetTop - scrollContainer.offsetTop;
+            const tableBottom = tableTop + table.offsetHeight;
+
+            if (tableTop <= scrollPosition && tableBottom > scrollPosition) {
+                const tableId = table.id;
+                for (const category of categories) {
+                    const matchingTable = category.tables.find(t =>
+                        `table-${t.title.replace(/\s+/g, '-').toLowerCase()}` === tableId
+                    );
+                    if (matchingTable) {
+                        activeCategory = category.name;
+                        activeTable = matchingTable.title;
+                        console.log('Active Category:', activeCategory, 'Active Table:', activeTable);
+                        return; // Exit the function once we've found a match
+                    }
+                }
+                break;
+            }
+        }
     }
 
     onMount(() => {
-        console.log("Component mounted");
         if (scrollContainer) {
             scrollContainer.addEventListener('scroll', handleScroll);
-            // Check initial scroll position
-            handleScroll();
+            handleScroll(); // Check initial scroll position
         }
     });
 
@@ -67,14 +99,16 @@
             on:setActiveTable={setActiveTable}
     />
 
-    <div bind:this={scrollContainer} class="p-4 overflow-y-auto h-screen">
+    <div bind:this={scrollContainer} class="w-3/4 p-4 overflow-y-auto h-screen">
         <h1 class="text-2xl font-bold mb-4 text-blue-700">All Tables</h1>
         {#each categories as category}
             <div class="bg-gray-100 p-4 mb-6 rounded-lg">
                 <h2 class="text-2xl font-bold text-blue-700 mb-4">{category.name}</h2>
                 <div class="space-y-4">
                     {#each category.tables as table}
-                        <Table table="{table}"></Table>
+                        <div id="table-{table.title.replace(/\s+/g, '-').toLowerCase()}">
+                            <Table {table}></Table>
+                        </div>
                     {/each}
                 </div>
             </div>
@@ -88,6 +122,4 @@
             </button>
         {/if}
     </div>
-
-
 </div>
