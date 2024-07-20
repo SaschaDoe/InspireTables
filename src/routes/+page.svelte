@@ -61,6 +61,14 @@
 		font-weight: bold;
 	}
 
+	.tabs-container {
+		position: sticky;
+		top: 0;
+		background-color: #ffffff;
+		z-index: 5;
+		padding: 20px 20px 0 20px;
+	}
+
 	.flex {
 		display: flex;
 	}
@@ -112,6 +120,7 @@
 				{/if}
 			</svelte:fragment>
 		</TabGroup>
+
 	</div>
 	<button
 			class="resizer"

@@ -1,32 +1,73 @@
 <script lang="ts">
+    import { onMount, onDestroy } from 'svelte';
     import Table from "$lib/Table.svelte";
-    import {allCategories} from "../core/tables/allCategories";
+    import CategoryIndex from "./CategoryIndex.svelte";
+    import { allCategories } from "../core/tables/allCategories";
+    import { writable } from 'svelte/store';
 
     let categories = allCategories();
     let activeCategory = "";
+    let activeTable = "";
+    let showScrollToTop = writable(false);
+    let scrollContainer:HTMLDivElement;
+
     function setActiveCategory(categoryName: string) {
         activeCategory = categoryName;
+        activeTable = ""; // Reset active table when changing category
     }
+
+    function setActiveTable(event: CustomEvent<{categoryName: string, tableName: string}>) {
+        const { categoryName, tableName } = event.detail;
+        activeCategory = categoryName;
+        activeTable = tableName;
+        scrollToTable(tableName);
+    }
+
+    function scrollToTable(tableName: string) {
+        const tableId = tableName.replace(/\s+/g, '-').toLowerCase();
+        const tableElement = document.getElementById(tableId);
+        if (tableElement && scrollContainer) {
+            tableElement.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+
+    function scrollToTop() {
+        if (scrollContainer) {
+            scrollContainer.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
+
+    function handleScroll() {
+        showScrollToTop.set(scrollContainer.scrollTop > 100);
+        console.log("Scroll position:", scrollContainer.scrollTop, "Show button:", $showScrollToTop);
+    }
+
+    onMount(() => {
+        console.log("Component mounted");
+        if (scrollContainer) {
+            scrollContainer.addEventListener('scroll', handleScroll);
+            // Check initial scroll position
+            handleScroll();
+        }
+    });
+
+    onDestroy(() => {
+        if (scrollContainer) {
+            scrollContainer.removeEventListener('scroll', handleScroll);
+        }
+    });
 </script>
 
-<div class="container mx-auto p-4 flex">
-    <div class="w-1/4 pr-4">
-        <h2 class="text-2xl font-bold mb-4 text-blue-700">Categories</h2>
-        <ul class="space-y-2">
-            {#each categories as category}
-                <li>
-                    <button
-                            class="text-xl font-bold w-full text-left p-2 rounded-lg transition-colors duration-200 ease-in-out {activeCategory === category.name ? 'bg-blue-700 text-white' : 'text-blue-700 hover:bg-blue-100'}"
-                            on:click={() => setActiveCategory(category.name)}
-                    >
-                        {category.name}
-                    </button>
-                </li>
-            {/each}
-        </ul>
-    </div>
+<div class="flex relative">
+    <CategoryIndex
+            {categories}
+            {activeCategory}
+            {activeTable}
+            on:setActiveCategory={(event) => setActiveCategory(event.detail)}
+            on:setActiveTable={setActiveTable}
+    />
 
-    <div class="w-3/4">
+    <div bind:this={scrollContainer} class="p-4 overflow-y-auto h-screen">
         <h1 class="text-2xl font-bold mb-4 text-blue-700">All Tables</h1>
         {#each categories as category}
             <div class="bg-gray-100 p-4 mb-6 rounded-lg">
@@ -38,5 +79,15 @@
                 </div>
             </div>
         {/each}
+        {#if $showScrollToTop}
+            <button
+                    on:click={scrollToTop}
+                    class="fixed bottom-5 left-2 bg-blue-500 text-white p-2 rounded-full shadow-lg hover:bg-blue-600 transition-colors duration-200 z-50"
+            >
+                ↑
+            </button>
+        {/if}
     </div>
+
+
 </div>

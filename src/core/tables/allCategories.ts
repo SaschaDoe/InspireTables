@@ -16,7 +16,7 @@ export function allCategories(): Category[] {
     allCategories.push(genreCategory);
 
     let illnessCategory = new Category()
-        .withName("illness")
+        .withName("Illness")
         .withTable(new IllnessAdjectiveTable());
     allCategories.push(illnessCategory);
 
