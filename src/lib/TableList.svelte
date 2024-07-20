@@ -90,7 +90,7 @@
     });
 </script>
 
-<div class="flex relative">
+<div class="flex relative h-full">
     <CategoryIndex
             {categories}
             {activeCategory}
@@ -99,7 +99,7 @@
             on:setActiveTable={setActiveTable}
     />
 
-    <div bind:this={scrollContainer} class="w-3/4 p-4 overflow-y-auto h-screen">
+    <div bind:this={scrollContainer} class="flex-1 p-4 overflow-y-auto h-screen">
         <h1 class="text-2xl font-bold mb-4 text-blue-700">All Tables</h1>
         {#each categories as category}
             <div class="bg-gray-100 p-4 mb-6 rounded-lg">
