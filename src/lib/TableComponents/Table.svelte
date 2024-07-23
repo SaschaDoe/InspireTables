@@ -2,31 +2,48 @@
     import type { Table } from "../../core/tables/table";
     import { MainGenreTable } from "../../core/tables/genre/mainGenres";
     import {getModalStore, type ModalSettings} from '@skeletonlabs/skeleton';
+    import Modal from "$lib/TableComponents/Modal.svelte";
 
-    const modalStore = getModalStore();
+    let showModal: boolean = false;
 
-    console.log("Table component initialized");
+
+
     export let table: Table = new MainGenreTable();
+    let modalDescription = "";
 
     function roll(){
         let result = table.roll();
-        let description = result.description
-        let tree = result.tree
-        //see final result
-        //see tree https://www.skeleton.dev/components/tree-views
-        //confirm to persist entities that must have created on the way
-        //reload single rolls in tree
-        const modal: ModalSettings = {
-            type: 'confirm',
-            title: 'Please Confirm',
-            body: 'Are you sure you wish to proceed?',
-            // TRUE if confirm pressed, FALSE if cancel pressed
-            response: (r: boolean) => console.log('response:', r),
+        modalDescription = result.combinedString
+        showModal = true;
+    }
 
-        };
-        modalStore.trigger(modal);
+    function handleClose(): void {
+        console.log('Modal closed');
+    }
+
+    function handleButton1Click(): void {
+        roll();
+    }
+
+    function handleButton2Click(): void {
+        showModal = false;
+    }
+
+    function handleButton3Click(): void {
+        console.log('Persist');
     }
 </script>
+
+<Modal
+        bind:showModal
+        on:close={handleClose}
+        on:button1Click={handleButton1Click}
+        on:button2Click={handleButton2Click}
+        on:button3Click={handleButton3Click}
+>
+    <h2 class="text-blue-700 text-2xl font-bold mb-4">{table.title}</h2>
+    <p class="text-gray-700">{modalDescription}</p>
+</Modal>
 
 <div class="container mx-auto p-4">
     <div class="bg-surface-100 border border-surface-300 rounded-lg shadow-lg p-6">

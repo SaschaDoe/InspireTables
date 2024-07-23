@@ -105,7 +105,6 @@
 	}
 </style>
 
-<h1 class="title">Inspire Tables</h1>
 <div class="flex h-screen">
 	<div id="left-panel" class="w-1/2 border-r border-gray-300">
 		<TabGroup>
