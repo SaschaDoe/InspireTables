@@ -22,7 +22,7 @@ export class Entry{
         return this;
     }
 
-    get getDescriptionText(): string {
+    get DescriptionText(): string {
         return this.descriptionParts.map(part =>
         {if(part instanceof Table){
             return `{${part.title}}`;

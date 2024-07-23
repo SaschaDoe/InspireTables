@@ -1,8 +1,8 @@
 <script lang="ts">
     import { onMount, onDestroy } from 'svelte';
-    import Table from "$lib/Table.svelte";
+    import Table from "$lib/TableComponents/Table.svelte";
     import CategoryIndex from "./CategoryIndex.svelte";
-    import { allCategories } from "../core/tables/allCategories";
+    import { allCategories } from "../../core/tables/allCategories";
     import { writable } from 'svelte/store';
 
     let categories = allCategories();

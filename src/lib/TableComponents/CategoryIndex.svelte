@@ -26,14 +26,14 @@
     <div class="w-1/4 pr-4 sticky top-0 max-h-screen overflow-y-auto">
 
         <div class="flex items-center mb-4">
-
-            <h2 class="text-2xl font-bold text-blue-700 mr-2">Categories</h2>
             <button
                     class="text-xl font-bold text-blue-700 hover:bg-blue-100 rounded-lg p-1"
                     on:click={toggleIndex}
             >
                 ←
             </button>
+            <h2 class="text-2xl font-bold text-blue-700 mr-2">Categories</h2>
+
         </div>
         <ul class="space-y-2">
             {#each categories as category}
@@ -62,7 +62,7 @@
     </div>
 {:else}
     <button
-            class="fixed top-36 left-2 text-xl font-bold text-blue-700 hover:bg-blue-100 rounded-lg p-2 shadow-md"
+            class="fixed top-36 left-2 text-xl font-bold text-blue-700 hover:bg-blue-100 rounded-lg p-1 shadow-md"
             on:click={toggleIndex}
     >
         →

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import {Tab, TabGroup} from "@skeletonlabs/skeleton";
-	import TableList from "$lib/TableList.svelte";
+	import TableList from "$lib/TableComponents/TableList.svelte";
+	import EntityMenu from "$lib/EntityComponents/EntityMenu.svelte";
 	let isDragging = false;
 	let initialX: number;
 	let initialWidthLeft: number;
@@ -114,7 +115,7 @@
 				{#if tabSet === 0}
 					<TableList></TableList>
 				{:else if tabSet === 1}
-					<p class="text-blue-500">Entitites</p>
+					<EntityMenu></EntityMenu>
 				{:else if tabSet === 2}
 					(tab panel 3 contents)
 				{/if}

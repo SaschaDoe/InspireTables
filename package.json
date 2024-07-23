@@ -32,6 +32,7 @@
   "type": "module",
   "dependencies": {
     "@floating-ui/dom": "1.6.7",
-    "@sveltejs/adapter-static": "^3.0.2"
+    "@sveltejs/adapter-static": "^3.0.2",
+    "@tauri-apps/api": "^1.6.0"
   }
 }
