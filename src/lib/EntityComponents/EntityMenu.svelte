@@ -4,7 +4,6 @@
     import CharacterComponent from "$lib/EntityComponents/entitySpecificComponents/CharacterComponent.svelte";
     import { CharacterCreator } from "../../core/entities/character/characterCreator";
     import { writable } from 'svelte/store';
-    import {IdGenerator} from "../../core/entities/persist/id/IdGenerator";
 
     // Create a writable store for the refresh trigger
     const refreshTrigger = writable(0);
