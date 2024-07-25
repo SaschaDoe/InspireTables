@@ -2,20 +2,16 @@ import type {Entity} from "./entity";
 
 export function summarizeEntities(entities: Entity[]): string {
     console.log("summarize: ", entities);
-    const summary = entities.reduce((acc, entity) => {
+    const summary = entities.reduce((acc, entity, index) => {
         const type = entity.constructor.name;
         if (!acc[type]) {
             acc[type] = [];
         }
-        if (entity.id !== null) {
-            acc[type].push(entity.id);
-        } else {
-            acc[type].push(-1);
-        }
+        acc[type].push(index);
         return acc;
-    }, {} as Record<string, (number | string)[]>);
+    }, {} as Record<string, number[]>);
 
     return Object.entries(summary)
-        .map(([type, ids]) => `${type}: ${ids.join(', ')}`)
+        .map(([type, indices]) => `${type}: ${indices.join(', ')}`)
         .join('; ');
 }

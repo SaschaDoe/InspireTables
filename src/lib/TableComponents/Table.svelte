@@ -48,25 +48,6 @@
         }
         showModal = false;
     }
-
-    function getComponentForEntity(entity: any): any {
-        const entityType = entity.constructor.name;
-        return entityComponents[entityType]?.default;
-        //TODO: Add way to hide the specific components
-        //add them to tree view
-
-    }
-
-    onMount(async () => {
-        // Dynamically import all entity components
-        const componentModules = import.meta.glob('../EntityComponents/entitySpecificComponents/*.svelte');
-        for (const path in componentModules) {
-            const componentName = path.split('/').pop()?.split('.')[0] ?? '';
-            entityComponents[componentName] = await componentModules[path]();
-        }
-    });
-
-
 </script>
 
 <Modal
@@ -83,6 +64,7 @@
     {#if rollResult}
         {#if rollResult.entities.length > 0}
             <p class="text-green-900">Entities: {summarizeEntities(rollResult.entities)}</p>
+            <!-- TODO: Click on entity and scroll and open the Componenent if possible -->
         {/if}
         <TreeView result={rollResult} />
 

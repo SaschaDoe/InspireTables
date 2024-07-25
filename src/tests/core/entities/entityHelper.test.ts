@@ -23,6 +23,6 @@ describe('EntityHelper', () => {
 
         let entityText = summarizeEntities([entity, secondEntity]);
 
-        expect(entityText).toBe("Illness: 0; Character: 0");
+        expect(entityText).toBe("Illness: 0; Character: 1");
     });
 });
