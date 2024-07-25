@@ -4,11 +4,12 @@
     import { onMount } from "svelte";
     import type { ComponentType } from "svelte";
     import { Creator } from "../../core/entities/creator";
-    import {idGenerator} from "../../core/entities/persist/stores";
+    import { idGenerator } from "../../core/entities/persist/stores";
 
     export let store: EntityStorageManager<Entity>;
     export let EntityComponent: ComponentType;
     export let creator: Creator;
+    export let title = "No Title";
 
     let entities: Entity[] = [];
     let loading = true;
@@ -29,7 +30,6 @@
             const newEntities = creator.create();
             console.log("created new Entity in EntityList: ", newEntities);
 
-            // Initialize IDs for new entities
             await Promise.all(newEntities.map(async (entity) => {
                 entity.id = await idGenerator.generateId();
             }));
@@ -42,22 +42,51 @@
     }
 </script>
 
-<button class="btn variant-filled-secondary" on:click={createEntity}>Add</button>
+<div class="w-full flex flex-col">
+    <div class="bg-surface-100 border border-surface-300 rounded-lg shadow-lg p-6 flex-grow overflow-hidden flex flex-col">
+        <div class="flex justify-between items-center mb-4">
+            <h1 class="text-2xl font-bold text-blue-700">{title}</h1>
+            <button class="btn variant-filled-secondary" on:click={createEntity}>Add</button>
+        </div>
 
-{#if loading}
-    <p>Loading entities...</p>
-{:else if error}
-    <p>Error: {error}</p>
-{:else}
-    <ul>
-        {#if entities.length === 0}
-            <p>No Entity</p>
+        {#if loading}
+            <div class="flex justify-center items-center py-8 flex-grow">
+                <span class="loading loading-spinner loading-lg"></span>
+            </div>
+        {:else if error}
+            <p class="alert variant-filled-error">{error}</p>
         {:else}
-            {#each entities as entity}
-                <li>
-                    <svelte:component this={EntityComponent} entity={entity} />
-                </li>
-            {/each}
+            <div class="overflow-auto flex-grow">
+                {#if entities.length === 0}
+                    <p class="text-center text-gray-500 dark:text-gray-400 py-8">No entities found</p>
+                {:else}
+                    <table class="table table-hover w-full">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Entity</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {#each entities as entity (entity.id)}
+                            <tr>
+                                <td>{entity.id}</td>
+                                <td>
+                                    <svelte:component this={EntityComponent} {entity} />
+                                </td>
+                            </tr>
+                        {/each}
+                        </tbody>
+                    </table>
+                {/if}
+            </div>
         {/if}
-    </ul>
-{/if}
+    </div>
+</div>
+
+<style>
+    /* Ensure the component takes up full width and height of its container */
+    div {
+        min-height: 0; /* This is crucial for nested flex containers */
+    }
+</style>
