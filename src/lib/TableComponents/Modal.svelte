@@ -2,6 +2,7 @@
     import { createEventDispatcher } from 'svelte';
 
     export let showModal: boolean = false;
+    export let hasEntities: boolean = false;
 
     const dispatch = createEventDispatcher<{
         close: void;
@@ -21,15 +22,15 @@
         }
     }
 
-    function handleButton1Click(): void {
+    function rollClick(): void {
         dispatch('button1Click');
     }
 
-    function handleButton2Click(): void {
+    function closeClick(): void {
         dispatch('button2Click');
     }
 
-    function handleButton3Click(): void {
+    function persistClick(): void {
         dispatch('button3Click');
     }
 </script>
@@ -39,14 +40,20 @@
         <div class="bg-white p-6 rounded-lg max-w-lg w-full max-h-[80vh] overflow-y-auto">
             <slot></slot>
             <div class="flex justify-around mt-6">
-                <button on:click={handleButton1Click} class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
+                <button on:click={rollClick} class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
                     Reroll
                 </button>
-                <button on:click={handleButton2Click} class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors">
+                <button on:click={closeClick} class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors">
                     Close
                 </button>
-                <button on:click={handleButton3Click} class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors">
-                    Button 3
+                <button
+                        on:click={persistClick}
+                        class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+                        disabled={!hasEntities}
+                        class:opacity-50={!hasEntities}
+                        class:cursor-not-allowed={!hasEntities}
+                >
+                    Persist
                 </button>
             </div>
         </div>

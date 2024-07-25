@@ -4,7 +4,7 @@
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
 	import { storePopup } from '@skeletonlabs/skeleton';
     import {onMount} from "svelte";
-    import {IdGenerator} from "../core/entities/IdGenerator";
+    import {IdGenerator} from "../core/entities/persist/id/IdGenerator";
     initializeStores();
 
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });

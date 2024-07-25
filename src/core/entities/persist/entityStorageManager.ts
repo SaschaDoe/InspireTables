@@ -1,13 +1,25 @@
 import { invoke } from '@tauri-apps/api/tauri';
-import type { Entity } from "./entity";
+import type { Entity } from "../entity";
+import type {StorageStrategy} from "./storageStrategy";
+import type {PrivateKeyInput} from "node:crypto";
+import {idGenerator} from "./stores";
 
 export class EntityStorageManager<T extends Entity> {
     private entityType: string;
     private entities: T[] = [];
     private initialized: boolean = false;
+    private storageStrategy: StorageStrategy;
 
-    constructor(entityType: string) {
+    constructor(entityType: string, storageStrategy: StorageStrategy) {
         this.entityType = entityType;
+        this.storageStrategy = storageStrategy;
+    }
+
+    async clear(): Promise<void> {
+        await this.initializeStorage();
+        this.entities = [];
+        await this.saveEntities();
+        console.log(`Cleared all entities for ${this.entityType}`);
     }
 
     private async initializeStorage(): Promise<void> {
@@ -32,7 +44,7 @@ export class EntityStorageManager<T extends Entity> {
 
     private async loadEntities(): Promise<void> {
         const filePath = this.getFilePath();
-        const jsonString = await invoke('load_file', { path: filePath }) as string;
+        const jsonString = await this.storageStrategy.loadFile(filePath);
         if (jsonString.trim() === '') {
             this.entities = [];
         } else {
@@ -44,17 +56,26 @@ export class EntityStorageManager<T extends Entity> {
     private async saveEntities(): Promise<void> {
         const filePath = this.getFilePath();
         const jsonString = JSON.stringify(this.entities, null, 2);
-        await invoke('save_file', { path: filePath, contents: jsonString });
+        await this.storageStrategy.saveFile(filePath, jsonString);
         console.log(`Saved ${this.entities.length} entities to ${filePath}`);
     }
 
     async getAllEntities(): Promise<T[]> {
         await this.initializeStorage();
-        return this.entities;
+        return this.entities || [];
+    }
+
+    async saveSpecificEntities(entities: T[]): Promise<void>{
+        for(let entity of entities) {
+            await this.saveEntity(entity);
+        }
     }
 
     async saveEntity(entity: T): Promise<void> {
         await this.initializeStorage();
+        if (entity.id === -1) {
+            entity.id = await idGenerator.generateId();
+        }
         const index = this.entities.findIndex(e => e.id === entity.id);
         if (index !== -1) {
             this.entities[index] = entity;
@@ -64,17 +85,5 @@ export class EntityStorageManager<T extends Entity> {
             console.log(`Added new entity with id ${entity.id}`);
         }
         await this.saveEntities();
-    }
-
-    async removeEntity(id: number): Promise<void> {
-        await this.initializeStorage();
-        const initialLength = this.entities.length;
-        this.entities = this.entities.filter(e => e.id !== id);
-        if (this.entities.length === initialLength) {
-            console.log(`No entity found with id ${id} to remove`);
-        } else {
-            console.log(`Removed entity with id ${id}`);
-            await this.saveEntities();
-        }
     }
 }

@@ -1,19 +1,25 @@
 <script lang="ts">
     import type { Table } from "../../core/tables/table";
     import { MainGenreTable } from "../../core/tables/genre/mainGenres";
-    import {getModalStore, type ModalSettings} from '@skeletonlabs/skeleton';
     import Modal from "$lib/TableComponents/Modal.svelte";
+    import { RollResult } from "../../core/tables/rollResult";
+    import { Entry } from "../../core/tables/entry";
+    import TreeView from "$lib/TableComponents/TreeView.svelte";
+    import {onMount} from "svelte";
+    import {summarizeEntities} from "../../core/entities/entityHelper";
+    import {EntityStoreRegistry} from "../../core/entities/persist/entityStoreRegistry";
 
     let showModal: boolean = false;
-
-
-
     export let table: Table = new MainGenreTable();
     let modalDescription = "";
+    let rollResult = new RollResult(new Entry());
+    let entityComponents: { [key: string]: any } = {};
+    let hasEntities: boolean = false;
 
-    function roll(){
-        let result = table.roll();
-        modalDescription = result.combinedString
+    function roll() {
+        rollResult = table.roll();
+        modalDescription = rollResult.combinedString;
+        hasEntities = rollResult.entities.length > 0;
         showModal = true;
     }
 
@@ -21,28 +27,66 @@
         console.log('Modal closed');
     }
 
-    function handleButton1Click(): void {
+    function handleRerollClick(): void {
         roll();
     }
 
-    function handleButton2Click(): void {
+    function handleCancelClick(): void {
         showModal = false;
     }
 
-    function handleButton3Click(): void {
-        console.log('Persist');
+    function handlePersistClick(): void {
+        for (let entity of rollResult.entities) {
+            const entityType = entity.constructor.name;
+            const store = EntityStoreRegistry.getInstance().getStore(entityType);
+            if (store) {
+                store.saveEntity(entity);
+                console.log("Store: ", store, "stored: ", entity);
+            } else {
+                console.warn(`No store found for entity type: ${entityType}`);
+            }
+        }
+        showModal = false;
     }
+
+    function getComponentForEntity(entity: any): any {
+        const entityType = entity.constructor.name;
+        return entityComponents[entityType]?.default;
+        //TODO: Add way to hide the specific components
+        //add them to tree view
+
+    }
+
+    onMount(async () => {
+        // Dynamically import all entity components
+        const componentModules = import.meta.glob('../EntityComponents/entitySpecificComponents/*.svelte');
+        for (const path in componentModules) {
+            const componentName = path.split('/').pop()?.split('.')[0] ?? '';
+            entityComponents[componentName] = await componentModules[path]();
+        }
+    });
+
+
 </script>
 
 <Modal
         bind:showModal
         on:close={handleClose}
-        on:button1Click={handleButton1Click}
-        on:button2Click={handleButton2Click}
-        on:button3Click={handleButton3Click}
+        on:button1Click={handleRerollClick}
+        on:button2Click={handleCancelClick}
+        on:button3Click={handlePersistClick}
+        {hasEntities}
 >
     <h2 class="text-blue-700 text-2xl font-bold mb-4">{table.title}</h2>
     <p class="text-gray-700">{modalDescription}</p>
+
+    {#if rollResult}
+        {#if rollResult.entities.length > 0}
+            <p class="text-green-900">Entities: {summarizeEntities(rollResult.entities)}</p>
+        {/if}
+        <TreeView result={rollResult} />
+
+    {/if}
 </Modal>
 
 <div class="container mx-auto p-4">

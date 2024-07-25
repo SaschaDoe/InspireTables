@@ -1,6 +1,7 @@
 import {RollResult} from "./rollResult";
 import {Entry} from "./entry";
 import {Dice} from "./dice";
+import {FunctionEntry} from "./functionEntry";
 
 export class Table {
     title: string = "";
@@ -35,7 +36,12 @@ export class Table {
 
         for (let part of entry.parts) {
             if (part instanceof Table) {
-                rollResult.results.push(part.roll());
+                let subResult = part.roll();
+                rollResult.results.push(subResult);
+                rollResult.entities.push(...subResult.entities);
+            } else if (part instanceof FunctionEntry) {
+                let entity = part.costumeFunction(null); // You might want to pass appropriate input here
+                rollResult.addEntity(entity);
             }
         }
 

@@ -1,60 +1,41 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
-    import type { Illness } from "../../core/entities/illness";
-    import { IllnessCreator } from "../../core/entities/illnessCreator";
-    import { EntityStorageManager } from "../../core/entities/entityStorageManager";
+    import EntityList from "$lib/EntityComponents/EntityList.svelte";
+    import {allStores, characterStore, idGenerator} from "../../core/entities/persist/stores";
+    import CharacterComponent from "$lib/EntityComponents/entitySpecificComponents/CharacterComponent.svelte";
+    import { CharacterCreator } from "../../core/entities/character/characterCreator";
+    import { writable } from 'svelte/store';
+    import {IdGenerator} from "../../core/entities/persist/id/IdGenerator";
 
-    let illnesses: Illness[] = [];
-    let illnessCreator = new IllnessCreator();
-    let illnessStore = new EntityStorageManager<Illness>('illness');
+    // Create a writable store for the refresh trigger
+    const refreshTrigger = writable(0);
 
-    onMount(async () => {
-        await loadIllnesses();
-    });
 
-    async function loadIllnesses() {
+    async function clear() {
         try {
-            illnesses = await illnessStore.getAllEntities();
-            console.log('Loaded illnesses:', illnesses);
+            for (let store of allStores) {
+                console.log("try to clear", store);
+                await store.clear();
+            }
+            await idGenerator.clear();
+            // Trigger a refresh after clearing
+            refreshTrigger.update(n => n + 1);
         } catch (error) {
-            console.error('Error loading illnesses:', error);
-            illnesses = [];
-        }
-    }
-
-    async function createIllness() {
-        try {
-            const newIllness = await illnessCreator.createWithPersistence();
-            await illnessStore.saveEntity(newIllness);
-            illnesses = [...illnesses, newIllness];
-        } catch (error) {
-            console.error('Error creating illness:', error);
-        }
-    }
-
-    async function removeIllness(id: number) {
-        try {
-            await illnessStore.removeEntity(id);
-            illnesses = illnesses.filter(illness => illness.id !== id);
-        } catch (error) {
-            console.error('Error removing illness:', error);
+            console.error('Error clearing:', error);
         }
     }
 </script>
 
 <main>
-    <h1>Illness Manager</h1>
+    <h1>Entities</h1>
+    <button class="btn variant-filled-secondary" on:click={clear}>Clear</button>
 
-    <button on:click={createIllness}>Create New Illness</button>
-
-    <ul>
-        {#each illnesses as illness (illness.id)}
-            <li>
-                {illness.type} - {illness.adjective}
-                <button on:click={() => removeIllness(illness.id)}>Remove</button>
-            </li>
-        {/each}
-    </ul>
+    {#key $refreshTrigger}
+        <EntityList
+                store={characterStore}
+                EntityComponent={CharacterComponent}
+                creator={new CharacterCreator()}
+        />
+    {/key}
 </main>
 
 <style>
@@ -69,11 +50,6 @@
         text-transform: uppercase;
         font-size: 4em;
         font-weight: 100;
-    }
-
-    ul {
-        list-style-type: none;
-        padding: 0;
     }
 
     li {

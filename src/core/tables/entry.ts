@@ -1,33 +1,34 @@
-import {Table} from "./table";
+import { Table } from "./table";
+import { FunctionEntry } from "./functionEntry";
 
-export class Entry{
-    name:string = "";
-    parts:(string|Table)[]=[];
-    descriptionParts:(string|Table)[]=[];
+export class Entry {
+    name: string = "";
+    parts: (string | Table | FunctionEntry)[] = [];
 
-    withText(text: string):Entry {
+    withText(text: string): Entry {
         this.parts.push(text);
-        this.descriptionParts.push(text);
         return this;
     }
 
-    withTable(table: Table) {
+    withTable(table: Table): Entry {
         this.parts.push(table);
-        this.descriptionParts.push(table);
-        return this;
-    }
-
-    withDescription(description: string) {
-        this.descriptionParts.push(description);
         return this;
     }
 
     get DescriptionText(): string {
-        return this.descriptionParts.map(part =>
-        {if(part instanceof Table){
-            return `{${part.title}}`;
-        }else{
-            return part;
-        }}).join('');
+        return this.parts.map(part => {
+            if (part instanceof Table) {
+                return `{${part.title}}`;
+            } else if (part instanceof FunctionEntry) {
+                return `{${part.description}}`;
+            } else {
+                return part;
+            }
+        }).join('');
+    }
+
+    withFunction(functionEntry: FunctionEntry): Entry {
+        this.parts.push(functionEntry);
+        return this;
     }
 }

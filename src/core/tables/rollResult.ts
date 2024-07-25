@@ -1,9 +1,23 @@
 import type {Entry} from "./entry";
 import {Table} from "./table";
+import type {Entity} from "../entities/entity";
 
 export class RollResult {
     entry: Entry;
     results: RollResult[] = [];
+    entities: Entity[] = [];
+
+    constructor(entry: Entry) {
+        this.entry = entry;
+    }
+
+    addEntity(entity: any) {
+        if (Array.isArray(entity)) {
+            this.entities.push(...entity.filter(e => e !== null && e !== undefined));
+        } else if (entity !== null && entity !== undefined) {
+            this.entities.push(entity);
+        }
+    }
 
     get combinedString(): string {
         const parts: string[] = [];
@@ -23,7 +37,4 @@ export class RollResult {
         return parts.join('').trim();
     }
 
-    constructor(entry: Entry) {
-        this.entry = entry;
-    }
 }

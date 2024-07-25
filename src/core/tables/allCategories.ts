@@ -11,9 +11,16 @@ import {IllnessSymptomTable} from "./illness/illnessSymptomTable";
 import {IllnessTypeTable} from "./illness/illnessTypeTable";
 import {IllnessTransmissionTable} from "./illness/illnessTransmissionTable";
 import {TimeTable} from "./other/TimeTable";
+import {CharacterTable} from "./character/characterTable";
 
 export function allCategories(): Category[] {
     let allCategories: Category[] = [];
+
+    let characterCategory = new Category()
+        .withName("Character")
+        .withTable(new CharacterTable())
+    allCategories.push(characterCategory);
+
     let genreCategory = new Category()
         .withName("Genres")
         .withTable(new AllGenreTable())
