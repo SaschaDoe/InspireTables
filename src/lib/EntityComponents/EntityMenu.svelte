@@ -31,7 +31,7 @@
     function handleSetActiveType(event: CustomEvent<string>) {
         activeType = event.detail;
         console.log('Active Type:', activeType);
-        // You can add logic here to update the view based on the active type
+        scrollToType(activeType);
     }
 
     function handleSetActiveEntity(event: CustomEvent<{typeName: string, entityId: number}>) {
@@ -42,14 +42,36 @@
         scrollToEntity(typeName, entityId);
     }
 
-    function scrollToEntity(typeName: string, entityId: number) {
-        const entityElement = document.getElementById(`entity-${typeName}-${entityId}`);
-        if (entityElement && scrollContainer) {
+    function scrollToType(typeName: string) {
+        let fullTypeDivId = `entitylist-${typeName}`
+        console.log("scroll to type activated for ",fullTypeDivId)
+        const typeElement = document.getElementById(fullTypeDivId);
+        console.log("found: ", typeElement)
+        if (typeElement && scrollContainer) {
             setTimeout(() => {
-                const topOffset = entityElement.offsetTop - scrollContainer.offsetTop;
+                const topOffset = typeElement.offsetTop - scrollContainer.offsetTop;
                 scrollContainer.scrollTo({ top: topOffset, behavior: 'smooth' });
             }, 0);
         }
+    }
+
+    function scrollToEntity(typeName: string, entityId: number) {
+        const entityElement = document.getElementById(`entity-${entityId}`);
+        if (!entityElement) {
+            console.error(`Could not find element with id: entity-${typeName}-${entityId}`);
+            return;
+        }
+        if (!scrollContainer) {
+            console.error("Scroll container is not defined");
+            return;
+        }
+        setTimeout(() => {
+            const rect = entityElement.getBoundingClientRect();
+            const scrollContainerRect = scrollContainer.getBoundingClientRect();
+            const topOffset = rect.top - scrollContainerRect.top + scrollContainer.scrollTop;
+            console.log(`Calculated topOffset: ${topOffset}`);
+            scrollContainer.scrollTo({ top: topOffset, behavior: 'smooth' });
+        }, 0);
     }
 </script>
 
@@ -58,6 +80,8 @@
         <EntityIndex
                 on:setActiveType={handleSetActiveType}
                 on:setActiveEntity={handleSetActiveEntity}
+                {activeType}
+                {activeEntityId}
         />
     </IndexBaseComponent>
 
@@ -69,20 +93,26 @@
 
         <div bind:this={scrollContainer} class="flex-1 overflow-y-auto space-y-8" id="entity-list-container">
             {#key $refreshTrigger}
+                <div id="entitylist-Character">
                 <EntityList
                         title="Characters"
                         store={characterStore}
                         EntityComponent={CharacterComponent}
                         creator={new CharacterCreator()}
                         {activeEntityId}
+                        activeType={activeType}
                 />
+                </div>
+                <div id="entitylist-Illness">
                 <EntityList
                         title="Illnesses"
                         store={illnessStore}
                         EntityComponent={IllnessComponent}
                         creator={new IllnessCreator()}
                         {activeEntityId}
+                        activeType={activeType}
                 />
+                </div>
             {/key}
         </div>
     </main>

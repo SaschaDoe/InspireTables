@@ -11,6 +11,7 @@
     export let creator: Creator;
     export let title = "No Title";
     export let activeEntityId = -1;
+    export let activeType = ""; // New prop to determine if this list is active
 
     let entities: Entity[] = [];
     let loading = true;
@@ -44,9 +45,9 @@
 </script>
 
 <div class="w-full flex flex-col">
-    <div class="bg-surface-100 border border-surface-300 rounded-lg shadow-lg p-6 flex-grow overflow-hidden flex flex-col">
+    <div class="bg-surface-100 border border-surface-300 rounded-lg shadow-lg p-6 flex-grow overflow-hidden flex flex-col {activeType === title ? 'border-blue-500 border-2' : ''}">
         <div class="flex justify-between items-center mb-4">
-            <h1 class="text-2xl font-bold text-blue-700">{title}</h1>
+            <h1 class="text-2xl font-bold {activeType === title ? 'text-blue-700' : 'text-gray-700'}">{title}</h1>
             <button class="btn variant-filled-secondary" on:click={createEntity}>Add</button>
         </div>
 
@@ -71,9 +72,9 @@
                         <tbody>
                         {#each entities as entity (entity.id)}
                             <tr
-                                    id="entity-{title}-{entity.id}"
-                                    class:active={entity.id === activeEntityId}
+                                    id="entity-{entity.id}"
                                     class="transition-colors duration-200 ease-in-out hover:bg-surface-200"
+                                    class:active={entity.id === activeEntityId && activeType === title}
                             >
                                 <td>{entity.id}</td>
                                 <td>
