@@ -15,6 +15,13 @@
     let activeType = "";
     let activeEntityId = -1;
     let scrollContainer: HTMLDivElement;
+    let showScrollToTop = writable(false);
+
+    function scrollToTop() {
+        if (scrollContainer) {
+            scrollContainer.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
 
     async function clear() {
         try {
@@ -78,6 +85,7 @@
     }
 
     function updateActiveEntityFromScroll() {
+        showScrollToTop.set(scrollContainer.scrollTop > 100);
         if (!scrollContainer) return;
 
         const scrollTop = scrollContainer.scrollTop;
@@ -133,6 +141,7 @@
 
                 break;
             }
+
         }
 
         // Update active type and entity if changed
@@ -204,6 +213,15 @@
         </div>
     </main>
 </div>
+
+{#if $showScrollToTop}
+    <button
+            on:click={scrollToTop}
+            class="fixed bottom-5 left-2 bg-blue-500 text-white p-2 rounded-full shadow-lg hover:bg-blue-600 transition-colors duration-200 z-50"
+    >
+        ↑
+    </button>
+{/if}
 
 <style>
     :global(body) {
