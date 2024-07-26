@@ -82,9 +82,9 @@
 
         const scrollTop = scrollContainer.scrollTop;
         const clientHeight = scrollContainer.clientHeight;
-        const scrollCenter = scrollTop + (clientHeight / 2);
+        const scrollBottom = scrollTop + clientHeight;
 
-        console.log("Scroll update - scrollTop:", scrollTop, "clientHeight:", clientHeight, "scrollCenter:", scrollCenter);
+        console.log("Scroll update - scrollTop:", scrollTop, "clientHeight:", clientHeight, "scrollBottom:", scrollBottom);
 
         // Get all entity type containers
         const entityContainers = scrollContainer.querySelectorAll('[id^="entitylist-"]');
@@ -94,35 +94,46 @@
         let currentEntityId = -1;
 
         // Iterate through entity type containers
-        entityContainers.forEach((container) => {
+        for (let i = 0; i < entityContainers.length; i++) {
+            const container = entityContainers[i];
             const rect = container.getBoundingClientRect();
-            const containerTop = rect.top;
-            const containerBottom = rect.bottom;
+            const containerTop = rect.top + scrollTop - scrollContainer.offsetTop;
+            const containerBottom = rect.bottom + scrollTop - scrollContainer.offsetTop;
 
             console.log("Container:", container.id, "Top:", containerTop, "Bottom:", containerBottom);
 
-            if (containerTop <= scrollCenter && containerBottom >= scrollCenter) {
+            if (containerTop <= scrollBottom && containerBottom >= scrollTop) {
                 currentType = container.id.replace('entitylist-', '');
                 console.log("Current type found:", currentType);
 
                 const entityElements = container.querySelectorAll('[id^="entity-"]');
                 console.log("Found entity elements:", entityElements.length);
-                let closestDistance = Infinity;
 
-                entityElements.forEach((entity) => {
+                for (let j = 0; j < entityElements.length; j++) {
+                    const entity = entityElements[j];
                     const entityRect = entity.getBoundingClientRect();
-                    const entityCenter = (entityRect.top + entityRect.bottom) / 2;
-                    const distance = Math.abs(entityCenter - scrollCenter);
+                    const entityTop = entityRect.top + scrollTop - scrollContainer.offsetTop;
+                    const entityBottom = entityRect.bottom + scrollTop - scrollContainer.offsetTop;
 
-                    console.log("Entity:", entity.id, "Distance:", distance);
-
-                    if (distance < closestDistance) {
-                        closestDistance = distance;
+                    if (entityTop <= scrollBottom && entityBottom >= scrollTop) {
                         currentEntityId = parseInt(entity.id.split('-')[1]);
+                        console.log("Current entity found:", currentEntityId);
+                        break;
                     }
-                });
+                }
+
+                if (currentEntityId === -1 && i === entityContainers.length - 1) {
+                    // If we're at the last container and no entity is visible, select the last entity
+                    const lastEntity = entityElements[entityElements.length - 1];
+                    if (lastEntity) {
+                        currentEntityId = parseInt(lastEntity.id.split('-')[1]);
+                        console.log("Selected last entity:", currentEntityId);
+                    }
+                }
+
+                break;
             }
-        });
+        }
 
         // Update active type and entity if changed
         if (currentType !== activeType || currentEntityId !== activeEntityId) {
