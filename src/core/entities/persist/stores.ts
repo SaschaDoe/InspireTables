@@ -43,5 +43,7 @@ export const registry = EntityStoreRegistry.getInstance();
 registry.registerStore('Character', characterStore);
 registry.registerStore('Illness', illnessStore);
 
+
+
 // Initialize IdGenerator
 export const idGenerator = IdGenerator.getInstance(getIdStorageStrategy());

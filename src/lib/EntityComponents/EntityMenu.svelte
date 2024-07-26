@@ -1,15 +1,19 @@
 <script lang="ts">
     import EntityList from "$lib/EntityComponents/EntityList.svelte";
-    import {allStores, characterStore, idGenerator, illnessStore} from "../../core/entities/persist/stores";
+    import { allStores, characterStore, idGenerator, illnessStore } from "../../core/entities/persist/stores";
     import CharacterComponent from "$lib/EntityComponents/entitySpecificComponents/CharacterComponent.svelte";
     import { CharacterCreator } from "../../core/entities/character/characterCreator";
     import { writable } from 'svelte/store';
-    import CategoryIndex from "$lib/TableComponents/CategoryIndex.svelte";
     import IndexBaseComponent from "$lib/IndexBaseComponent.svelte";
     import IllnessComponent from "$lib/EntityComponents/entitySpecificComponents/IllnessComponent.svelte";
-    import {IllnessCreator} from "../../core/entities/status/illnessCreator";
+    import { IllnessCreator } from "../../core/entities/status/illnessCreator";
+    import EntityIndex from "$lib/EntityComponents/EntityIndex.svelte";
 
     const refreshTrigger = writable(0);
+
+    let activeType = "";
+    let activeEntityId = -1;
+    let scrollContainer: HTMLDivElement;
 
     async function clear() {
         try {
@@ -23,12 +27,38 @@
             console.error('Error clearing:', error);
         }
     }
+
+    function handleSetActiveType(event: CustomEvent<string>) {
+        activeType = event.detail;
+        console.log('Active Type:', activeType);
+        // You can add logic here to update the view based on the active type
+    }
+
+    function handleSetActiveEntity(event: CustomEvent<{typeName: string, entityId: number}>) {
+        const { typeName, entityId } = event.detail;
+        activeType = typeName;
+        activeEntityId = entityId;
+        console.log('Active Type:', activeType, 'Active Entity ID:', activeEntityId);
+        scrollToEntity(typeName, entityId);
+    }
+
+    function scrollToEntity(typeName: string, entityId: number) {
+        const entityElement = document.getElementById(`entity-${typeName}-${entityId}`);
+        if (entityElement && scrollContainer) {
+            setTimeout(() => {
+                const topOffset = entityElement.offsetTop - scrollContainer.offsetTop;
+                scrollContainer.scrollTo({ top: topOffset, behavior: 'smooth' });
+            }, 0);
+        }
+    }
 </script>
 
 <div class="flex h-screen overflow-hidden">
-
-    <IndexBaseComponent >
-        <p>bla</p>
+    <IndexBaseComponent>
+        <EntityIndex
+                on:setActiveType={handleSetActiveType}
+                on:setActiveEntity={handleSetActiveEntity}
+        />
     </IndexBaseComponent>
 
     <main class="flex-1 overflow-hidden flex flex-col">
@@ -37,19 +67,21 @@
             <button class="btn variant-filled-secondary" on:click={clear}>Clear All</button>
         </div>
 
-        <div class="flex-1 overflow-y-auto space-y-8">
+        <div bind:this={scrollContainer} class="flex-1 overflow-y-auto space-y-8" id="entity-list-container">
             {#key $refreshTrigger}
                 <EntityList
                         title="Characters"
                         store={characterStore}
                         EntityComponent={CharacterComponent}
                         creator={new CharacterCreator()}
+                        {activeEntityId}
                 />
                 <EntityList
                         title="Illnesses"
                         store={illnessStore}
                         EntityComponent={IllnessComponent}
                         creator={new IllnessCreator()}
+                        {activeEntityId}
                 />
             {/key}
         </div>

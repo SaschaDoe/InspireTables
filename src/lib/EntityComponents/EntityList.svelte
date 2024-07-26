@@ -10,6 +10,7 @@
     export let EntityComponent: ComponentType;
     export let creator: Creator;
     export let title = "No Title";
+    export let activeEntityId = -1;
 
     let entities: Entity[] = [];
     let loading = true;
@@ -69,7 +70,11 @@
                         </thead>
                         <tbody>
                         {#each entities as entity (entity.id)}
-                            <tr>
+                            <tr
+                                    id="entity-{title}-{entity.id}"
+                                    class:active={entity.id === activeEntityId}
+                                    class="transition-colors duration-200 ease-in-out hover:bg-surface-200"
+                            >
                                 <td>{entity.id}</td>
                                 <td>
                                     <svelte:component this={EntityComponent} {entity} />
@@ -88,5 +93,9 @@
     /* Ensure the component takes up full width and height of its container */
     div {
         min-height: 0; /* This is crucial for nested flex containers */
+    }
+
+    .active {
+        @apply bg-blue-100 dark:bg-blue-900;
     }
 </style>

@@ -16,7 +16,6 @@ function toggleIndex() {
             >
                 ←
             </button>
-            <h2 class="text-2xl font-bold text-blue-700 mr-2">Categories</h2>
             <slot></slot>
         </div>
     </div>
