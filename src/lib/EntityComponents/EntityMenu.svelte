@@ -8,6 +8,7 @@
     import IllnessComponent from "$lib/EntityComponents/entitySpecificComponents/IllnessComponent.svelte";
     import { IllnessCreator } from "../../core/entities/status/illnessCreator";
     import EntityIndex from "$lib/EntityComponents/EntityIndex.svelte";
+    import {onMount} from "svelte";
 
     const refreshTrigger = writable(0);
 
@@ -72,7 +73,78 @@
             console.log(`Calculated topOffset: ${topOffset}`);
             scrollContainer.scrollTo({ top: topOffset, behavior: 'smooth' });
         }, 0);
+
+
     }
+
+    function updateActiveEntityFromScroll() {
+        if (!scrollContainer) return;
+
+        const scrollTop = scrollContainer.scrollTop;
+        const clientHeight = scrollContainer.clientHeight;
+        const scrollCenter = scrollTop + (clientHeight / 2);
+
+        console.log("Scroll update - scrollTop:", scrollTop, "clientHeight:", clientHeight, "scrollCenter:", scrollCenter);
+
+        // Get all entity type containers
+        const entityContainers = scrollContainer.querySelectorAll('[id^="entitylist-"]');
+        console.log("Found entity containers:", entityContainers.length);
+
+        let currentType = "";
+        let currentEntityId = -1;
+
+        // Iterate through entity type containers
+        entityContainers.forEach((container) => {
+            const rect = container.getBoundingClientRect();
+            const containerTop = rect.top;
+            const containerBottom = rect.bottom;
+
+            console.log("Container:", container.id, "Top:", containerTop, "Bottom:", containerBottom);
+
+            if (containerTop <= scrollCenter && containerBottom >= scrollCenter) {
+                currentType = container.id.replace('entitylist-', '');
+                console.log("Current type found:", currentType);
+
+                const entityElements = container.querySelectorAll('[id^="entity-"]');
+                console.log("Found entity elements:", entityElements.length);
+                let closestDistance = Infinity;
+
+                entityElements.forEach((entity) => {
+                    const entityRect = entity.getBoundingClientRect();
+                    const entityCenter = (entityRect.top + entityRect.bottom) / 2;
+                    const distance = Math.abs(entityCenter - scrollCenter);
+
+                    console.log("Entity:", entity.id, "Distance:", distance);
+
+                    if (distance < closestDistance) {
+                        closestDistance = distance;
+                        currentEntityId = parseInt(entity.id.split('-')[1]);
+                    }
+                });
+            }
+        });
+
+        // Update active type and entity if changed
+        if (currentType !== activeType || currentEntityId !== activeEntityId) {
+            activeType = currentType;
+            activeEntityId = currentEntityId;
+            console.log(`Active Type updated: ${activeType}, Active Entity ID: ${activeEntityId}`);
+        } else {
+            console.log(`No change in Active Type: ${activeType}, Active Entity ID: ${activeEntityId}`);
+        }
+    }
+
+    onMount(() => {
+        if (scrollContainer) {
+            scrollContainer.addEventListener('scroll', updateActiveEntityFromScroll);
+        }
+
+        return () => {
+            if (scrollContainer) {
+                scrollContainer.removeEventListener('scroll', updateActiveEntityFromScroll);
+            }
+        };
+    });
 </script>
 
 <div class="flex h-screen overflow-hidden">
@@ -93,7 +165,8 @@
 
         <div bind:this={scrollContainer} class="flex-1 overflow-y-auto space-y-8" id="entity-list-container">
             {#key $refreshTrigger}
-                <div id="entitylist-Character">
+                <div  class="space-y-6">
+                    <div id="entitylist-Character">
                     <EntityList
                             title="Characters"
                             entityName="Character"
@@ -103,7 +176,8 @@
                             {activeEntityId}
                             activeType={activeType}
                     />
-
+                    </div>
+                    <div id="entitylist-Illness">
                     <EntityList
                             title="Illnesses"
                             entityName="Illness"
@@ -113,6 +187,7 @@
                             {activeEntityId}
                             activeType={activeType}
                     />
+                        </div>
                 </div>
             {/key}
         </div>

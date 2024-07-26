@@ -80,7 +80,7 @@
 </script>
 
 <div class="w-full flex flex-col">
-    <div class="bg-surface-100 border border-surface-300 rounded-lg shadow-lg p-6 flex-grow overflow-hidden flex flex-col {activeType === entityName ? 'border-blue-500 border-2' : ''}">
+    <div class=" bg-gray-100 rounded-lg shadow-lg p-6 flex-grow overflow-hidden flex flex-col {activeType === entityName ? 'border-blue-500 border-2' : ''}">
         <div class="flex justify-between items-center mb-4">
             <h1 class="text-2xl font-bold {activeType === entityName ? 'text-blue-700' : 'text-gray-700'}">{title}</h1>
             <button class="btn variant-filled-secondary" on:click={createEntity}>Add</button>

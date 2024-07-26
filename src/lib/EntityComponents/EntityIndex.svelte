@@ -11,7 +11,18 @@
 
     export let activeType: string = "";
     export let activeEntityId: number = -1;
-
+    $: if (activeType) {
+        console.log('Active type changed:', activeType);
+        entitiesByTypeStore.subscribe(entitiesMap => {
+            console.log('Current entitiesByTypeStore contents:');
+            entitiesMap.forEach((entities, type) => {
+                console.log(`  ${type}${type === activeType ? ' (active)' : ''}: ${entities.length} entities`);
+            });
+            if (!entitiesMap.has(activeType)) {
+                console.warn(`  Warning: activeType "${activeType}" is not present in the store!`);
+            }
+        });
+    }
     let entitiesByTypeStore: Writable<Map<string, Entity[]>> = writable(new Map());
     let unsubscribe: () => void;
 
