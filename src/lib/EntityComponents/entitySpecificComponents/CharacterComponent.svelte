@@ -8,12 +8,12 @@
 </script>
 
 <BaseEntityComponent title="Character" id={entity.id} {isHidden} {enableHidden}>
-    <p class="text-blue-700">{entity.gender}</p>
+    <p>{entity.gender}</p>
     {#if entity.illnesses && entity.illnesses.length > 0}
         {#each entity.illnesses as illness}
-            <p class="text-blue-700">{illness.adjective} {illness.origin}</p>
+            <p>{illness.adjective} {illness.origin}</p>
         {/each}
     {:else}
-        <p class="text-blue-700">No illnesses</p>
+        <p>No illnesses</p>
     {/if}
 </BaseEntityComponent>

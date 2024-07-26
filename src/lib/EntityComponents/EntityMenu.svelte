@@ -92,30 +92,22 @@
         const clientHeight = scrollContainer.clientHeight;
         const scrollBottom = scrollTop + clientHeight;
 
-        console.log("Scroll update - scrollTop:", scrollTop, "clientHeight:", clientHeight, "scrollBottom:", scrollBottom);
-
-        // Get all entity type containers
         const entityContainers = scrollContainer.querySelectorAll('[id^="entitylist-"]');
         console.log("Found entity containers:", entityContainers.length);
 
         let currentType = "";
         let currentEntityId = -1;
 
-        // Iterate through entity type containers
         for (let i = 0; i < entityContainers.length; i++) {
             const container = entityContainers[i];
             const rect = container.getBoundingClientRect();
             const containerTop = rect.top + scrollTop - scrollContainer.offsetTop;
             const containerBottom = rect.bottom + scrollTop - scrollContainer.offsetTop;
 
-            console.log("Container:", container.id, "Top:", containerTop, "Bottom:", containerBottom);
-
             if (containerTop <= scrollBottom && containerBottom >= scrollTop) {
                 currentType = container.id.replace('entitylist-', '');
-                console.log("Current type found:", currentType);
 
                 const entityElements = container.querySelectorAll('[id^="entity-"]');
-                console.log("Found entity elements:", entityElements.length);
 
                 for (let j = 0; j < entityElements.length; j++) {
                     const entity = entityElements[j];
@@ -125,7 +117,7 @@
 
                     if (entityTop <= scrollBottom && entityBottom >= scrollTop) {
                         currentEntityId = parseInt(entity.id.split('-')[1]);
-                        console.log("Current entity found:", currentEntityId);
+
                         break;
                     }
                 }
@@ -135,26 +127,19 @@
                     const lastEntity = entityElements[entityElements.length - 1];
                     if (lastEntity) {
                         currentEntityId = parseInt(lastEntity.id.split('-')[1]);
-                        console.log("Selected last entity:", currentEntityId);
                     }
                 }
-
                 break;
             }
-
         }
-
-        // Update active type and entity if changed
         if (currentType !== activeType || currentEntityId !== activeEntityId) {
             activeType = currentType;
             activeEntityId = currentEntityId;
-            console.log(`Active Type updated: ${activeType}, Active Entity ID: ${activeEntityId}`);
-        } else {
-            console.log(`No change in Active Type: ${activeType}, Active Entity ID: ${activeEntityId}`);
         }
     }
 
     onMount(() => {
+        activeType = "Character";
         if (scrollContainer) {
             scrollContainer.addEventListener('scroll', updateActiveEntityFromScroll);
         }
@@ -179,7 +164,7 @@
 
     <main class="flex-1 overflow-hidden flex flex-col">
         <div class="flex justify-between items-center p-4">
-            <h1 class="text-2xl font-bold text-primary-500">Entities</h1>
+            <h1 class="text-2xl font-bold text-blue-700">Entities</h1>
             <button class="btn variant-filled-secondary" on:click={clear}>Clear All</button>
         </div>
 

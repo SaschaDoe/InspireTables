@@ -51,7 +51,6 @@
 
         const tables = scrollContainer.querySelectorAll('[id^="table-"]');
         const scrollPosition = scrollContainer.scrollTop;
-        const containerHeight = scrollContainer.clientHeight;
 
         for (let i = 0; i < tables.length; i++) {
             const table = tables[i] as HTMLElement;
@@ -68,7 +67,7 @@
                         activeCategory = category.name;
                         activeTable = matchingTable.title;
                         console.log('Active Category:', activeCategory, 'Active Table:', activeTable);
-                        return; // Exit the function once we've found a match
+                        return;
                     }
                 }
                 break;

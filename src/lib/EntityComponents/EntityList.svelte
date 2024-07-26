@@ -79,25 +79,25 @@
     }
 </script>
 
-<div class="w-full flex flex-col">
-    <div class=" bg-gray-100 rounded-lg shadow-lg p-6 flex-grow overflow-hidden flex flex-col {activeType === entityName ? 'border-blue-500 border-2' : ''}">
+<div class="container mx-auto p-4">
+    <div class="bg-gray-100 rounded-lg shadow-lg p-6">
         <div class="flex justify-between items-center mb-4">
-            <h1 class="text-2xl font-bold {activeType === entityName ? 'text-blue-700' : 'text-gray-700'}">{title}</h1>
+            <h1 class="text-2xl font-bold text-blue-700">{title}</h1>
             <button class="btn variant-filled-secondary" on:click={createEntity}>Add</button>
         </div>
 
         {#if loading}
-            <div class="flex justify-center items-center py-8 flex-grow">
+            <div class="flex justify-center items-center py-8">
                 <span class="loading loading-spinner loading-lg"></span>
             </div>
         {:else if error}
             <p class="alert variant-filled-error">{error}</p>
         {:else}
-            <div class="overflow-auto flex-grow">
+            <div class="overflow-x-auto">
                 {#if entities.length === 0}
                     <p class="text-center text-gray-500 dark:text-gray-400 py-8">No entities found</p>
                 {:else}
-                    <table class="table table-hover w-full">
+                    <table class="table w-full">
                         <thead>
                         <tr>
                             <th>ID</th>
@@ -106,11 +106,7 @@
                         </thead>
                         <tbody>
                         {#each entities as entity (entity.id)}
-                            <tr
-                                    id="entity-{entity.id}"
-                                    class="transition-colors duration-200 ease-in-out hover:bg-surface-200"
-                                    class:active={entity.id === activeEntityId && activeType === entityName}
-                            >
+                            <tr id="entity-{entity.id}">
                                 <td>{entity.id}</td>
                                 <td>
                                     <svelte:component this={EntityComponent} {entity} />
@@ -126,12 +122,7 @@
 </div>
 
 <style>
-    /* Ensure the component takes up full width and height of its container */
-    div {
-        min-height: 0; /* This is crucial for nested flex containers */
-    }
-
-    .active {
-        @apply bg-blue-100 dark:bg-blue-900;
+    :global(.active) {
+        @apply bg-blue-100;
     }
 </style>

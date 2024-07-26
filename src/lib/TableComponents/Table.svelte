@@ -5,7 +5,6 @@
     import { RollResult } from "../../core/tables/rollResult";
     import { Entry } from "../../core/tables/entry";
     import TreeView from "$lib/TableComponents/TreeView.svelte";
-    import {onMount} from "svelte";
     import {summarizeEntities} from "../../core/entities/entityHelper";
     import {EntityStoreRegistry} from "../../core/entities/persist/entityStoreRegistry";
 
@@ -13,7 +12,6 @@
     export let table: Table = new MainGenreTable();
     let modalDescription = "";
     let rollResult = new RollResult(new Entry());
-    let entityComponents: { [key: string]: any } = {};
     let hasEntities: boolean = false;
 
     function roll() {
@@ -41,9 +39,6 @@
             const store = EntityStoreRegistry.getInstance().getStore(entityType);
             if (store) {
                 store.saveEntity(entity);
-                console.log("Store: ", store, "stored: ", entity);
-            } else {
-                console.warn(`No store found for entity type: ${entityType}`);
             }
         }
         showModal = false;

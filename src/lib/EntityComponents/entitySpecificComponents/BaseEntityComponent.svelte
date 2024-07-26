@@ -13,7 +13,7 @@
 
 <div class="flex items-center space-x-2">
     {#if enableHidden}
-        <button on:click={toggleHidden} class="mb-2 text-blue-700">
+        <button on:click={toggleHidden} class="mb-2">
             {#if isHidden}
                 ▼
             {:else}
@@ -22,7 +22,7 @@
         </button>
     {/if}
 
-    <h3 class="text-blue-700">{title}: {id}</h3>
+    <h3 >{title}: {id}</h3>
 </div>
 
 {#if !isHidden}

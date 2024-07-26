@@ -18,28 +18,13 @@
     let unsubscribe: () => void;
 
     $: if (activeType) {
-        console.log('Active type changed:', activeType);
-        entitiesByTypeStore.subscribe(entitiesMap => {
-            console.log('Current entitiesByTypeStore contents:');
-            entitiesMap.forEach((entities, type) => {
-                console.log(`  ${type}${type === activeType ? ' (active)' : ''}: ${entities.length} entities`);
-            });
-            if (!entitiesMap.has(activeType)) {
-                console.warn(`  Warning: activeType "${activeType}" is not present in the store!`);
-            }
-        });
-
-        // Update expandedTypes when activeType changes
         expandedTypes.set(new Set([activeType]));
     }
 
     onMount(async () => {
         const registry = EntityStoreRegistry.getInstance();
-
-        // Initial fetch
         entitiesByTypeStore.set(await registry.getAllEntitiesByType());
 
-        // Subscribe to changes
         unsubscribe = registry.subscribe((updatedEntitiesByType: Map<string, Entity[]>) => {
             entitiesByTypeStore.set(updatedEntitiesByType);
         });
