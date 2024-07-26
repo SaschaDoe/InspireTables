@@ -1,23 +1,45 @@
 <script lang="ts">
     import type { Entity } from "../../core/entities/entity";
     import { EntityStorageManager } from "../../core/entities/persist/entityStorageManager";
-    import { onMount } from "svelte";
+    import { onMount, onDestroy } from "svelte";
     import type { ComponentType } from "svelte";
-    import { Creator } from "../../core/entities/creator";
+    import { Creator, type CreatedEntities } from "../../core/entities/creator";
     import { idGenerator } from "../../core/entities/persist/stores";
+    import { EntityStoreRegistry } from "../../core/entities/persist/entityStoreRegistry";
+    import { clearEntityUpdates, entityUpdateStore, notifyEntityUpdates } from "$lib/EntityComponents/entityStore";
 
     export let store: EntityStorageManager<Entity>;
     export let EntityComponent: ComponentType;
     export let creator: Creator;
     export let title = "No Title";
+    export let entityName: string;  // New prop for the singular entity name
     export let activeEntityId = -1;
-    export let activeType = ""; // New prop to determine if this list is active
+    export let activeType = "";
 
     let entities: Entity[] = [];
     let loading = true;
     let error: string | null = null;
 
+    let unsubscribe: () => void;
+
     onMount(async () => {
+        await loadEntities();
+
+        unsubscribe = entityUpdateStore.subscribe(async (updatedEntityTypes) => {
+            if (updatedEntityTypes.has(entityName)) {
+                await loadEntities();
+                clearEntityUpdates();
+            }
+        });
+    });
+
+    onDestroy(() => {
+        if (unsubscribe) {
+            unsubscribe();
+        }
+    });
+
+    async function loadEntities() {
         try {
             entities = await store.getAllEntities();
         } catch (e) {
@@ -25,19 +47,32 @@
         } finally {
             loading = false;
         }
-    });
+    }
 
     async function createEntity() {
         try {
-            const newEntities = creator.create();
-            console.log("created new Entity in EntityList: ", newEntities);
+            const newEntities: CreatedEntities = creator.create();
+            console.log("created new Entities in EntityList: ", newEntities);
 
-            await Promise.all(newEntities.map(async (entity) => {
-                entity.id = await idGenerator.generateId();
-            }));
+            const registry = EntityStoreRegistry.getInstance();
+            const updatedEntityTypes: string[] = [];
 
-            await store.saveSpecificEntities(newEntities);
-            entities = await store.getAllEntities();
+            for (const [entityType, entityArray] of Object.entries(newEntities)) {
+                await Promise.all(entityArray.map(async (entity) => {
+                    entity.id = await idGenerator.generateId();
+                }));
+
+                const entityStore = registry.getStore(entityType);
+                if (entityStore) {
+                    await entityStore.saveSpecificEntities(entityArray);
+                    console.log(`Entities of type ${entityType} saved successfully in ${entityStore}`);
+                    updatedEntityTypes.push(entityType);
+                } else {
+                    console.error(`No store found for entity type: ${entityType}`);
+                }
+            }
+
+            notifyEntityUpdates(updatedEntityTypes);
         } catch (error) {
             console.error('Error creating entity:', error);
         }
@@ -45,9 +80,9 @@
 </script>
 
 <div class="w-full flex flex-col">
-    <div class="bg-surface-100 border border-surface-300 rounded-lg shadow-lg p-6 flex-grow overflow-hidden flex flex-col {activeType === title ? 'border-blue-500 border-2' : ''}">
+    <div class="bg-surface-100 border border-surface-300 rounded-lg shadow-lg p-6 flex-grow overflow-hidden flex flex-col {activeType === entityName ? 'border-blue-500 border-2' : ''}">
         <div class="flex justify-between items-center mb-4">
-            <h1 class="text-2xl font-bold {activeType === title ? 'text-blue-700' : 'text-gray-700'}">{title}</h1>
+            <h1 class="text-2xl font-bold {activeType === entityName ? 'text-blue-700' : 'text-gray-700'}">{title}</h1>
             <button class="btn variant-filled-secondary" on:click={createEntity}>Add</button>
         </div>
 
@@ -74,7 +109,7 @@
                             <tr
                                     id="entity-{entity.id}"
                                     class="transition-colors duration-200 ease-in-out hover:bg-surface-200"
-                                    class:active={entity.id === activeEntityId && activeType === title}
+                                    class:active={entity.id === activeEntityId && activeType === entityName}
                             >
                                 <td>{entity.id}</td>
                                 <td>

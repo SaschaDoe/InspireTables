@@ -94,24 +94,25 @@
         <div bind:this={scrollContainer} class="flex-1 overflow-y-auto space-y-8" id="entity-list-container">
             {#key $refreshTrigger}
                 <div id="entitylist-Character">
-                <EntityList
-                        title="Characters"
-                        store={characterStore}
-                        EntityComponent={CharacterComponent}
-                        creator={new CharacterCreator()}
-                        {activeEntityId}
-                        activeType={activeType}
-                />
-                </div>
-                <div id="entitylist-Illness">
-                <EntityList
-                        title="Illnesses"
-                        store={illnessStore}
-                        EntityComponent={IllnessComponent}
-                        creator={new IllnessCreator()}
-                        {activeEntityId}
-                        activeType={activeType}
-                />
+                    <EntityList
+                            title="Characters"
+                            entityName="Character"
+                            store={characterStore}
+                            EntityComponent={CharacterComponent}
+                            creator={new CharacterCreator()}
+                            {activeEntityId}
+                            activeType={activeType}
+                    />
+
+                    <EntityList
+                            title="Illnesses"
+                            entityName="Illness"
+                            store={illnessStore}
+                            EntityComponent={IllnessComponent}
+                            creator={new IllnessCreator()}
+                            {activeEntityId}
+                            activeType={activeType}
+                    />
                 </div>
             {/key}
         </div>

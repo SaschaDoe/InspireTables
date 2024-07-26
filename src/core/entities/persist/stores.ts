@@ -6,6 +6,7 @@ import { BrowserIdStorageStrategy } from "./id/browserStorageStrategy";
 import { IdGenerator } from "./id/IdGenerator";
 import {EntityStoreRegistry} from "./entityStoreRegistry";
 
+
 // Function to determine if we're in a Tauri environment
 function isInTauriEnvironment(): boolean {
     if (typeof window !== 'undefined') {

@@ -1,18 +1,28 @@
-import {Dice} from "../tables/dice";
-import type {Entity} from "./entity";
+import { Dice } from "../tables/dice";
+import type { Entity } from "./entity";
+
+export interface CreatedEntities {
+    [key: string]: Entity[];
+}
 
 export abstract class Creator {
     dice: Dice = new Dice();
 
     /**
-     * Create a new entity without persisting it.
+     * Create new entities without persisting them.
      * This method should be implemented by derived classes.
      */
-    abstract create(): Entity[];
+    abstract create(): CreatedEntities;
 
     /**
-     * Persist the entity.
+     * Persist the entities.
      * This method should be implemented by derived classes.
      */
-    abstract persist(entity: Entity): Promise<void>;
+    abstract persist(entities: CreatedEntities): Promise<void>;
+
+    /**
+     * Get the entity type this creator is responsible for.
+     * This method should be implemented by derived classes.
+     */
+    abstract getEntityType(): string;
 }
