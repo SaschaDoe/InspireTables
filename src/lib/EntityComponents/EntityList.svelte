@@ -12,9 +12,7 @@
     export let EntityComponent: ComponentType;
     export let creator: Creator;
     export let title = "No Title";
-    export let entityName: string;  // New prop for the singular entity name
-    export let activeEntityId = -1;
-    export let activeType = "";
+    export let entityName: string;
 
     let entities: Entity[] = [];
     let loading = true;
@@ -100,16 +98,18 @@
                     <table class="table w-full">
                         <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Entity</th>
+                            <th class="w-1/4">ID</th>
+                            <th class="w-3/4">Entity</th>
                         </tr>
                         </thead>
                         <tbody>
                         {#each entities as entity (entity.id)}
-                            <tr id="entity-{entity.id}">
-                                <td>{entity.id}</td>
-                                <td>
-                                    <svelte:component this={EntityComponent} {entity} />
+                            <tr id="entity-{entity.id}" class="entity-row">
+                                <td class="w-1/4 align-top">{entity.id}</td>
+                                <td class="w-3/4">
+                                    <div class="entity-component-wrapper">
+                                        <svelte:component this={EntityComponent} {entity} />
+                                    </div>
                                 </td>
                             </tr>
                         {/each}
@@ -124,5 +124,15 @@
 <style>
     :global(.active) {
         @apply bg-blue-100;
+    }
+
+    .entity-row {
+        display: grid;
+        grid-template-columns: 1fr 3fr;
+    }
+
+    .entity-component-wrapper {
+        position: relative;
+        width: 100%;
     }
 </style>

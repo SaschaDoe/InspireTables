@@ -178,8 +178,6 @@
                             store={characterStore}
                             EntityComponent={CharacterComponent}
                             creator={new CharacterCreator()}
-                            {activeEntityId}
-                            activeType={activeType}
                     />
                     </div>
                     <div id="entitylist-Illness">
@@ -189,8 +187,6 @@
                             store={illnessStore}
                             EntityComponent={IllnessComponent}
                             creator={new IllnessCreator()}
-                            {activeEntityId}
-                            activeType={activeType}
                     />
                         </div>
                 </div>

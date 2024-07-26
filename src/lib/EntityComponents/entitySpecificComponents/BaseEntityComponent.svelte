@@ -11,25 +11,29 @@
     }
 </script>
 
-<div class="flex items-center space-x-2">
+<div class="grid grid-cols-[auto,1fr] gap-x-2">
     {#if enableHidden}
-        <button on:click={toggleHidden} class="mb-2">
+        <button on:click={toggleHidden} class="self-start mt-1">
             {#if isHidden}
                 ▼
             {:else}
                 ▲
             {/if}
         </button>
+    {:else}
+        <div></div>
     {/if}
 
-    <h3 >{title}: {id}</h3>
-</div>
+    <h3>{title}: {id}</h3>
 
-{#if !isHidden}
-    <div transition:slide>
-        <slot></slot>
+    <div class="contents">
+        {#if !isHidden}
+            <div transition:slide|local class="col-span-2 info">
+                <slot></slot>
+            </div>
+        {/if}
     </div>
-{/if}
+</div>
 
 <style>
     button {
@@ -37,5 +41,10 @@
         border: none;
         cursor: pointer;
         font-size: 1.2em;
+    }
+    .info {
+        display: flex;
+        flex-direction: column;
+        white-space: nowrap;
     }
 </style>

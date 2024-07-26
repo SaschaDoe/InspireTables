@@ -3,7 +3,7 @@
     import BaseEntityComponent from "$lib/EntityComponents/entitySpecificComponents/BaseEntityComponent.svelte";
 
     export let entity: Character;
-    export let isHidden: boolean = false;
+    export let isHidden: boolean = true;
     export let enableHidden: boolean = true;
 </script>
 
