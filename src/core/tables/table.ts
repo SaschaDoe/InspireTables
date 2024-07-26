@@ -40,8 +40,8 @@ export class Table {
                 rollResult.results.push(subResult);
                 rollResult.entities.push(...subResult.entities);
             } else if (part instanceof FunctionEntry) {
-                let entity = part.costumeFunction(null); // You might want to pass appropriate input here
-                rollResult.addEntity(entity);
+                let entities = part.costumeFunction(null); // You might want to pass appropriate input here
+                rollResult.addEntities(entities);
             }
         }
 

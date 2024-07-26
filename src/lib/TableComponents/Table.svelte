@@ -5,8 +5,7 @@
     import { RollResult } from "../../core/tables/rollResult";
     import { Entry } from "../../core/tables/entry";
     import TreeView from "$lib/TableComponents/TreeView.svelte";
-    import {summarizeEntities} from "../../core/entities/entityHelper";
-    import {EntityStoreRegistry} from "../../core/entities/persist/entityStoreRegistry";
+    import { EntityStoreRegistry } from "../../core/entities/persist/entityStoreRegistry";
 
     let showModal: boolean = false;
     export let table: Table = new MainGenreTable();
@@ -17,7 +16,7 @@
     function roll() {
         rollResult = table.roll();
         modalDescription = rollResult.combinedString;
-        hasEntities = rollResult.entities.length > 0;
+        hasEntities = Object.values(rollResult.entities).some(entityArray => entityArray.length > 0);
         showModal = true;
     }
 
@@ -34,11 +33,12 @@
     }
 
     function handlePersistClick(): void {
-        for (let entity of rollResult.entities) {
-            const entityType = entity.constructor.name;
+        for (const [entityType, entities] of Object.entries(rollResult.entities)) {
             const store = EntityStoreRegistry.getInstance().getStore(entityType);
             if (store) {
-                store.saveEntity(entity);
+                for (const entity of entities) {
+                    store.saveEntity(entity);
+                }
             }
         }
         showModal = false;
@@ -57,12 +57,7 @@
     <p class="text-gray-700">{modalDescription}</p>
 
     {#if rollResult}
-        {#if rollResult.entities.length > 0}
-            <p class="text-green-900">Entities: {summarizeEntities(rollResult.entities)}</p>
-            <!-- TODO: Click on entity and scroll and open the Componenent if possible -->
-        {/if}
         <TreeView result={rollResult} />
-
     {/if}
 </Modal>
 

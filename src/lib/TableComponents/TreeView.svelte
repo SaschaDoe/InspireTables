@@ -1,14 +1,15 @@
 <script lang="ts">
     import type { RollResult } from "../../core/tables/rollResult";
-    import type {SvelteComponent} from "svelte";
-    import {entityComponentMap} from "$lib/EntityComponents/entityComponentMap";
-    import type {Entity} from "../../core/entities/entity";
+    import { entityComponentMap } from "$lib/EntityComponents/entityComponentMap";
+    import type { Entity } from "../../core/entities/entity";
 
     function getComponentForEntity(entity: Entity) {
-        console.log("Getting Component for: ",entity);
+        console.log("Getting Component for: ", entity);
         let name: string = entity.constructor.name;
+        console.log(name);
         let component = entityComponentMap[name] || null;
         console.log("Found: ", component);
+        console.log("In: ", entityComponentMap);
         return component;
     }
 
@@ -20,8 +21,9 @@
         <div class="flex items-center">
             <span class="text-blue-700">{result.entry.name} - {result.entry.DescriptionText}</span>
         </div>
-            <div class="ml-4">
-                {#each result.entities as entity}
+        <div class="ml-4">
+            {#each Object.entries(result.entities) as [entityType, entityList]}
+                {#each entityList as entity}
                     {#if getComponentForEntity(entity)}
                         <svelte:component
                                 this={getComponentForEntity(entity)}
@@ -31,6 +33,7 @@
                         />
                     {/if}
                 {/each}
-            </div>
+            {/each}
+        </div>
     </div>
 </div>

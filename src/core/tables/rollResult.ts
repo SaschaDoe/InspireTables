@@ -1,21 +1,24 @@
 import type {Entry} from "./entry";
 import {Table} from "./table";
 import type {Entity} from "../entities/entity";
+import type {CreatedEntities} from "../entities/creator";
 
 export class RollResult {
     entry: Entry;
     results: RollResult[] = [];
-    entities: Entity[] = [];
+    entities: CreatedEntities = {};
 
     constructor(entry: Entry) {
         this.entry = entry;
     }
 
-    addEntity(entity: any) {
-        if (Array.isArray(entity)) {
-            this.entities.push(...entity.filter(e => e !== null && e !== undefined));
-        } else if (entity !== null && entity !== undefined) {
-            this.entities.push(entity);
+    addEntities(entities: CreatedEntities) {
+        console.log("Entities added: ", entities);
+        for (const [key, value] of Object.entries(entities)) {
+            if (!this.entities[key]) {
+                this.entities[key] = [];
+            }
+            this.entities[key].push(...value);
         }
     }
 

@@ -3,10 +3,10 @@ function Nothing(input: any) :any {
 }
 
 export class FunctionEntry {
-    costumeFunction: (input: any) => any | any[] = Nothing;
+    costumeFunction: (input: any) => any[] = Nothing;
     description = "";
 
-    withFunction(func: (input: any) => any | any[]) {
+    withFunction(func: (input: any) => any[]) {
         this.costumeFunction = func;
         return this;
     }

@@ -1,4 +1,4 @@
-import type {IdStorageStrategy} from "./idStorageStrategy";
+import type { IdStorageStrategy } from "./idStorageStrategy";
 
 export class IdGenerator {
     private static instance: IdGenerator;
@@ -6,6 +6,8 @@ export class IdGenerator {
     private readonly fileName = 'last_id.txt';
     private initialized: boolean = false;
     private idStorageStrategy: IdStorageStrategy;
+    private initializationPromise: Promise<void> | null = null;
+    private generateLock: Promise<void> = Promise.resolve();
 
     private constructor(idStorageStrategy: IdStorageStrategy) {
         this.counter = 0;
@@ -19,7 +21,16 @@ export class IdGenerator {
         return IdGenerator.instance;
     }
 
-    public async initialize(): Promise<void> {
+    public initialize(): Promise<void> {
+        if (this.initializationPromise) {
+            return this.initializationPromise;
+        }
+
+        this.initializationPromise = this._initialize();
+        return this.initializationPromise;
+    }
+
+    private async _initialize(): Promise<void> {
         if (this.initialized) return;
 
         try {
@@ -33,16 +44,39 @@ export class IdGenerator {
     }
 
     public async generateId(): Promise<number> {
-        if (!this.initialized) {
-            await this.initialize();
-        }
+        await this.initialize();
 
-        this.counter++;
-        await this.idStorageStrategy.saveLastId(this.fileName, this.counter);
-        return this.counter;
+        // Use a lock to ensure only one generation happens at a time
+        const release = await this.acquireLock();
+        try {
+            this.counter++;
+            await this.idStorageStrategy.saveLastId(this.fileName, this.counter);
+            return this.counter;
+        } finally {
+            release();
+        }
     }
 
-    public async clear(): Promise<void>{
-        this.counter = 0;
+    private async acquireLock(): Promise<() => void> {
+        let release: () => void;
+        const newLock = new Promise<void>(resolve => {
+            release = resolve;
+        });
+
+        const previousLock = this.generateLock;
+        this.generateLock = newLock;
+
+        await previousLock;
+        return release!;
+    }
+
+    public async clear(): Promise<void> {
+        const release = await this.acquireLock();
+        try {
+            this.counter = 0;
+            await this.idStorageStrategy.saveLastId(this.fileName, this.counter);
+        } finally {
+            release();
+        }
     }
 }
