@@ -1,14 +1,17 @@
 import { invoke } from '@tauri-apps/api/tauri';
 import type { Entity } from "../entity";
-import type {StorageStrategy} from "./storageStrategy";
-import type {PrivateKeyInput} from "node:crypto";
-import {idGenerator} from "./stores";
+import type { StorageStrategy } from "./storageStrategy";
+import type { PrivateKeyInput } from "node:crypto";
+import { idGenerator } from "./stores";
+
+type Subscriber<T> = (entities: T[]) => void;
 
 export class EntityStorageManager<T extends Entity> {
     private entityType: string;
     private entities: T[] = [];
     private initialized: boolean = false;
     private storageStrategy: StorageStrategy;
+    private subscribers: Set<Subscriber<T>> = new Set();
 
     constructor(entityType: string, storageStrategy: StorageStrategy) {
         this.entityType = entityType;
@@ -20,6 +23,7 @@ export class EntityStorageManager<T extends Entity> {
         this.entities = [];
         await this.saveEntities();
         console.log(`Cleared all entities for ${this.entityType}`);
+        this.notifySubscribers();
     }
 
     private async initializeStorage(): Promise<void> {
@@ -51,6 +55,7 @@ export class EntityStorageManager<T extends Entity> {
             this.entities = JSON.parse(jsonString) as T[];
         }
         console.log(`Loaded ${this.entities.length} entities from ${filePath}`);
+        this.notifySubscribers();
     }
 
     private async saveEntities(): Promise<void> {
@@ -58,6 +63,7 @@ export class EntityStorageManager<T extends Entity> {
         const jsonString = JSON.stringify(this.entities, null, 2);
         await this.storageStrategy.saveFile(filePath, jsonString);
         console.log(`Saved ${this.entities.length} entities to ${filePath}`);
+        this.notifySubscribers();
     }
 
     async getAllEntities(): Promise<T[]> {
@@ -65,8 +71,8 @@ export class EntityStorageManager<T extends Entity> {
         return this.entities || [];
     }
 
-    async saveSpecificEntities(entities: T[]): Promise<void>{
-        for(let entity of entities) {
+    async saveSpecificEntities(entities: T[]): Promise<void> {
+        for (let entity of entities) {
             await this.saveEntity(entity);
         }
     }
@@ -85,5 +91,14 @@ export class EntityStorageManager<T extends Entity> {
             console.log(`Added new entity with id ${entity.id}`);
         }
         await this.saveEntities();
+    }
+
+    subscribe(callback: Subscriber<T>): () => void {
+        this.subscribers.add(callback);
+        return () => this.subscribers.delete(callback);
+    }
+
+    private notifySubscribers(): void {
+        this.subscribers.forEach(subscriber => subscriber(this.entities));
     }
 }

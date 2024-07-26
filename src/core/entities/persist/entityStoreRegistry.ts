@@ -1,10 +1,12 @@
+import type { Entity } from "../entity";
 import { EntityStorageManager } from "./entityStorageManager";
-import type {Entity} from "../entity";
 
-//see stores for usage
+type Subscriber<T> = (entities: T) => void;
+
 export class EntityStoreRegistry {
     private static instance: EntityStoreRegistry;
     private stores: Map<string, EntityStorageManager<any>> = new Map();
+    private subscribers: Set<Subscriber<Map<string, Entity[]>>> = new Set();
 
     private constructor() {}
 
@@ -17,6 +19,7 @@ export class EntityStoreRegistry {
 
     registerStore(entityType: string, store: EntityStorageManager<any>): void {
         this.stores.set(entityType, store);
+        store.subscribe(() => this.notifySubscribers());
     }
 
     getStore(entityType: string): EntityStorageManager<any> | undefined {
@@ -31,17 +34,24 @@ export class EntityStoreRegistry {
         return new Map(this.stores);
     }
 
-
     async getAllEntitiesByType(): Promise<Map<string, Entity[]>> {
-        const registry = EntityStoreRegistry.getInstance();
-        const allStores = registry.getAllStores();
         const entitiesByType = new Map<string, Entity[]>();
 
-        for (const [entityType, store] of allStores) {
+        for (const [entityType, store] of this.stores) {
             const entities = await store.getAllEntities();
             entitiesByType.set(entityType, entities);
         }
 
         return entitiesByType;
+    }
+
+    subscribe(callback: Subscriber<Map<string, Entity[]>>): () => void {
+        this.subscribers.add(callback);
+        return () => this.subscribers.delete(callback);
+    }
+
+    private async notifySubscribers(): Promise<void> {
+        const entitiesByType = await this.getAllEntitiesByType();
+        this.subscribers.forEach(subscriber => subscriber(entitiesByType));
     }
 }
