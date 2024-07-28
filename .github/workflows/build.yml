@@ -2,7 +2,7 @@ name: Build Tauri App
 
 on:
   push:
-    branches: [ master ]  # Adjust this to your main branch name
+    branches: [ main ]  # Adjust this to your main branch name
 
 jobs:
   build:
@@ -16,14 +16,27 @@ jobs:
       with:
         node-version: '20'  # Updated to a newer version of Node.js
 
-    - name: Install Rust
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        profile: minimal
+    - name: Verify Node.js version
+      run: |
+        node --version
+        npm --version
 
-    - name: Install dependencies
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+
+    - name: Install dependencies (Rust)
+      run: |
+        rustc --version
+        cargo --version
+
+    - name: Install dependencies (Node.js)
       run: npm ci
+
+    - name: Install Tauri CLI
+      run: npm install -g @tauri-apps/cli
+
+    - name: Verify Tauri CLI installation
+      run: tauri --version
 
     - name: Build Tauri app
       run: npm run tauri build
@@ -34,24 +47,4 @@ jobs:
         name: tauri-app
         path: src-tauri/target/release/bundle/msi/*.msi  # Adjust path if necessary
 
-    # Optional: Create a release
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: v${{ github.run_number }}
-        release_name: Release ${{ github.run_number }}
-        draft: false
-        prerelease: false
-
-    - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./src-tauri/target/release/bundle/msi/YourAppName.msi  # Adjust this path
-        asset_name: YourAppName-${{ github.run_number }}.msi
-        asset_content_type: application/octet-stream
+    # Optional: Create a release steps...
