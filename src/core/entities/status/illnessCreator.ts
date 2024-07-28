@@ -1,7 +1,7 @@
 import { Illness } from "./illness";
 import { Creator, type CreatedEntities } from "../creator";
 import { IllnessAdjectiveTable } from "../../tables/illness/illnessAdjectiveTable";
-import { TimeTable } from "../../tables/other/TimeTable";
+import { TimeTable } from "../../tables/other/timeTable";
 import { IllnessTypeTable } from "../../tables/illness/illnessTypeTable";
 import { IllnessSymptomTable } from "../../tables/illness/illnessSymptomTable";
 import { IllnessCureTable } from "../../tables/illness/illnessCureTable";
@@ -10,12 +10,18 @@ import { IllnessWorldEffectTable } from "../../tables/illness/illnessWorldEffect
 import { IllnessLoreTable } from "../../tables/illness/illnessLoreTable";
 import { IllnessTransmissionTable } from "../../tables/illness/illnessTransmissionTable";
 import { illnessStore } from "../persist/stores";
+import {PrognosisTable} from "../../tables/illness/prognosisTable";
+import {ImpactTable} from "../../tables/other/impactTable";
+import {StrengthTable} from "../../tables/other/strengthTable";
 
 export class IllnessCreator extends Creator {
     create(): CreatedEntities {
         let illness = new Illness();
         illness.adjective = new IllnessAdjectiveTable().withDice(this.dice).roll().combinedString;
         illness.time = new TimeTable().withDice(this.dice).roll().combinedString;
+        illness.onset = new TimeTable().withDice(this.dice).roll().combinedString;
+        illness.impactOnFunctioning = new ImpactTable().withDice(this.dice).roll().combinedString;
+        illness.levelOfCare = new StrengthTable().withDice(this.dice).roll().combinedString;
         illness.type = new IllnessTypeTable().withDice(this.dice).roll().combinedString;
 
         let numberBeginningSymptoms = this.dice.rollWith(3);
@@ -34,7 +40,7 @@ export class IllnessCreator extends Creator {
         illness.lore = new IllnessLoreTable().withDice(this.dice).roll().combinedString;
         illness.age = new TimeTable().withDice(this.dice).roll().combinedString;
         illness.transmission = new IllnessTransmissionTable().withDice(this.dice).roll().combinedString;
-
+        illness.prognosis = new PrognosisTable().withDice(this.dice).roll().combinedString;
         return { Illness: [illness] };
     }
 

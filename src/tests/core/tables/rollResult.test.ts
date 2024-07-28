@@ -2,20 +2,20 @@ import {describe, expect, test} from "vitest";
 import {Table} from "../../../core/tables/table";
 import {Entry} from "../../../core/tables/entry";
 import {FunctionEntry} from "../../../core/tables/functionEntry";
-import {IllnessCreator} from "../../../core/entities/status/illnessCreator";
 import {Illness} from "../../../core/entities/status/illness";
-import {Character} from "../../../core/entities/character/character";
 import {CharacterCreator} from "../../../core/entities/character/characterCreator";
 
 describe('RollResult', () => {
     test('get one entity', () => {
         let table = new Table();
         let illness = new Illness();
-        table.entries.push(new Entry().withFunction(new FunctionEntry().withFunction(() => illness)));
+        table.entries.push(new Entry().withFunction(new FunctionEntry().withFunction(() => ({ Illness: [illness] }))));
 
         let result = table.roll();
-        expect(result.entities.length).toBe(1);
-        expect(result.entities[0]).toBe(illness);
+        expect(Object.keys(result.entities).length).toBe(1);
+        expect(result.entities.Illness).toBeDefined();
+        expect(result.entities.Illness.length).toBe(1);
+        expect(result.entities.Illness[0]).toBe(illness);
     });
 
     test('get two entities', () => {
@@ -23,13 +23,14 @@ describe('RollResult', () => {
         let illness = new Illness();
         let illness2 = new Illness();
         table.entries.push(new Entry()
-            .withFunction(new FunctionEntry().withFunction(() => illness))
-            .withFunction(new FunctionEntry().withFunction(() => illness2)));
+            .withFunction(new FunctionEntry().withFunction(() => ({ Illness: [illness] })))
+            .withFunction(new FunctionEntry().withFunction(() => ({ Illness: [illness2] }))));
 
         let result = table.roll();
-        expect(result.entities.length).toBe(2);
-        expect(result.entities[0]).toBe(illness);
-        expect(result.entities[1]).toBe(illness2);
+        expect(Object.keys(result.entities).length).toBe(1);
+        expect(result.entities.Illness.length).toBe(2);
+        expect(result.entities.Illness[0]).toBe(illness);
+        expect(result.entities.Illness[1]).toBe(illness2);
     });
 
     test('get two entities from one function', () => {
@@ -37,11 +38,12 @@ describe('RollResult', () => {
         let illness = new Illness();
         let illness2 = new Illness();
         table.entries.push(new Entry()
-            .withFunction(new FunctionEntry().withFunction(() => [illness,illness2])));
+            .withFunction(new FunctionEntry().withFunction(() => ({ Illness: [illness, illness2] }))));
         let result = table.roll();
-        expect(result.entities.length).toBe(2);
-        expect(result.entities[0]).toBe(illness);
-        expect(result.entities[1]).toBe(illness2);
+        expect(Object.keys(result.entities).length).toBe(1);
+        expect(result.entities.Illness.length).toBe(2);
+        expect(result.entities.Illness[0]).toBe(illness);
+        expect(result.entities.Illness[1]).toBe(illness2);
     });
 
     test('get two entities from one entity', () => {
@@ -54,8 +56,8 @@ describe('RollResult', () => {
             })));
         let result = table.roll();
 
-        expect(result.entities.length).toBe(2);
-        expect(result.entities[0]).toBeInstanceOf(Character);
-        expect(result.entities[1]).toBeInstanceOf(Illness);
+        expect(Object.keys(result.entities).length).toBe(2);
+        expect(result.entities.Character.length).toBe(1);
+        expect(result.entities.Illness.length).toBe(1);
     });
 });

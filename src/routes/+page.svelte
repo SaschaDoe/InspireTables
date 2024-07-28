@@ -54,22 +54,6 @@
 		color: #333;
 	}
 
-	.title {
-		text-align: center;
-		margin: 20px 0;
-		font-size: 3rem;
-		color: #4a90e2;
-		font-weight: bold;
-	}
-
-	.tabs-container {
-		position: sticky;
-		top: 0;
-		background-color: #ffffff;
-		z-index: 5;
-		padding: 20px 20px 0 20px;
-	}
-
 	.flex {
 		display: flex;
 	}

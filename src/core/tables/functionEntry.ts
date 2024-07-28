@@ -1,12 +1,14 @@
-function Nothing(input: any) :any {
-    return "";
+import type {CreatedEntities} from "../entities/creator";
+
+function Nothing(input: any) :CreatedEntities {
+    return {};
 }
 
 export class FunctionEntry {
-    costumeFunction: (input: any) => any[] = Nothing;
+    costumeFunction: (input: any) => CreatedEntities = Nothing;
     description = "";
 
-    withFunction(func: (input: any) => any[]) {
+    withFunction(func: (input: any) => CreatedEntities) {
         this.costumeFunction = func;
         return this;
     }

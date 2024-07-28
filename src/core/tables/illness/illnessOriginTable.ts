@@ -1,6 +1,18 @@
 import {Table} from "../table";
 
+//TODO: combination of causes
+//TODO: probability from risk to ceratin
+//TODO: all attributes can be known and unknown
+//TODO: leading to one overall known status
+//TODO: Necessary vs sufficient causes
 const illnessOrigins: string[] = [
+    "diet",
+    "autoimmune reaction",
+    "toxins", //TODO which one
+    "radiation",
+    "lack of physical activity",
+    "stress",
+    "isolation",
     "natural mutation",
     "laboratory accident",
     "biological warfare",
@@ -11,7 +23,6 @@ const illnessOrigins: string[] = [
     "alien organism",
     "magical experimentation",
     "ancient relic",
-    "toxic exposure",
     "genetic predisposition",
     "mythical creature",
     "demonic presence",

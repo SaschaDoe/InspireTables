@@ -1,6 +1,6 @@
 import {Table} from "../table";
 
-const times = ["short", "mid", "long", "infinite"];
+export const times = ["immediately", "short", "mid", "long", "infinite"];
 
 export class TimeTable extends Table{
     constructor() {

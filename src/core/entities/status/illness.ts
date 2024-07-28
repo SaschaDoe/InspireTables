@@ -12,4 +12,9 @@ export class Illness extends Entity{
     age = "";
     transmission = "";
     adjective = "";
+    onset = "";
+    prognosis = "";
+    impactOnFunctioning = "";
+    levelOfCare = "";
+
 }

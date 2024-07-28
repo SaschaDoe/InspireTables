@@ -33,10 +33,13 @@
     }
 
     function handlePersistClick(): void {
+        console.log("start handle persist")
         for (const [entityType, entities] of Object.entries(rollResult.entities)) {
             const store = EntityStoreRegistry.getInstance().getStore(entityType);
             if (store) {
                 for (const entity of entities) {
+                    console.log("Save ",entity)
+                    console.log("into ",store)
                     store.saveEntity(entity);
                 }
             }

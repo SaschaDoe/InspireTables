@@ -68,19 +68,6 @@ describe('Table', () => {
         expect(rollResult.combinedString).toBe("Main Entry: Inner Entry");
     })
 
-    test('roll inner Table combined description', () => {
-        let table = new Table();
-        let innerTable = new Table();
-        let innerEntry = new Entry().withText("Inner Entry");
-        innerTable.entries.push(innerEntry);
-        let entry = new Entry().withText("Main Entry: ").withTable(innerTable);
-        table.entries.push(entry);
-
-        let rollResult = table.roll();
-
-        expect(rollResult.combinedString).toBe("Main Entry: Inner Entry");
-    })
-
     test('roll two inner Tables combined description', () => {
         let table = new Table();
         let innerTable = new Table();

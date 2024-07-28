@@ -1,6 +1,6 @@
 import { Creator, type CreatedEntities } from "../creator";
 import { Character } from "./character";
-import { GenderTable } from "../../tables/other/GenderTable";
+import { GenderTable } from "../../tables/other/genderTable";
 import { IllnessCreator } from "../status/illnessCreator";
 import { characterStore, illnessStore } from "../persist/stores";
 import type { Illness } from "../status/illness";

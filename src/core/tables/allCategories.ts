@@ -10,8 +10,13 @@ import {IllnessOriginTable} from "./illness/illnessOriginTable";
 import {IllnessSymptomTable} from "./illness/illnessSymptomTable";
 import {IllnessTypeTable} from "./illness/illnessTypeTable";
 import {IllnessTransmissionTable} from "./illness/illnessTransmissionTable";
-import {TimeTable} from "./other/TimeTable";
+import {TimeTable} from "./other/timeTable";
 import {CharacterTable} from "./character/characterTable";
+import {StrengthTable} from "./other/strengthTable";
+import {ProbabilityTable} from "./other/probabilityTable";
+import {GenderTable} from "./other/genderTable";
+import {PrognosisTable} from "./illness/prognosisTable";
+import {ImpactTable} from "./other/impactTable";
 
 export function allCategories(): Category[] {
     let allCategories: Category[] = [];
@@ -37,12 +42,17 @@ export function allCategories(): Category[] {
         .withTable(new IllnessSymptomTable())
         .withTable(new IllnessTypeTable())
         .withTable(new IllnessTransmissionTable())
-        .withTable(new IllnessAdjectiveTable());
+        .withTable(new IllnessAdjectiveTable())
+        .withTable(new PrognosisTable());
     allCategories.push(illnessCategory);
 
     let otherCategory = new Category()
         .withName("Other")
-        .withTable(new TimeTable());
+        .withTable(new TimeTable())
+        .withTable(new StrengthTable())
+        .withTable(new ProbabilityTable())
+        .withTable(new GenderTable())
+        .withTable(new ImpactTable());
     allCategories.push(otherCategory);
 
     return allCategories;

@@ -38,7 +38,8 @@ export class Table {
             if (part instanceof Table) {
                 let subResult = part.roll();
                 rollResult.results.push(subResult);
-                rollResult.entities.push(...subResult.entities);
+                rollResult.addEntities(subResult.entities);
+
             } else if (part instanceof FunctionEntry) {
                 let entities = part.costumeFunction(null); // You might want to pass appropriate input here
                 rollResult.addEntities(entities);

@@ -1,7 +1,5 @@
-import { invoke } from '@tauri-apps/api/tauri';
 import type { Entity } from "../entity";
 import type { StorageStrategy } from "./storageStrategy";
-import type { PrivateKeyInput } from "node:crypto";
 import { idGenerator } from "./stores";
 
 type Subscriber<T> = (entities: T[]) => void;
@@ -81,6 +79,7 @@ export class EntityStorageManager<T extends Entity> {
         await this.initializeStorage();
         if (entity.id === -1) {
             entity.id = await idGenerator.generateId();
+            console.log("id: ", entity.id)
         }
         const index = this.entities.findIndex(e => e.id === entity.id);
         if (index !== -1) {
