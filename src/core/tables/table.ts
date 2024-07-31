@@ -4,15 +4,22 @@ import {Dice} from "./dice";
 import {FunctionEntry} from "./functionEntry";
 
 export class Table {
+    values: string[] = [];
     title: string = "";
     entries: Entry[] = [];
     private dice: Dice = new Dice();
 
     withEntriesFromList(inputs: string[]): Table {
+        this.values = inputs;
         for (let input of inputs) {
             this.entries.push(new Entry().withText(input));
         }
         this.sortEntriesAlphabetically();
+        return this;
+    }
+
+    withValues(values: string[]){
+        this.values = values;
         return this;
     }
 
@@ -32,7 +39,7 @@ export class Table {
     roll(): RollResult {
         let result = this.dice.roll(0, this.entries.length - 1);
         let entry = this.entries[result];
-        let rollResult = new RollResult(entry);
+        let rollResult = new RollResult(entry).withRolledIndex(result);
 
         for (let part of entry.parts) {
             if (part instanceof Table) {

@@ -1,6 +1,6 @@
 import {Table} from "../table";
 
-const illnessAdjectiveTable: string[] = [
+export const illnessAdjectiveTable: string[] = [
     "contagious",
     "infectious",
     "virulent",

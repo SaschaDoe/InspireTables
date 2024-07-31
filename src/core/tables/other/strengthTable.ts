@@ -1,6 +1,6 @@
 import {Table} from "../table";
 
-export const strength = [
+export const strengths = [
     "negligible",
     "weak",
     "mild",
@@ -14,7 +14,7 @@ export class StrengthTable extends Table{
     constructor(){
         super();
         this.title = "Strength"
-        this.withEntriesFromList(strength);
+        this.withEntriesFromList(strengths);
 
     }
 }

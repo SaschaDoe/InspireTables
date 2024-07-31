@@ -1,12 +1,11 @@
 import type {Entry} from "./entry";
-import {Table} from "./table";
-import type {Entity} from "../entities/entity";
 import type {CreatedEntities} from "../entities/creator";
 
 export class RollResult {
     entry: Entry;
     results: RollResult[] = [];
     entities: CreatedEntities = {};
+    rolledIndex = -1;
 
     constructor(entry: Entry) {
         this.entry = entry;
@@ -40,4 +39,8 @@ export class RollResult {
         return parts.join('').trim();
     }
 
+    withRolledIndex(result: number) {
+        this.rolledIndex = result;
+        return this;
+    }
 }

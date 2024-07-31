@@ -1,8 +1,8 @@
 import { type Illness } from "./illness";
-import { strength } from "../../tables/other/strengthTable";
+import { strengths } from "../../tables/other/strengthTable";
 import { prognosis } from "../../tables/illness/prognosisTable";
 import { times } from "../../tables/other/timeTable";
-import { impact } from "../../tables/other/impactTable";
+import { impacts } from "../../tables/other/impactTable";
 import { amounts } from "../../tables/other/amountTable";
 import {cureComplexity} from "../../tables/illness/cureComplexityTable";
 import {cureEffectiveness} from "../../tables/illness/cureEffectivnessTable";
@@ -74,8 +74,8 @@ export class IllnessViewModel {
             {values: prognosis, current: this.illness.prognosis},
             {values: times, current: this.illness.onset, mapping: pointMappings.onset},
             {values: times, current: this.illness.time, mapping: pointMappings.timeToCure},
-            {values: impact, current: this.illness.impactOnFunctioning},
-            {values: strength, current: this.illness.levelOfCare}
+            {values: impacts, current: this.illness.impactOnFunctioning},
+            {values: strengths, current: this.illness.levelOfCare}
         ];
 
         let totalSeverity = 0;
@@ -95,7 +95,7 @@ export class IllnessViewModel {
         const averageSeverity = totalSeverity / attributes.length;
         const severityIndex = Math.min(Math.round(averageSeverity * 6), 7) - 1;
 
-        this._severity = strength[severityIndex];
+        this._severity = strengths[severityIndex];
     }
 
     private calculateKnown(): void {

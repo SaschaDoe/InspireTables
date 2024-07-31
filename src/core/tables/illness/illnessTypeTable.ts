@@ -1,6 +1,6 @@
 import {Table} from "../table";
 
-const generalIllnessNames: string[] = [
+export const generalIllnessNames: string[] = [
     "fever",
     "plague",
     "epidemic",

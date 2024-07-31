@@ -1,6 +1,6 @@
 import {Table} from "../table";
 
-const illnessWorldImpacts: string[] = [
+export const illnessWorldImpacts: string[] = [
     "economic downturn",
     "social unrest",
     "quarantine measures",

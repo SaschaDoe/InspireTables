@@ -1,6 +1,6 @@
 import {Table} from "../table";
 
-export const impact = [
+export const impacts = [
     "no",
     "minimal",
     "mild",
@@ -14,7 +14,7 @@ export class ImpactTable extends Table{
     constructor(){
         super();
         this.title = "Impact"
-        this.withEntriesFromList(impact);
+        this.withEntriesFromList(impacts);
 
     }
 }

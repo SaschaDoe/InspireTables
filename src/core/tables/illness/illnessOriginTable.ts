@@ -5,7 +5,7 @@ import {Table} from "../table";
 //TODO: all attributes can be known and unknown
 //TODO: leading to one overall known status
 //TODO: Necessary vs sufficient causes
-const illnessOrigins: string[] = [
+export const illnessOrigins: string[] = [
     "diet",
     "autoimmune reaction",
     "toxins", //TODO which one
