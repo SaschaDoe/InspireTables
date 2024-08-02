@@ -98,19 +98,15 @@
                     <table class="table w-full">
                         <thead>
                         <tr>
-                            <th class="w-1/4">ID</th>
-                            <th class="w-3/4">Entity</th>
+                            <th >ID</th>
+                            <th >Entity</th>
                         </tr>
                         </thead>
                         <tbody>
                         {#each entities as entity (entity.id)}
-                            <tr id="entity-{entity.id}" class="entity-row">
-                                <td class="w-1/4 align-top">{entity.id}</td>
-                                <td class="w-3/4">
-                                    <div class="entity-component-wrapper">
-                                        <svelte:component this={EntityComponent} {entity} />
-                                    </div>
-                                </td>
+                            <tr id="entity-{entity.id}" >
+                                <td class="align-top">{entity.id}</td>
+                                <td ><svelte:component this={EntityComponent} {entity} /></td>
                             </tr>
                         {/each}
                         </tbody>
@@ -133,6 +129,6 @@
 
     .entity-component-wrapper {
         position: relative;
-        width: 100%;
+        width: 250px;
     }
 </style>

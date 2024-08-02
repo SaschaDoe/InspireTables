@@ -1,11 +1,12 @@
 import {Table} from "../table";
 
+//TODO: add vectors or body fluids with other tables
 const illnessTransmissionMethods: string[] = [
     "airborne particles",
     "direct physical contact",
     "contaminated water or food",
     "bloodborne pathogens",
-    "vector-borne (e.g., insects)",
+    "vector-borne ",
     "sexual transmission",
     "mother to fetus (vertical transmission)",
     "droplet spread",

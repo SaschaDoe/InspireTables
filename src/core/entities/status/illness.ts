@@ -2,9 +2,7 @@ import { Entity } from "../entity";
 
 export class Illness extends Entity {
     adjective = "";
-    adjectiveKnown = "";
-    adjectiveInternalKnown = "";
-    adjectiveHandlingKnown = "";
+    type = "";
 
     time = "";
     timeKnown = "";
@@ -17,20 +15,10 @@ export class Illness extends Entity {
     onsetHandlingKnown = "";
 
     impactOnFunctioning = "";
-    impactKnown = "";
-    impactInternalKnown = "";
-    impactHandlingKnown = "";
-
-    levelOfCare = "";
-    levelOfCareKnown = "";
-    levelOfCareInternalKnown = "";
-    levelOfCareHandlingKnown = "";
-
-    type = "";
-    typeKnown = "";
-    typeInternalKnown = "";
-    typeHandlingKnown = "";
-
+    impactOnFunctioningKnown = "";
+    impactOnFunctioningInternalKnown = "";
+    impactOnFunctioningHandlingKnown = "";
+    
     beginningSymptoms: string[] = [];
     beginningSymptomsKnown = "";
     beginningSymptomsInternalKnown = "";
@@ -71,30 +59,7 @@ export class Illness extends Entity {
     prognosisInternalKnown = "";
     prognosisHandlingKnown = "";
 
-    crossSpeciesTransmission = "";
-    crossSpeciesTransmissionKnown = "";
-    crossSpeciesTransmissionInternalKnown = "";
-    crossSpeciesTransmissionHandlingKnown = "";
-
-    geographicSpread = "";
-    geographicSpreadKnown = "";
-    geographicSpreadInternalKnown = "";
-    geographicSpreadHandlingKnown = "";
-
-    hostDiversity = "";
-    hostDiversityKnown = "";
-    hostDiversityInternalKnown = "";
-    hostDiversityHandlingKnown = "";
-
-    seasonality = "";
-    seasonalityKnown = "";
-    seasonalityInternalKnown = "";
-    seasonalityHandlingKnown = "";
-
-    vectorInvolvement = "";
-    vectorInvolvementKnown = "";
-    vectorInvolvementInternalKnown = "";
-    vectorInvolvementHandlingKnown = "";
+    severity = "";
 
     cure = "";
     cureKnown = "";
@@ -155,9 +120,57 @@ export class Illness extends Entity {
 
     diagnoseDifficulty = "";
 
-    severity = "";
-    known = "";
+    reproductionRate = "";
+    reproductionRateKnown = "";
+    reproductionRateInternalKnown = "";
+    reproductionRateHandlingKnown = "";
+
+    infectiousPeriod = "";
+    infectiousPeriodKnown = "";
+    infectiousPeriodInternalKnown = "";
+    infectiousPeriodHandlingKnown = "";
+
+    attackRate = "";
+    attackRateKnown = "";
+    attackRateInternalKnown = "";
+    attackRateHandlingKnown = "";
+
+    asymptomaticSpread = "";
+    asymptomaticSpreadKnown = "";
+    asymptomaticSpreadInternalKnown = "";
+    asymptomaticSpreadHandlingKnown = "";
+
+    environmentalResilience = "";
+    environmentalResilienceKnown = "";
+    environmentalResilienceInternalKnown = "";
+    environmentalResilienceHandlingKnown = "";
+
+    crossSpeciesTransmission = "";
+    crossSpeciesTransmissionKnown = "";
+    crossSpeciesTransmissionInternalKnown = "";
+    crossSpeciesTransmissionHandlingKnown = "";
+
+    geographicSpread = "";
+    geographicSpreadKnown = "";
+    geographicSpreadInternalKnown = "";
+    geographicSpreadHandlingKnown = "";
+
+    hostDiversity = "";
+    hostDiversityKnown = "";
+    hostDiversityInternalKnown = "";
+    hostDiversityHandlingKnown = "";
+
+    seasonality = "";
+    seasonalityKnown = "";
+    seasonalityInternalKnown = "";
+    seasonalityHandlingKnown = "";
+
+    vectorInvolvement = "";
+    vectorInvolvementKnown = "";
+    vectorInvolvementInternalKnown = "";
+    vectorInvolvementHandlingKnown = "";
+
     contagiousness = "";
 
-
+    known = "";
 }

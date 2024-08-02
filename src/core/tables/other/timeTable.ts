@@ -1,6 +1,19 @@
 import {Table} from "../table";
 
-export const times = ["immediately", "short", "mid", "long", "infinite"];
+export const times = [
+    "immediate",
+    "seconds",
+    "minutes",
+    "hours",
+    "days",
+    "weeks",
+    "months",
+    "years",
+    "centuries",
+    "season",
+    "generational",
+    "infinite",
+];
 
 export class TimeTable extends Table{
     constructor() {

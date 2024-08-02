@@ -1,13 +1,13 @@
 import { Table } from "../table";
 
 export const difficultyLevels = [
-    "trivially",
-    "straightforward",
-    "challenging",
-    "moderately difficult",
+    "trivial",
+    "easy",
+    "simple",
+    "moderate",
     "complex",
     "challenging",
-    "nearly impossible",
+    "impossible",
 ];
 
 export class DifficultyLevelTable extends Table {

@@ -1,4 +1,3 @@
-import {IllnessAdjectiveTable} from "../../tables/illness/illnessAdjectiveTable";
 import {TimeTable} from "../../tables/other/timeTable";
 import {IllnessTypeTable} from "../../tables/illness/illnessTypeTable";
 import {IllnessSymptomTable} from "../../tables/illness/illnessSymptomTable";
@@ -8,20 +7,20 @@ import {IllnessWorldEffectTable} from "../../tables/illness/illnessWorldEffectTa
 import {IllnessLoreTable} from "../../tables/illness/illnessLoreTable";
 import {IllnessTransmissionTable} from "../../tables/illness/illnessTransmissionTable";
 import {illnessStore} from "../persist/stores";
-import {prognosis, PrognosisTable} from "../../tables/illness/prognosisTable";
+import {PrognosisTable} from "../../tables/illness/prognosisTable";
 import {ImpactTable} from "../../tables/other/impactTable";
-import {strengths, StrengthTable} from "../../tables/other/strengthTable";
+import {strengths} from "../../tables/other/strengthTable";
 import {amounts, AmountTable} from "../../tables/other/amountTable";
 import {VectorInvolvementTable} from "../../tables/illness/vectorInvolvementTable";
 import {SeasonalityTable} from "../../tables/illness/seasonalityTable";
 import {HostDiversityTable} from "../../tables/illness/hostDiversityTable";
 import {GeographicSpreadTable} from "../../tables/illness/geographicSpreadTable";
 import {CrossSpeciesTransmissionTable} from "../../tables/illness/crossSpeciesTransmissionTable";
-import {cureEffectiveness, CureEffectivenessTable} from "../../tables/illness/cureEffectivnessTable";
-import {cureAvailability, CureAvailabilityTable} from "../../tables/illness/cureAvailabilityTable";
-import {cureSideEffects, CureSideEffectsTable} from "../../tables/illness/cureSideEffectsTable";
-import {cureDuration, CureDurationTable} from "../../tables/illness/cureDurationTable";
-import {cureComplexity, CureComplexityTable} from "../../tables/illness/cureComplexityTable";
+import {CureEffectivenessTable} from "../../tables/illness/cureEffectivnessTable";
+import {CureAvailabilityTable} from "../../tables/illness/cureAvailabilityTable";
+import {CureSideEffectsTable} from "../../tables/illness/cureSideEffectsTable";
+import {CureDurationTable} from "../../tables/illness/cureDurationTable";
+import {CureComplexityTable} from "../../tables/illness/cureComplexityTable";
 import {AttributeDefinition} from "../attributeDefinition";
 import {SymptomObviousnessTable} from "../../tables/illness/symptomObviousnessTable";
 import {SymptomConsistencyTable} from "../../tables/illness/symptomConsistencyTable";
@@ -34,16 +33,22 @@ import type {Table} from "../../tables/table";
 import {Experiment} from "../experiment";
 import type {CureDifficulty} from "./cureDifficulty";
 import type {Severity} from "./severity";
+import {SpeedTable} from "../../tables/other/speedTable";
+import {AsymptomaticSpreadTable} from "../../tables/illness/asymptomaticSpreadTable";
+import {EnvironmentalResilienceTable} from "../../tables/illness/environmentalResilienceTable";
+import type {Contagiousness} from "./contagiousness";
+import {intensityLevels} from "../../tables/other/intensityTable";
+import {difficultyLevels} from "../../tables/other/difficultTable";
+import {IllnessAdjectiveGenerator} from "./illnessAdjectiveGenerator";
 
 type IllnessAttribute = keyof Illness;
-export class NewIllnessCreator extends Creator{
+
+export class IllnessCreator extends Creator{
     attributeDefinitions: AttributeDefinition[] = [
-        new AttributeDefinition().withName('adjective').withTable(new IllnessAdjectiveTable()),
+        new AttributeDefinition().withName('type').withTable(new IllnessTypeTable()),
         new AttributeDefinition().withName('time').withTable(new TimeTable()).withWeight(-1),
         new AttributeDefinition().withName('onset').withTable(new TimeTable()),
         new AttributeDefinition().withName('impactOnFunctioning').withTable(new ImpactTable()),
-        new AttributeDefinition().withName('levelOfCare').withTable(new StrengthTable()),
-        new AttributeDefinition().withName('type').withTable(new IllnessTypeTable()),
         new AttributeDefinition().withName('origin').withTable(new IllnessOriginTable()),
         new AttributeDefinition().withName('worldEffect').withTable(new IllnessWorldEffectTable()),
         new AttributeDefinition().withName('lore').withTable(new IllnessLoreTable()),
@@ -66,6 +71,12 @@ export class NewIllnessCreator extends Creator{
         new AttributeDefinition().withName('incubationPeriod').withTable(new IncubationPeriodTable()),
         new AttributeDefinition().withName('illnessMimicry').withTable(new IllnessMimicryTable()),
         new AttributeDefinition().withName('detectionMethodComplexity').withTable(new DetectionMethodComplexityTable()),
+        new AttributeDefinition().withName('reproductionRate').withTable(new SpeedTable()),// weight: -1
+        new AttributeDefinition().withName('incubationPeriod').withTable(new TimeTable()),// weight: -1
+        new AttributeDefinition().withName('infectiousPeriod').withTable(new TimeTable()),
+        new AttributeDefinition().withName('attackRate').withTable(new AmountTable()),
+        new AttributeDefinition().withName('asymptomaticSpread').withTable(new AsymptomaticSpreadTable()),
+        new AttributeDefinition().withName('environmentalResilience').withTable(new EnvironmentalResilienceTable()),
     ];
 
     getEntityType(): string {
@@ -74,6 +85,8 @@ export class NewIllnessCreator extends Creator{
 
     create(): CreatedEntities {
         let illness = new Illness();
+
+        illness.adjective = new IllnessAdjectiveGenerator().withDice(this.dice).generate();
 
         for (const pair of this.attributeDefinitions) {
             if (this.isIllnessAttribute(pair.name)) {
@@ -86,12 +99,15 @@ export class NewIllnessCreator extends Creator{
         this.rollAndSetSymptoms(illness, 'beginningSymptoms');
         this.rollAndSetSymptoms(illness, 'symptoms');
 
-        let diagnoseDifficulty = this.dice.roll(0,amounts.length-1);
+        let diagnoseDifficulty = this.dice.roll(0,difficultyLevels.length-1);
         this.calculateDiagnoseDifficulty(illness, diagnoseDifficulty);
-        let cureDifficulty = this.dice.roll(0,amounts.length-1);
+        let cureDifficulty = this.dice.roll(0,difficultyLevels.length-1);
         this.calculateCureDifficulty(illness, cureDifficulty);
         let severity = this.dice.roll(0, strengths.length-1);
         this.calculateSeverity(illness, severity);
+        let contagiousness = this.dice.roll(0,intensityLevels.length-1);
+        this.calculateContagiousness(illness, contagiousness);
+        this.calculateKnown(illness);
 
         return { Illness: [illness] };
     }
@@ -115,6 +131,8 @@ export class NewIllnessCreator extends Creator{
         this.setIllnessAttribute(illness, `${symptomType}HandlingKnown` as IllnessAttribute, new AmountTable().withDice(this.dice).roll().combinedString);
     }
 
+
+
     private setIllnessAttribute(illness: any, attribute: string, value: string): void {
         if (illness.hasOwnProperty(attribute)) {
             (illness as any)[attribute] = value;
@@ -124,7 +142,7 @@ export class NewIllnessCreator extends Creator{
     }
 
     private isIllnessAttribute(key: string): key is keyof Illness {
-        return key in Illness.prototype;
+        return key in new Illness();
     }
 
     private calculateAttribute<T>(
@@ -160,7 +178,7 @@ export class NewIllnessCreator extends Creator{
             illness,
             ["symptomObviousness", "symptomConsistency", "incubationPeriod", "illnessMimicry", "detectionMethodComplexity"],
             target,
-            amounts,
+            difficultyLevels,
             () => ({} as DiagnoseDifficulty),
             (illness, result) => {
                 illness.symptomObviousness = result.symptomObviousness;
@@ -178,7 +196,7 @@ export class NewIllnessCreator extends Creator{
             illness,
             ["cureEffectiveness", "cureAvailability", "cureSideEffects", "cureDuration", "cureComplexity"],
             target,
-            amounts,
+            difficultyLevels,
             () => ({} as CureDifficulty),
             (illness, result) => {
                 illness.cureComplexity = result.cureComplexity;
@@ -208,6 +226,43 @@ export class NewIllnessCreator extends Creator{
         );
     }
 
+    private calculateContagiousness(illness: Illness, target: number): [number, Contagiousness] {
+        return this.calculateAttribute<Contagiousness>(
+            illness,
+            [
+                "transmissionMode",
+                "reproductionRate",
+                "incubationPeriod",
+                "infectiousPeriod",
+                "attackRate",
+                "asymptomaticSpread",
+                "environmentalResilience",
+                "vectorInvolvement",
+                "seasonality",
+                "hostDiversity",
+                "geographicSpread",
+                "crossSpeciesTransmission"],
+            target,
+            intensityLevels,
+            () => ({} as Contagiousness),
+            (illness, result) => {
+                illness.transmission = result.transmissionMode;
+                illness.reproductionRate = result.reproductionRate;
+                illness.incubationPeriod = result.incubationPeriod;
+                illness.infectiousPeriod = result.infectiousPeriod;
+                illness.attackRate = result.attackRate;
+                illness.asymptomaticSpread = result.asymptomaticSpread;
+                illness.environmentalResilience = result.environmentalResilience;
+                illness.vectorInvolvement = result.vectorInvolvement;
+                illness.seasonality = result.seasonality;
+                illness.hostDiversity = result.hostDiversity;
+                illness.geographicSpread = result.geographicSpread;
+                illness.crossSpeciesTransmission = result.crossSpeciesTransmission;
+            },
+            (illness, value) => illness.contagiousness = value
+        );
+    }
+
     private filterAttributeDefinitions(
         neededAttributes: string[],
         allDefinitions: AttributeDefinition[]
@@ -227,5 +282,23 @@ export class NewIllnessCreator extends Creator{
             console.error(`Failed to save illnesses:`, error);
             throw error;
         }
+    }
+
+    getAmountValue(amount: string): number {
+        return amounts.indexOf(amount);
+    }
+
+    calculateKnown(illness: Illness) {
+        const knownProperties = Object.keys(illness).filter(key => key.endsWith('Known'));
+
+        const sum = knownProperties.reduce((acc, key) => {
+            const value = illness[key as keyof Illness] as string;
+            return acc + this.getAmountValue(value);
+        }, 0);
+
+        const average = sum / knownProperties.length;
+        const roundedIndex = Math.round(average);
+
+        illness.known = amounts[roundedIndex];
     }
 }

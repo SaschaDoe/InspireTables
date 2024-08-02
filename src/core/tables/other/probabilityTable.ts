@@ -1,6 +1,6 @@
 import {Table} from "../table";
 
-export const probability = [
+export const probabilities = [
     "certain",
     "high",
     "mid",
@@ -12,7 +12,7 @@ export class ProbabilityTable extends Table{
     constructor(){
         super();
         this.title = "Probability"
-        this.withEntriesFromList(probability);
+        this.withEntriesFromList(probabilities);
 
     }
 }
