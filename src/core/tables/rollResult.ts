@@ -26,8 +26,9 @@ export class RollResult {
         let resultIndex = 0;
 
         for (const part of this.entry.parts) {
-            if (typeof part === 'string') {
-                parts.push(part);
+            let input = part.input;
+            if (typeof input === 'string') {
+                parts.push(input);
             } else {
                 const nestedResult = this.results[resultIndex++];
                 if (nestedResult) {

@@ -83,7 +83,7 @@
                 {#each table.entries as entry, i}
                     <tr>
                         <td>{i}</td>
-                        <td>{entry.DescriptionText}</td>
+                        <td>{entry.descriptionText}</td>
                     </tr>
                 {/each}
                 </tbody>

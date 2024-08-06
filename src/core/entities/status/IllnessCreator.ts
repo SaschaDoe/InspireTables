@@ -99,13 +99,13 @@ export class IllnessCreator extends Creator{
         this.rollAndSetSymptoms(illness, 'beginningSymptoms');
         this.rollAndSetSymptoms(illness, 'symptoms');
 
-        let diagnoseDifficulty = this.dice.roll(0,difficultyLevels.length-1);
+        let diagnoseDifficulty = this.dice.rollInterval(0,difficultyLevels.length-1);
         this.calculateDiagnoseDifficulty(illness, diagnoseDifficulty);
-        let cureDifficulty = this.dice.roll(0,difficultyLevels.length-1);
+        let cureDifficulty = this.dice.rollInterval(0,difficultyLevels.length-1);
         this.calculateCureDifficulty(illness, cureDifficulty);
-        let severity = this.dice.roll(0, strengths.length-1);
+        let severity = this.dice.rollInterval(0, strengths.length-1);
         this.calculateSeverity(illness, severity);
-        let contagiousness = this.dice.roll(0,intensityLevels.length-1);
+        let contagiousness = this.dice.rollInterval(0,intensityLevels.length-1);
         this.calculateContagiousness(illness, contagiousness);
         this.calculateKnown(illness);
 

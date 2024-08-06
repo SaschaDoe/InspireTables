@@ -8,7 +8,7 @@ export class DiceMock extends Dice{
         return this;
     }
 
-    override roll(min: number, max: number): number {
+    override rollInterval(min: number, max: number): number {
         if (this.results.length === 0) {
             throw new Error("No more preset results available");
         }

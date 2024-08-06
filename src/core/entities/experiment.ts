@@ -94,7 +94,7 @@ export class Experiment<T> {
             const value = this.getPropertySafely(instance, definition.name);
 
             if (typeof value === 'string') {
-                const index = definition.table.entries.findIndex(entry => entry.name === value);
+                const index = definition.table.entries.findIndex(entry => entry.descriptionText === value);
                 if (index !== -1) {
                     totalIndex += (index / (definition.table.entries.length - 1)) * definition.weight;
                     totalWeight += definition.weight;

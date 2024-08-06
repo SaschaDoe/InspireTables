@@ -2,6 +2,8 @@ import { test, expect, describe } from "vitest"
 import { Table } from "../../../core/tables/table";
 import { Entry } from "../../../core/tables/entry";
 import { DiceMock } from "./diceMock";
+import {EntryPart} from "../../../core/tables/entryPart";
+import {EntrySetting} from "../../../core/tables/entrySetting";
 
 describe('Table', () => {
     test('get all entries from input', () => {
@@ -9,7 +11,7 @@ describe('Table', () => {
         let inputs = ["bla"];
         table.withEntriesFromList(inputs);
         expect(table.entries.length).toBe(1);
-        expect(table.entries[0].DescriptionText).toBe("bla");
+        expect(table.entries[0].descriptionText).toBe("bla");
     })
 
     test('roll single entry', () => {
@@ -83,4 +85,92 @@ describe('Table', () => {
 
         expect(rollResult.combinedString).toBe("Main Entry: Inner Entry.");
     })
+
+    test('probability check - one entry', () => {
+        let table = new Table()
+            .withEntry(new Entry());
+
+        table.updateIntervals();
+
+        expect(table.entries[0].interval.startPercentage).toBe(0)
+        expect(table.entries[0].interval.endPercentage).toBe(1)
+    })
+
+    test('probability check - two entries', () => {
+        let table = new Table()
+            .withEntry(new Entry())
+            .withEntry(new Entry());
+
+        table.updateIntervals();
+
+        expect(table.entries[0].interval.startPercentage).toBe(0)
+        expect(table.entries[0].interval.endPercentage).toBe(0.5)
+        expect(table.entries[1].interval.startPercentage).toBe(0.5)
+        expect(table.entries[1].interval.endPercentage).toBe(1)
+    })
+
+    test('probability check - three entries', () => {
+        let table = new Table()
+            .withEntry(new Entry())
+            .withEntry(new Entry())
+            .withEntry(new Entry());
+
+        table.updateIntervals();
+
+        expect(table.entries[0].interval.startPercentage).toBe(0)
+        expect(table.entries[0].interval.endPercentage).toBeCloseTo(0.3,0.1)
+        expect(table.entries[1].interval.startPercentage).toBeCloseTo(0.3,0.1)
+        expect(table.entries[1].interval.endPercentage).toBeCloseTo(0.6,0.1)
+        expect(table.entries[2].interval.startPercentage).toBeCloseTo(0.6,0.1)
+        expect(table.entries[2].interval.endPercentage).toBeCloseTo(1,0.1)
+    })
+
+    test('probability check - three entries and probability', () => {
+        let table = new Table()
+            .withEntry(new Entry(),0.8)
+            .withEntry(new Entry())
+            .withEntry(new Entry());
+
+        table.updateIntervals();
+
+        expect(table.entries[0].interval.startPercentage).toBe(0)
+        expect(table.entries[0].interval.endPercentage).toBeCloseTo(0.8,0.1)
+        expect(table.entries[1].interval.startPercentage).toBeCloseTo(0.8,0.1)
+        expect(table.entries[1].interval.endPercentage).toBeCloseTo(0.9,0.1)
+        expect(table.entries[2].interval.startPercentage).toBeCloseTo(0.9,0.1)
+        expect(table.entries[2].interval.endPercentage).toBeCloseTo(1,0.1)
+    });
+
+    test('probability check - three entries and two 0.4 probability', () => {
+        let table = new Table()
+            .withEntry(new Entry(),0.4)
+            .withEntry(new Entry(),0.4)
+            .withEntry(new Entry());
+
+        table.updateIntervals();
+
+        expect(table.entries[0].interval.startPercentage).toBe(0)
+        expect(table.entries[0].interval.endPercentage).toBeCloseTo(0.4,0.1)
+        expect(table.entries[1].interval.startPercentage).toBeCloseTo(0.4,0.1)
+        expect(table.entries[1].interval.endPercentage).toBeCloseTo(0.8,0.1)
+        expect(table.entries[2].interval.startPercentage).toBeCloseTo(0.8,0.1)
+        expect(table.entries[2].interval.endPercentage).toBeCloseTo(1,0.1)
+    });
+
+    test('probability check - three entries and no probability in the middle', () => {
+        let table = new Table()
+            .withEntry(new Entry(),0.4)
+            .withEntry(new Entry())
+            .withEntry(new Entry(),0.4);
+
+        table.updateIntervals();
+
+        expect(table.entries[0].interval.startPercentage).toBe(0)
+        expect(table.entries[0].interval.endPercentage).toBeCloseTo(0.4,0.1)
+        expect(table.entries[1].interval.startPercentage).toBeCloseTo(0.4,0.1)
+        expect(table.entries[1].interval.endPercentage).toBeCloseTo(0.6,0.1)
+        expect(table.entries[2].interval.startPercentage).toBeCloseTo(0.6,0.1)
+        expect(table.entries[2].interval.endPercentage).toBeCloseTo(1,0.1)
+    });
+
 });

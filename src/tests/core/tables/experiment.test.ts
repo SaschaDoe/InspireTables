@@ -5,6 +5,7 @@ import { AttributeDefinition } from "../../../core/entities/attributeDefinition"
 import { RollResult } from "../../../core/tables/rollResult";
 import { Entry } from "../../../core/tables/entry";
 import type { Dice } from "../../../core/tables/dice";
+import {EntryPart} from "../../../core/tables/entryPart";
 
 describe('Experiment', () => {
     test('generateMatchingInstance returns expected result', () => {
@@ -14,8 +15,8 @@ describe('Experiment', () => {
 
         const rollSpy = vi.fn(() => {
             const mockEntry = new Entry();
-            mockEntry.name = "test value";
-            mockEntry.parts = ["test value"];
+            let entryPart = new EntryPart().withText("test value")
+            mockEntry.parts.push(entryPart);
             return new RollResult(mockEntry).withRolledIndex(0);
         });
 
