@@ -3,44 +3,44 @@ import {ActionSubGenreTable} from "./content/genre/actionSubGenreTable";
 import {ComedySubGenreTable} from "./content/genre/comedySubGenreTable";
 import {AllGenreTable} from "./content/genre/allGenreTable";
 import {Category} from "./category";
-import {IllnessCureTable} from "./illness/illnessCureTable";
-import {IllnessLoreTable} from "./illness/illnessLoreTable";
-import {IllnessOriginTable} from "./illness/illnessOriginTable";
-import {IllnessSymptomTable} from "./illness/illnessSymptomTable";
-import {IllnessTypeTable} from "./illness/illnessTypeTable";
-import {IllnessTransmissionTable} from "./illness/illnessTransmissionTable";
+import {IllnessCureTable} from "./content/illness/illnessCureTable";
+import {IllnessLoreTable} from "./content/illness/illnessLoreTable";
+import {IllnessOriginTable} from "./content/illness/illnessOriginTable";
+import {IllnessSymptomTable} from "./content/illness/illnessSymptomTable";
+import {IllnessTypeTable} from "./content/illness/illnessTypeTable";
+import {IllnessTransmissionTable} from "./content/illness/illnessTransmissionTable";
 import {TimeTable} from "./content/other/timeTable";
 import {CharacterTable} from "./content/character/characterTable";
 import {StrengthTable} from "./content/other/strengthTable";
 import {ProbabilityTable} from "./content/other/probabilityTable";
 import {GenderTable} from "./content/other/genderTable";
-import {PrognosisTable} from "./illness/prognosisTable";
+import {PrognosisTable} from "./content/illness/prognosisTable";
 import {ImpactTable} from "./content/other/impactTable";
 import {
     RealisticProbableLowTechIllnessAdjectiveTable
-} from "./illness/adjective/realisticProbableLowTechIllnessAdjectiveTable";
+} from "./content/illness/adjective/realisticProbableLowTechIllnessAdjectiveTable";
 import {
     RealisticProbableHighTechIllnessAdjectiveTable
-} from "./illness/adjective/realisticProbableHighTechIllnessAdjectiveTable";
+} from "./content/illness/adjective/realisticProbableHighTechIllnessAdjectiveTable";
 import {
     RealisticLessProbableHighTechIllnessAdjectiveTable
-} from "./illness/adjective/realisticLessProbableHighTechIllnessAdjectiveTable";
+} from "./content/illness/adjective/realisticLessProbableHighTechIllnessAdjectiveTable";
 import {
     RealisticLessProbableLowTechIllnessAdjectiveTable
-} from "./illness/adjective/realisticLessProbableLowTechIllnessAdjectiveTable";
+} from "./content/illness/adjective/realisticLessProbableLowTechIllnessAdjectiveTable";
 import {
     UnrealisticProbableHighTechIllnessAdjectiveTable
-} from "./illness/adjective/unrealisticProbableHighTechIllnessAdjectiveTable";
+} from "./content/illness/adjective/unrealisticProbableHighTechIllnessAdjectiveTable";
 import {
     UnrealisticProbableLowTechIllnessAdjectiveTable
-} from "./illness/adjective/unrealisticProbableLowTechIllnessAdjectiveTable";
+} from "./content/illness/adjective/unrealisticProbableLowTechIllnessAdjectiveTable";
 import {
     UnrealisticLessProbableHighTechIllnessAdjectiveTable
-} from "./illness/adjective/unrealisticLessProbableHighTechIllnessAdjectiveTable";
+} from "./content/illness/adjective/unrealisticLessProbableHighTechIllnessAdjectiveTable";
 import {
     UnrealisticLessProbableLowTechIllnessAdjectiveTable
-} from "./illness/adjective/unrealisticLessProbableLowTechIllnessAdjectiveTable";
-import {RealisticLowTechIllnessAdjectiveTable} from "./illness/adjective/realisticLowTechIllnessAdjectiveTable";
+} from "./content/illness/adjective/unrealisticLessProbableLowTechIllnessAdjectiveTable";
+import {RealisticLowTechIllnessAdjectiveTable} from "./content/illness/adjective/realisticLowTechIllnessAdjectiveTable";
 
 export function allCategories(): Category[] {
     let allCategories: Category[] = [];

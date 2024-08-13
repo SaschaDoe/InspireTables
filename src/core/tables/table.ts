@@ -35,7 +35,7 @@ export class Table {
         for (let [type, text] of entries) {
             const baseProbability = Table.probabilityMap.get(type) || 0;
             const adjustedProbability = (baseProbability / totalWeight) * 100;
-            this.withEntry(new Entry().withText(text), adjustedProbability);
+            this.addEntry(new Entry().withText(text), adjustedProbability);
         }
 
         this.normalizeProbabilities();
@@ -70,7 +70,7 @@ export class Table {
         }
     }
 
-    withEntry(entry: Entry, probabilityInPercent: number = 0){
+    addEntry(entry: Entry, probabilityInPercent: number = 0){
         entry.withSetting(new EntrySetting().withProbability(probabilityInPercent));
         this.entries.push(entry);
         return this;

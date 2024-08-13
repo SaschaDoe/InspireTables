@@ -4,28 +4,28 @@ import {Dice} from "../../tables/dice";
 import {probabilities} from "../../tables/content/other/probabilityTable";
 import {
     RealisticLessProbableLowTechIllnessAdjectiveTable
-} from "../../tables/illness/adjective/realisticLessProbableLowTechIllnessAdjectiveTable";
+} from "../../tables/content/illness/adjective/realisticLessProbableLowTechIllnessAdjectiveTable";
 import {
     RealisticLessProbableHighTechIllnessAdjectiveTable
-} from "../../tables/illness/adjective/realisticLessProbableHighTechIllnessAdjectiveTable";
+} from "../../tables/content/illness/adjective/realisticLessProbableHighTechIllnessAdjectiveTable";
 import {
     RealisticProbableHighTechIllnessAdjectiveTable
-} from "../../tables/illness/adjective/realisticProbableHighTechIllnessAdjectiveTable";
+} from "../../tables/content/illness/adjective/realisticProbableHighTechIllnessAdjectiveTable";
 import {
     RealisticProbableLowTechIllnessAdjectiveTable
-} from "../../tables/illness/adjective/realisticProbableLowTechIllnessAdjectiveTable";
+} from "../../tables/content/illness/adjective/realisticProbableLowTechIllnessAdjectiveTable";
 import {
     UnrealisticLessProbableHighTechIllnessAdjectiveTable
-} from "../../tables/illness/adjective/unrealisticLessProbableHighTechIllnessAdjectiveTable";
+} from "../../tables/content/illness/adjective/unrealisticLessProbableHighTechIllnessAdjectiveTable";
 import {
     UnrealisticLessProbableLowTechIllnessAdjectiveTable
-} from "../../tables/illness/adjective/unrealisticLessProbableLowTechIllnessAdjectiveTable";
+} from "../../tables/content/illness/adjective/unrealisticLessProbableLowTechIllnessAdjectiveTable";
 import {
     UnrealisticProbableHighTechIllnessAdjectiveTable
-} from "../../tables/illness/adjective/unrealisticProbableHighTechIllnessAdjectiveTable";
+} from "../../tables/content/illness/adjective/unrealisticProbableHighTechIllnessAdjectiveTable";
 import {
     UnrealisticProbableLowTechIllnessAdjectiveTable
-} from "../../tables/illness/adjective/unrealisticProbableLowTechIllnessAdjectiveTable";
+} from "../../tables/content/illness/adjective/unrealisticProbableLowTechIllnessAdjectiveTable";
 
 export class IllnessAdjectiveGenerator{
     private dice = new Dice();

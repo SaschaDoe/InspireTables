@@ -32,9 +32,10 @@ export class Entry {
         return this;
     }
 
-    withText(text: string){
+    withText(text: string, probability: number = -1){
         this.withPart((new EntryPart()
             .withText(text)));
+        this.setting = new EntrySetting().withProbability(probability);
         return this;
     }
 

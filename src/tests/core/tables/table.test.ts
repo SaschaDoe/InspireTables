@@ -88,7 +88,7 @@ describe('Table', () => {
 
     test('probability check - one entry', () => {
         let table = new Table()
-            .withEntry(new Entry());
+            .addEntry(new Entry());
 
         table.updateIntervals();
 
@@ -98,8 +98,8 @@ describe('Table', () => {
 
     test('probability check - two entries', () => {
         let table = new Table()
-            .withEntry(new Entry())
-            .withEntry(new Entry());
+            .addEntry(new Entry())
+            .addEntry(new Entry());
 
         table.updateIntervals();
 
@@ -111,9 +111,9 @@ describe('Table', () => {
 
     test('probability check - three entries', () => {
         let table = new Table()
-            .withEntry(new Entry())
-            .withEntry(new Entry())
-            .withEntry(new Entry());
+            .addEntry(new Entry())
+            .addEntry(new Entry())
+            .addEntry(new Entry());
 
         table.updateIntervals();
 
@@ -127,9 +127,9 @@ describe('Table', () => {
 
     test('probability check - three entries and probability', () => {
         let table = new Table()
-            .withEntry(new Entry(),0.8)
-            .withEntry(new Entry())
-            .withEntry(new Entry());
+            .addEntry(new Entry(),0.8)
+            .addEntry(new Entry())
+            .addEntry(new Entry());
 
         table.updateIntervals();
 
@@ -143,9 +143,9 @@ describe('Table', () => {
 
     test('probability check - three entries and two 0.4 probability', () => {
         let table = new Table()
-            .withEntry(new Entry(),0.4)
-            .withEntry(new Entry(),0.4)
-            .withEntry(new Entry());
+            .addEntry(new Entry(),0.4)
+            .addEntry(new Entry(),0.4)
+            .addEntry(new Entry());
 
         table.updateIntervals();
 
@@ -159,9 +159,9 @@ describe('Table', () => {
 
     test('probability check - three entries and no probability in the middle', () => {
         let table = new Table()
-            .withEntry(new Entry(),0.4)
-            .withEntry(new Entry())
-            .withEntry(new Entry(),0.4);
+            .addEntry(new Entry(),0.4)
+            .addEntry(new Entry())
+            .addEntry(new Entry(),0.4);
 
         table.updateIntervals();
 

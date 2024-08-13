@@ -15,10 +15,10 @@ export class ProbabilityTable extends Table{
     constructor(){
         super();
         this.title = "Probability";
-        this.add(new Entry().withText("certain",1));
-        this.add(new Entry().withText("high",30));
-        this.add(new Entry().withText("mid",38));
-        this.add(new Entry().withText("low",30));
-        this.add(new Entry().withText("non existing",1));
+        this.addEntry(new Entry().withText("certain",1));
+        this.addEntry(new Entry().withText("high",30));
+        this.addEntry(new Entry().withText("mid",38));
+        this.addEntry(new Entry().withText("low",30));
+        this.addEntry(new Entry().withText("non existing",1));
     }
 }
