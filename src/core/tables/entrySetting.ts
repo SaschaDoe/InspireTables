@@ -5,4 +5,5 @@ export class EntrySetting{
         this.probabilityInPercent = probabilityInPercent;
         return this;
     }
+
 }

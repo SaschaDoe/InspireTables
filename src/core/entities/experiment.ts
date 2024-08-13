@@ -1,5 +1,5 @@
 import { RollResult } from "../tables/rollResult";
-import { Entry } from "../tables/entry";
+import { Entry } from "../tables/core/entry/entry";
 import { Table } from "../tables/table";
 import type {Dice} from "../tables/dice";
 

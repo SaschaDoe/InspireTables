@@ -1,5 +1,5 @@
 import { Table } from "../tables/table";
-import { Entry } from "../tables/entry";
+import { Entry } from "../tables/core/entry/entry";
 import type {AttributeDefinition} from "./attributeDefinition"; // Assuming Entry is defined in this file
 
 export class Aggregate<T> {

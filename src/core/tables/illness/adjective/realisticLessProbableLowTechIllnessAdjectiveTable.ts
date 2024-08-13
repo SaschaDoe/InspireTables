@@ -5,7 +5,8 @@ export const realisticLessProbableLowTechIllnessAdjectives: string[] = [
     "psychosomatic",
     "toxic",
     "ancient",
-    "parasitic"
+    "parasitic",
+    "unknown",
 ];
 
 export class RealisticLessProbableLowTechIllnessAdjectiveTable extends Table{

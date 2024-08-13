@@ -4,6 +4,10 @@ export class Interval{
     startPercentage = 0;
     endPercentage = 0;
 
+    get probability(){
+        return this.endPercentage - this.startPercentage;
+    }
+
     withStart(number: number) {
         this.start = number;
         return this;

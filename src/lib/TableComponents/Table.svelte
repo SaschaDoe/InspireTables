@@ -1,9 +1,9 @@
 <script lang="ts">
     import type { Table } from "../../core/tables/table";
-    import { MainGenreTable } from "../../core/tables/genre/mainGenres";
+    import { MainGenreTable } from "../../core/tables/content/genre/mainGenres";
     import Modal from "$lib/TableComponents/Modal.svelte";
     import { RollResult } from "../../core/tables/rollResult";
-    import { Entry } from "../../core/tables/entry";
+    import { Entry } from "../../core/tables/core/entry/entry";
     import TreeView from "$lib/TableComponents/TreeView.svelte";
     import { EntityStoreRegistry } from "../../core/entities/persist/entityStoreRegistry";
 
@@ -46,6 +46,8 @@
         }
         showModal = false;
     }
+
+    $: hasProbabilities = table.entries.some(entry => entry.setting.probabilityInPercent > 0);
 </script>
 
 <Modal
@@ -65,7 +67,7 @@
 </Modal>
 
 <div class="container mx-auto p-4">
-    <div class="bg-surface-100 border border-surface-300 rounded-lg shadow-lg p-6">
+    <div class="bg-surface-100 border border-surface-300 shadow-lg p-6">
         <div class="flex justify-between items-center mb-4">
             <h1 class="text-2xl font-bold text-blue-700">{table.title}</h1>
             <button class="btn variant-filled-secondary" on:click={roll}>Roll</button>
@@ -73,16 +75,16 @@
 
         <div class="overflow-x-auto">
             <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th>Index</th>
-                    <th>Title</th>
-                </tr>
-                </thead>
                 <tbody>
                 {#each table.entries as entry, i}
                     <tr>
-                        <td>{i}</td>
+                        {#if hasProbabilities}
+                            <td>
+                                {#if entry.setting.probabilityInPercent > 0}
+                                    {entry.setting.probabilityInPercent.toFixed(2)}%
+                                {/if}
+                            </td>
+                        {/if}
                         <td>{entry.descriptionText}</td>
                     </tr>
                 {/each}

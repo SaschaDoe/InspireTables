@@ -1,4 +1,4 @@
-import type {Entry} from "./entry";
+import type {Entry} from "./core/entry/entry";
 import type {CreatedEntities} from "../entities/creator";
 
 export class RollResult {

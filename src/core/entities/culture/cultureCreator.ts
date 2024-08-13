@@ -1,6 +1,6 @@
 import {Culture} from "./culture";
 import {Dice} from "../../tables/dice";
-import {CultureNameTable} from "../../tables/culture/cultureNameTable";
+import {CultureNameTable} from "../../tables/content/culture/cultureNameTable";
 
 export class CultureCreator{
     private dice: Dice = new Dice();

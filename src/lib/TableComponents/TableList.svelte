@@ -4,12 +4,36 @@
     import CategoryIndex from "./CategoryIndex.svelte";
     import { allCategories } from "../../core/tables/allCategories";
     import { writable } from 'svelte/store';
+    import { RangeSlider  } from '@skeletonlabs/skeleton';
 
     let categories = allCategories();
     let activeCategory = "";
     let activeTable = "";
     let showScrollToTop = writable(false);
     let scrollContainer: HTMLDivElement;
+    let sliderValue = 0;
+
+    $: sliderLabel = getSliderLabel(sliderValue);
+
+    function getSliderLabel(value: number): string {
+        if (value < 1) {
+            return `Normal: ${value.toFixed(1)}`;
+        } else if (value === 1) {
+            return "Even";
+        } else {
+            return `Flipped: ${(value - 1).toFixed(1)}`;
+        }
+    }
+
+    function getTableMode(value: number): string {
+        if (value < 1) {
+            return "normal";
+        } else if (value === 1) {
+            return "even";
+        } else {
+            return "flipped";
+        }
+    }
 
     function setActiveCategory(categoryName: string) {
         activeCategory = categoryName;
@@ -98,20 +122,39 @@
             on:setActiveTable={setActiveTable}
     />
 
-    <div bind:this={scrollContainer} class="flex-1 p-4 overflow-y-auto h-screen">
-        <h1 class="text-2xl font-bold mb-4 text-blue-700">All Tables</h1>
-        {#each categories as category}
-            <div class="bg-gray-100 p-4 mb-6 rounded-lg">
-                <h2 class="text-2xl font-bold text-blue-700 mb-4">{category.name}</h2>
-                <div class="space-y-4">
-                    {#each category.tables as table}
-                        <div id="table-{table.title.replace(/\s+/g, '-').toLowerCase()}">
-                            <Table {table}></Table>
-                        </div>
-                    {/each}
+    <div class="flex-1 flex flex-col h-screen">
+        <div class="bg-white z-10">
+            <div class="flex items-center justify-between mb-4">
+                <h1 class="text-2xl font-bold text-blue-700 p-4">All Tables</h1>
+                <div class="flex flex-col items-center w-48">
+                    <span class="text-sm text-gray-600 mb-1">{sliderLabel}</span>
+                    <RangeSlider
+                            name="table-mode"
+                            bind:value={sliderValue}
+                            min={0}
+                            max={2}
+                            step={0.1}
+                            ticked
+                    />
                 </div>
             </div>
-        {/each}
+        </div>
+
+        <div bind:this={scrollContainer} class="flex-1 p-4 overflow-y-auto">
+            {#each categories as category}
+                <div class="bg-gray-100 p-4 mb-6 rounded-lg">
+                    <h2 class="text-2xl font-bold text-blue-700 mb-4">{category.name}</h2>
+                    <div class="space-y-4">
+                        {#each category.tables as table}
+                            <div id="table-{table.title.replace(/\s+/g, '-').toLowerCase()}">
+                                <Table {table} mode={getTableMode(sliderValue)}></Table>
+                            </div>
+                        {/each}
+                    </div>
+                </div>
+            {/each}
+        </div>
+
         {#if $showScrollToTop}
             <button
                     on:click={scrollToTop}

@@ -3,9 +3,9 @@ import { Table } from "../../../core/tables/table";
 import { Experiment } from "../../../core/entities/experiment";
 import { AttributeDefinition } from "../../../core/entities/attributeDefinition";
 import { RollResult } from "../../../core/tables/rollResult";
-import { Entry } from "../../../core/tables/entry";
+import { Entry } from "../../../core/tables/core/entry/entry";
 import type { Dice } from "../../../core/tables/dice";
-import {EntryPart} from "../../../core/tables/entryPart";
+import {EntryPart} from "../../../core/tables/core/entry/entryPart";
 
 describe('Experiment', () => {
     test('generateMatchingInstance returns expected result', () => {

@@ -1,8 +1,8 @@
 import { test, expect, describe } from "vitest"
 import { Table } from "../../../core/tables/table";
-import { Entry } from "../../../core/tables/entry";
+import { Entry } from "../../../core/tables/core/entry/entry";
 import { DiceMock } from "./diceMock";
-import {EntryPart} from "../../../core/tables/entryPart";
+import {EntryPart} from "../../../core/tables/core/entry/entryPart";
 import {EntrySetting} from "../../../core/tables/entrySetting";
 
 describe('Table', () => {

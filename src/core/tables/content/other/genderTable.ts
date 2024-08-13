@@ -1,4 +1,4 @@
-import {Table} from "../table";
+import {Table} from "../../table";
 
 export let genders = ["male", "female"];
 

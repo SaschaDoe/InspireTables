@@ -1,4 +1,4 @@
-import {Table} from "../table";
+import {Table} from "../../table";
 
 export const cultureNames = [
     "african", "german", "french", "arabic", "barbaric", "elvish", "greek", "halfling", "dwarfen",

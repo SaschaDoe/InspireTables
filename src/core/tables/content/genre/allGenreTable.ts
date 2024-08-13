@@ -1,5 +1,5 @@
-import {Table} from "../table";
-import {Entry} from "../entry";
+import {Table} from "../../table";
+import {Entry} from "../../core/entry/entry";
 import {MainGenreTable} from "./mainGenres";
 import {ComedySubGenreTable} from "./comedySubGenreTable";
 import {ActionSubGenreTable} from "./actionSubGenreTable";

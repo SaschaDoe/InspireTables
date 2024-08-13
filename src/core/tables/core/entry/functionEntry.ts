@@ -1,4 +1,4 @@
-import type {CreatedEntities} from "../entities/creator";
+import type {CreatedEntities} from "../../../entities/creator";
 
 function Nothing(input: any) :CreatedEntities {
     return {};

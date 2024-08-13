@@ -1,7 +1,7 @@
-import {MainGenreTable} from "./genre/mainGenres";
-import {ActionSubGenreTable} from "./genre/actionSubGenreTable";
-import {ComedySubGenreTable} from "./genre/comedySubGenreTable";
-import {AllGenreTable} from "./genre/allGenreTable";
+import {MainGenreTable} from "./content/genre/mainGenres";
+import {ActionSubGenreTable} from "./content/genre/actionSubGenreTable";
+import {ComedySubGenreTable} from "./content/genre/comedySubGenreTable";
+import {AllGenreTable} from "./content/genre/allGenreTable";
 import {Category} from "./category";
 import {IllnessCureTable} from "./illness/illnessCureTable";
 import {IllnessLoreTable} from "./illness/illnessLoreTable";
@@ -9,13 +9,13 @@ import {IllnessOriginTable} from "./illness/illnessOriginTable";
 import {IllnessSymptomTable} from "./illness/illnessSymptomTable";
 import {IllnessTypeTable} from "./illness/illnessTypeTable";
 import {IllnessTransmissionTable} from "./illness/illnessTransmissionTable";
-import {TimeTable} from "./other/timeTable";
-import {CharacterTable} from "./character/characterTable";
-import {StrengthTable} from "./other/strengthTable";
-import {ProbabilityTable} from "./other/probabilityTable";
-import {GenderTable} from "./other/genderTable";
+import {TimeTable} from "./content/other/timeTable";
+import {CharacterTable} from "./content/character/characterTable";
+import {StrengthTable} from "./content/other/strengthTable";
+import {ProbabilityTable} from "./content/other/probabilityTable";
+import {GenderTable} from "./content/other/genderTable";
 import {PrognosisTable} from "./illness/prognosisTable";
-import {ImpactTable} from "./other/impactTable";
+import {ImpactTable} from "./content/other/impactTable";
 import {
     RealisticProbableLowTechIllnessAdjectiveTable
 } from "./illness/adjective/realisticProbableLowTechIllnessAdjectiveTable";
@@ -40,6 +40,7 @@ import {
 import {
     UnrealisticLessProbableLowTechIllnessAdjectiveTable
 } from "./illness/adjective/unrealisticLessProbableLowTechIllnessAdjectiveTable";
+import {RealisticLowTechIllnessAdjectiveTable} from "./illness/adjective/realisticLowTechIllnessAdjectiveTable";
 
 export function allCategories(): Category[] {
     let allCategories: Category[] = [];
@@ -59,6 +60,7 @@ export function allCategories(): Category[] {
 
     let illnessCategory = new Category()
         .withName("Illness")
+        .withTable(new RealisticLowTechIllnessAdjectiveTable())
         .withTable(new IllnessCureTable())
         .withTable(new IllnessLoreTable)
         .withTable(new IllnessOriginTable())

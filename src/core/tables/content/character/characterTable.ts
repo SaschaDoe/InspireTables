@@ -1,7 +1,7 @@
-import {CharacterCreator} from "../../entities/character/characterCreator";
-import {Table} from "../table";
-import {Entry} from "../entry";
-import {FunctionEntry} from "../functionEntry";
+import {CharacterCreator} from "../../../entities/character/characterCreator";
+import {Table} from "../../table";
+import {Entry} from "../../core/entry/entry";
+import {FunctionEntry} from "../../core/entry/functionEntry";
 
 export function NewCharacter(input: any):any{
     return new CharacterCreator().create();

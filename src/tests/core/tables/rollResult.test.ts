@@ -1,7 +1,7 @@
 import {describe, expect, test} from "vitest";
 import {Table} from "../../../core/tables/table";
-import {Entry} from "../../../core/tables/entry";
-import {FunctionEntry} from "../../../core/tables/functionEntry";
+import {Entry} from "../../../core/tables/core/entry/entry";
+import {FunctionEntry} from "../../../core/tables/core/entry/functionEntry";
 import {Illness} from "../../../core/entities/status/illness";
 import {CharacterCreator} from "../../../core/entities/character/characterCreator";
 

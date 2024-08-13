@@ -1,7 +1,7 @@
-import {techLevels, TechLevelTable} from "../../tables/other/techLevelTable";
-import {realisms, RealismTable} from "../../tables/other/realismTable";
+import {techLevels, TechLevelTable} from "../../tables/content/other/techLevelTable";
+import {realisms, RealismTable} from "../../tables/content/other/realismTable";
 import {Dice} from "../../tables/dice";
-import {probabilities} from "../../tables/other/probabilityTable";
+import {probabilities} from "../../tables/content/other/probabilityTable";
 import {
     RealisticLessProbableLowTechIllnessAdjectiveTable
 } from "../../tables/illness/adjective/realisticLessProbableLowTechIllnessAdjectiveTable";

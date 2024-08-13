@@ -1,7 +1,7 @@
-import {Table} from "../table";
-import {Entry} from "../entry";
-import {EntryPart} from "../entryPart";
-import {EntrySetting} from "../entrySetting";
+import {Table} from "../../table";
+import {Entry} from "../../core/entry/entry";
+import {EntryPart} from "../../core/entry/entryPart";
+import {EntrySetting} from "../../entrySetting";
 
 export const probabilities = [
     "certain",

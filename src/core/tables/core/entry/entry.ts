@@ -1,8 +1,8 @@
-import { Table } from "./table";
+import { Table } from "../../table";
 import { FunctionEntry } from "./functionEntry";
 import {EntryPart} from "./entryPart";
-import {EntrySetting} from "./entrySetting";
-import {Interval} from "./interval";
+import {EntrySetting} from "../../entrySetting";
+import {Interval} from "../../interval";
 
 export class Entry {
     parts: EntryPart[] = [];
