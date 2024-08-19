@@ -13,6 +13,6 @@ export class ComedySubGenreTable extends Table {
     constructor() {
         super();
         this.title = "Comedy Sub Genre";
-        this.withEntriesFromList(comedySubGenres);
+        this.addEntriesFromList(comedySubGenres);
     }
 }

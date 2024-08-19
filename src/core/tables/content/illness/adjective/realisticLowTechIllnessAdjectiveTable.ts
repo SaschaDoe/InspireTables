@@ -24,8 +24,9 @@ export class RealisticLowTechIllnessAdjectiveTable extends Table{
     constructor() {
         super();
         this.title = "Realistic Low Tech Illness Adjective";
-        this.withProbabilityEntriesFrom(realisticLowTechIllnessAdjectives);
+        this.addProbabilityListWithWords(realisticLowTechIllnessAdjectives);
     }
+
 
 
 }

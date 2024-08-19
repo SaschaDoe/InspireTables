@@ -14,7 +14,7 @@ export class ImpactTable extends Table{
     constructor(){
         super();
         this.title = "Impact"
-        this.withEntriesFromList(impacts);
+        this.addEntriesFromList(impacts);
 
     }
 }

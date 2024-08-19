@@ -14,6 +14,6 @@ export class DifficultyLevelTable extends Table {
     constructor() {
         super();
         this.title = "Difficulty Level";
-        this.withEntriesFromList(difficultyLevels);
+        this.addEntriesFromList(difficultyLevels);
     }
 }

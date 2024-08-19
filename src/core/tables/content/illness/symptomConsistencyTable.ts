@@ -17,6 +17,6 @@ export class SymptomConsistencyTable extends Table {
     constructor() {
         super();
         this.title = "Symptom Consistency";
-        this.withEntriesFromList(symptomConsistency);
+        this.addEntriesFromList(symptomConsistency);
     }
 }

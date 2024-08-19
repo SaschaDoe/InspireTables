@@ -24,6 +24,6 @@ export class IllnessTypeTable extends Table{
     constructor() {
         super();
         this.title = "Illness Type";
-        this.withEntriesFromList(generalIllnessNames);
+        this.addEntriesFromList(generalIllnessNames);
     }
 }

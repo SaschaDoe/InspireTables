@@ -14,6 +14,6 @@ export class CrossSpeciesTransmissionTable extends Table {
     constructor() {
         super();
         this.title = "Cross-Species Transmission";
-        this.withEntriesFromList(crossSpeciesTransmissionLevels);
+        this.addEntriesFromList(crossSpeciesTransmissionLevels);
     }
 }

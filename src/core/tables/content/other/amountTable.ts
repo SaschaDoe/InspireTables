@@ -14,6 +14,6 @@ export class AmountTable extends Table {
     constructor() {
         super();
         this.title = "Amount";
-        this.withEntriesFromList(amounts);
+        this.addEntriesFromList(amounts);
     }
 }

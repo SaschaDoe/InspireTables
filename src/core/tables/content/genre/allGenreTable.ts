@@ -8,9 +8,9 @@ export class AllGenreTable extends Table{
     constructor() {
         super();
         this.title = "All Genres";
-        this.addEntry(new Entry().withTable(new MainGenreTable()))
-        this.addEntry(new Entry().withTable(new ComedySubGenreTable()))
-        this.addEntry(new Entry().withTable(new ActionSubGenreTable()))
+        this.entryList.with(new Entry().withTable(new MainGenreTable()))
+        this.entryList.with(new Entry().withTable(new ComedySubGenreTable()))
+        this.entryList.with(new Entry().withTable(new ActionSubGenreTable()))
         //TODO Propability of fantasy or sci fi very high / love low
     }
 }

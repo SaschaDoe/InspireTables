@@ -14,6 +14,6 @@ export class SeasonalityTable extends Table {
     constructor() {
         super();
         this.title = "Seasonality";
-        this.withEntriesFromList(seasonalityPatterns);
+        this.addEntriesFromList(seasonalityPatterns);
     }
 }

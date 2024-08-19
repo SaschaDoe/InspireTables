@@ -6,12 +6,24 @@
     import { Entry } from "../../core/tables/core/entry/entry";
     import TreeView from "$lib/TableComponents/TreeView.svelte";
     import { EntityStoreRegistry } from "../../core/entities/persist/entityStoreRegistry";
+    import {onMount} from "svelte";
 
     let showModal: boolean = false;
     export let table: Table = new MainGenreTable();
     let modalDescription = "";
     let rollResult = new RollResult(new Entry());
     let hasEntities: boolean = false;
+
+    let entries: Entry[] = [];
+    let isEvenDistributed: boolean = true;
+
+    onMount(() => {
+        if (!table.entryList.isProbabilitySet) {
+            table.entryList.setProbabilities();
+        }
+        entries = [...table.entryList.entries];
+        isEvenDistributed = table.isEvenDistributed;
+    });
 
     function roll() {
         rollResult = table.roll();
@@ -47,7 +59,6 @@
         showModal = false;
     }
 
-    $: hasProbabilities = table.entries.some(entry => entry.setting.probabilityInPercent > 0);
 </script>
 
 <Modal
@@ -76,13 +87,11 @@
         <div class="overflow-x-auto">
             <table class="table table-hover">
                 <tbody>
-                {#each table.entries as entry, i}
+                {#each entries as entry}
                     <tr>
-                        {#if hasProbabilities}
+                        {#if !isEvenDistributed}
                             <td>
-                                {#if entry.setting.probabilityInPercent > 0}
-                                    {entry.setting.probabilityInPercent.toFixed(2)}%
-                                {/if}
+                                {entry.interval.probability.toFixed(2)}%
                             </td>
                         {/if}
                         <td>{entry.descriptionText}</td>

@@ -1,4 +1,3 @@
-import {EntrySetting} from "../../entrySetting";
 import {Table} from "../../table";
 import {FunctionEntry} from "./functionEntry";
 

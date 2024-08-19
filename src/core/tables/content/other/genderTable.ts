@@ -6,7 +6,7 @@ export class GenderTable extends Table{
     constructor(){
         super();
         this.title = "Gender"
-        this.withEntriesFromList(genders);
+        this.addEntriesFromList(genders);
 
     }
 }

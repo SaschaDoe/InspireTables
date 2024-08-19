@@ -11,6 +11,6 @@ export class CultureNameTable extends Table {
     constructor() {
         super();
         this.title = "Culture Name";
-        this.withEntriesFromList(cultureNames);
+        this.addEntriesFromList(cultureNames);
     }
 }

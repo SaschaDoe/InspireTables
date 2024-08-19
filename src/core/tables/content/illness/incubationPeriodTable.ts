@@ -17,6 +17,6 @@ export class IncubationPeriodTable extends Table {
     constructor() {
         super();
         this.title = "Incubation Period";
-        this.withEntriesFromList(incubationPeriod);
+        this.addEntriesFromList(incubationPeriod);
     }
 }

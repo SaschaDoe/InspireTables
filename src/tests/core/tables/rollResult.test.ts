@@ -9,7 +9,7 @@ describe('RollResult', () => {
     test('get one entity', () => {
         let table = new Table();
         let illness = new Illness();
-        table.entries.push(new Entry().withFunction(new FunctionEntry().withFunction(() => ({ Illness: [illness] }))));
+        table.entryList.with(new Entry().withFunction(new FunctionEntry().withFunction(() => ({ Illness: [illness] }))));
 
         let result = table.roll();
         expect(Object.keys(result.entities).length).toBe(1);
@@ -22,7 +22,7 @@ describe('RollResult', () => {
         let table = new Table();
         let illness = new Illness();
         let illness2 = new Illness();
-        table.entries.push(new Entry()
+        table.entryList.with(new Entry()
             .withFunction(new FunctionEntry().withFunction(() => ({ Illness: [illness] })))
             .withFunction(new FunctionEntry().withFunction(() => ({ Illness: [illness2] }))));
 
@@ -37,8 +37,8 @@ describe('RollResult', () => {
         let table = new Table();
         let illness = new Illness();
         let illness2 = new Illness();
-        table.entries.push(new Entry()
-            .withFunction(new FunctionEntry().withFunction(() => ({ Illness: [illness, illness2] }))));
+        table.entryList.with((new Entry()
+            .withFunction(new FunctionEntry().withFunction(() => ({ Illness: [illness, illness2] })))));
         let result = table.roll();
         expect(Object.keys(result.entities).length).toBe(1);
         expect(result.entities.Illness.length).toBe(2);
@@ -48,12 +48,12 @@ describe('RollResult', () => {
 
     test('get two entities from one entity', () => {
         let table = new Table();
-        table.entries.push(new Entry()
+        table.entryList.with((new Entry()
             .withFunction(new FunctionEntry().withFunction(() => {
                 let characterCreator = new CharacterCreator();
                 characterCreator.hasIllness = true;
                 return characterCreator.create();
-            })));
+            }))));
         let result = table.roll();
 
         expect(Object.keys(result.entities).length).toBe(2);

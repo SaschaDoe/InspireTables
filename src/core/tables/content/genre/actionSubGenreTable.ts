@@ -11,6 +11,6 @@ export class ActionSubGenreTable extends Table {
     constructor() {
         super();
         this.title = "Action Sub Genres";
-        this.withEntriesFromList(actionSubGenres);
+        this.addEntriesFromList(actionSubGenres);
     }
 }

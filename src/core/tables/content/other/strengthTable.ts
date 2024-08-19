@@ -14,7 +14,7 @@ export class StrengthTable extends Table{
     constructor(){
         super();
         this.title = "Strength"
-        this.withEntriesFromList(strengths);
+        this.addEntriesFromList(strengths);
 
     }
 }

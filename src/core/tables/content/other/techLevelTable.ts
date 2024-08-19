@@ -23,6 +23,6 @@ export class TechLevelTable extends Table{
     constructor() {
         super();
         this.title = "Tech Level";
-        this.withEntriesFromList(techLevels);
+        this.addEntriesFromList(techLevels);
     }
 }

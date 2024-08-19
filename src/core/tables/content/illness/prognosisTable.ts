@@ -12,7 +12,7 @@ export class PrognosisTable extends Table{
     constructor(){
         super();
         this.title = "Prognosis"
-        this.withEntriesFromList(prognosis);
+        this.addEntriesFromList(prognosis);
 
     }
 }

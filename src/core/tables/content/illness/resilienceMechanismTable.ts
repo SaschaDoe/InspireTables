@@ -52,6 +52,6 @@ export class ResilienceMechanismsTable extends Table {
     constructor() {
         super();
         this.title = "Resilience Mechanisms";
-        this.withEntriesFromList(resilienceMechanisms);
+        this.addEntriesFromList(resilienceMechanisms);
     }
 }

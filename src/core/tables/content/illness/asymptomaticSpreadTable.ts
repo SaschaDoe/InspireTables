@@ -14,6 +14,6 @@ export class AsymptomaticSpreadTable extends Table{
     constructor() {
         super();
         this.title = "Asymptomatic Spread";
-        this.withEntriesFromList(asymptomaticSpread);
+        this.addEntriesFromList(asymptomaticSpread);
     }
 }

@@ -14,6 +14,6 @@ export class VectorInvolvementTable extends Table {
     constructor() {
         super();
         this.title = "Vector Involvement";
-        this.withEntriesFromList(vectorInvolvementLevels);
+        this.addEntriesFromList(vectorInvolvementLevels);
     }
 }

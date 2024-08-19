@@ -58,6 +58,6 @@ export class IllnessLoreTable extends Table{
     constructor() {
         super();
         this.title = "Illness Mythology";
-        this.withEntriesFromList(illnessMythologyLore);
+        this.addEntriesFromList(illnessMythologyLore);
     }
 }

@@ -11,6 +11,6 @@ export class RealismTable extends Table{
     constructor() {
         super();
         this.title = "Realism";
-        this.withEntriesFromList(realisms);
+        this.addEntriesFromList(realisms);
     }
 }

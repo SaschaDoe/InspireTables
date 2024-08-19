@@ -33,6 +33,6 @@ export class IllnessTransmissionTable extends Table{
     constructor() {
         super();
         this.title = "Illness Transmission";
-        this.withEntriesFromList(illnessTransmissionMethods);
+        this.addEntriesFromList(illnessTransmissionMethods);
     }
 }

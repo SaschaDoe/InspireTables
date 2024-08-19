@@ -17,6 +17,6 @@ export class IllnessMimicryTable extends Table {
     constructor() {
         super();
         this.title = "Illness Mimicry";
-        this.withEntriesFromList(illnessMimicry);
+        this.addEntriesFromList(illnessMimicry);
     }
 }

@@ -14,6 +14,6 @@ export class IntensityTable extends Table{
     constructor() {
         super();
         this.title = "Intensity";
-        this.withEntriesFromList(intensityLevels);
+        this.addEntriesFromList(intensityLevels);
     }
 }

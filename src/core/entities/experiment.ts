@@ -1,5 +1,3 @@
-import { RollResult } from "../tables/rollResult";
-import { Entry } from "../tables/core/entry/entry";
 import { Table } from "../tables/table";
 import type {Dice} from "../tables/dice";
 
@@ -94,9 +92,9 @@ export class Experiment<T> {
             const value = this.getPropertySafely(instance, definition.name);
 
             if (typeof value === 'string') {
-                const index = definition.table.entries.findIndex(entry => entry.descriptionText === value);
+                const index = definition.table.entryList.entries.findIndex(entry => entry.descriptionText === value);
                 if (index !== -1) {
-                    totalIndex += (index / (definition.table.entries.length - 1)) * definition.weight;
+                    totalIndex += (index / (definition.table.entryList.entries.length - 1)) * definition.weight;
                     totalWeight += definition.weight;
                 }
             }

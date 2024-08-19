@@ -2,7 +2,7 @@
     import { onMount, onDestroy } from 'svelte';
     import Table from "$lib/TableComponents/Table.svelte";
     import CategoryIndex from "./CategoryIndex.svelte";
-    import { allCategories } from "../../core/tables/allCategories";
+    import {allCategories} from "../../core/tables/allCategories";
     import { writable } from 'svelte/store';
     import { RangeSlider  } from '@skeletonlabs/skeleton';
 
@@ -99,6 +99,12 @@
         }
     }
 
+    let updateTrigger = 0;
+
+    function triggerUpdate() {
+        updateTrigger += 1;
+    }
+
     onMount(() => {
         if (scrollContainer) {
             scrollContainer.addEventListener('scroll', handleScroll);
@@ -147,7 +153,7 @@
                     <div class="space-y-4">
                         {#each category.tables as table}
                             <div id="table-{table.title.replace(/\s+/g, '-').toLowerCase()}">
-                                <Table {table} mode={getTableMode(sliderValue)}></Table>
+                                <Table {table}></Table>
                             </div>
                         {/each}
                     </div>

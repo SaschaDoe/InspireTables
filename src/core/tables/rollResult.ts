@@ -12,7 +12,6 @@ export class RollResult {
     }
 
     addEntities(entities: CreatedEntities) {
-        console.log("Entities added: ", entities);
         for (const [key, value] of Object.entries(entities)) {
             if (!this.entities[key]) {
                 this.entities[key] = [];

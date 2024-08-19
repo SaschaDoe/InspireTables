@@ -19,6 +19,6 @@ export class TimeTable extends Table{
     constructor() {
         super();
         this.title = "Time";
-        this.withEntriesFromList(times);
+        this.addEntriesFromList(times);
     }
 }

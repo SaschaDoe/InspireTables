@@ -21,6 +21,6 @@ export class CureDurationTable extends Table {
     constructor() {
         super();
         this.title = "Cure Duration";
-        this.withEntriesFromList(cureDuration);
+        this.addEntriesFromList(cureDuration);
     }
 }

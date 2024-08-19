@@ -47,6 +47,6 @@ export class CureAvailabilityTable extends Table {
     constructor() {
         super();
         this.title = "Cure Availability";
-        this.withEntriesFromList(cureAvailability);
+        this.addEntriesFromList(cureAvailability);
     }
 }

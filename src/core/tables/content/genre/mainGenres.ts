@@ -24,6 +24,6 @@ export class MainGenreTable extends Table{
     constructor() {
         super();
         this.title = "Main Genres";
-        this.withEntriesFromList(mainGenres);
+        this.addEntriesFromList(mainGenres);
     }
 }

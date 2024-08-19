@@ -16,6 +16,6 @@ export class EnvironmentalResilienceTable extends Table{
     constructor() {
         super();
         this.title = "Environmental Resilience";
-        this.withEntriesFromList(environmentalResilience);
+        this.addEntriesFromList(environmentalResilience);
     }
 }

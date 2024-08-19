@@ -16,6 +16,6 @@ export class CharacterTable extends Table{
         let functionEntry = new FunctionEntry();
         functionEntry.costumeFunction = NewCharacter;
         functionEntry.description = "<create new character>";
-        this.entries.push(new Entry().withFunction(functionEntry));
+        this.entryList.with(new Entry().withFunction(functionEntry));
     }
 }

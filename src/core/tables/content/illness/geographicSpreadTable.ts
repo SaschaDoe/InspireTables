@@ -14,6 +14,6 @@ export class GeographicSpreadTable extends Table {
     constructor() {
         super();
         this.title = "Geographic Spread";
-        this.withEntriesFromList(geographicSpreadLevels);
+        this.addEntriesFromList(geographicSpreadLevels);
     }
 }

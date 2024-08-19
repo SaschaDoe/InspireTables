@@ -14,6 +14,6 @@ export class HostDiversityTable extends Table {
     constructor() {
         super();
         this.title = "Host Diversity";
-        this.withEntriesFromList(hostDiversityLevels);
+        this.addEntriesFromList(hostDiversityLevels);
     }
 }

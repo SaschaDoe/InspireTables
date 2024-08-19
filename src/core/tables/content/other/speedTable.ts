@@ -14,6 +14,6 @@ export class SpeedTable extends Table{
     constructor() {
         super();
         this.title = "Speed";
-        this.withEntriesFromList(speeds);
+        this.addEntriesFromList(speeds);
     }
 }

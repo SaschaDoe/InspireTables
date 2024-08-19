@@ -14,6 +14,6 @@ export class HeightTable extends Table{
     constructor() {
         super();
         this.title = "Height"
-        this.withEntriesFromList(heights);
+        this.addEntriesFromList(heights);
     }
 }

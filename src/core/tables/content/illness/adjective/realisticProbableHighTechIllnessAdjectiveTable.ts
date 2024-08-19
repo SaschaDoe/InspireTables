@@ -15,6 +15,6 @@ export class RealisticProbableHighTechIllnessAdjectiveTable extends Table{
     constructor() {
         super();
         this.title = "Realistic Probable High Tech Illness Adjective";
-        this.withEntriesFromList(realisticProbableHighTechIllnessAdjectives);
+        this.addEntriesFromList(realisticProbableHighTechIllnessAdjectives);
     }
 }

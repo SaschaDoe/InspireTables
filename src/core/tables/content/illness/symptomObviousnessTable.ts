@@ -17,6 +17,6 @@ export class SymptomObviousnessTable extends Table {
     constructor() {
         super();
         this.title = "Symptom Obviousness";
-        this.withEntriesFromList(symptomObviousness);
+        this.addEntriesFromList(symptomObviousness);
     }
 }

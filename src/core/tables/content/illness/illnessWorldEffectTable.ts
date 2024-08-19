@@ -57,6 +57,6 @@ export class IllnessWorldEffectTable extends Table{
     constructor() {
         super();
         this.title = "Illness World Effect";
-        this.withEntriesFromList(illnessWorldImpacts);
+        this.addEntriesFromList(illnessWorldImpacts);
     }
 }

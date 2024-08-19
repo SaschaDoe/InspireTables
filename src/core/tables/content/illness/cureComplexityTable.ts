@@ -21,6 +21,6 @@ export class CureComplexityTable extends Table {
     constructor() {
         super();
         this.title = "Cure Complexity";
-        this.withEntriesFromList(cureComplexity);
+        this.addEntriesFromList(cureComplexity);
     }
 }

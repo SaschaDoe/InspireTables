@@ -17,6 +17,6 @@ export class DetectionMethodComplexityTable extends Table {
     constructor() {
         super();
         this.title = "Detection Method Complexity";
-        this.withEntriesFromList(detectionMethodComplexity);
+        this.addEntriesFromList(detectionMethodComplexity);
     }
 }
