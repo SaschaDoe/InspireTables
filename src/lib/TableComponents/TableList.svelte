@@ -12,6 +12,7 @@
     let showScrollToTop = writable(false);
     let scrollContainer: HTMLDivElement;
     let sliderValue = 0;
+    let tableUpdateTrigger = 0;
 
     $: sliderLabel = getSliderLabel(sliderValue);
 
@@ -21,7 +22,7 @@
                 table.changeGonzo(value);
             }
         }
-
+        tableUpdateTrigger += 1;
         if (value < 1) {
             return `Normal: ${value.toFixed(1)}`;
         } else if (value === 1) {
@@ -152,7 +153,7 @@
                     <div class="space-y-4">
                         {#each category.tables as table}
                             <div id="table-{table.title.replace(/\s+/g, '-').toLowerCase()}">
-                                <Table {table}></Table>
+                                <Table {table} {tableUpdateTrigger}></Table>
                             </div>
                         {/each}
                     </div>

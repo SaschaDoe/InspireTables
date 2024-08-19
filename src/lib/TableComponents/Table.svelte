@@ -10,6 +10,7 @@
 
     let showModal: boolean = false;
     export let table: Table = new MainGenreTable();
+    export let tableUpdateTrigger = 0;
     let modalDescription = "";
     let rollResult = new RollResult(new Entry());
     let hasEntities: boolean = false;
@@ -17,13 +18,16 @@
     let entries: Entry[] = [];
     let isEvenDistributed: boolean = true;
 
-    onMount(() => {
-        if (!table.entryList.isProbabilitySet) {
-            table.entryList.setProbabilities();
+    $: {
+        if (tableUpdateTrigger !== undefined) {
+            console.log("Table update triggered")
+            if (!table.entryList.isProbabilitySet) {
+                table.entryList.setProbabilities();
+            }
+            entries = [...table.entryList.entries];
+            isEvenDistributed = table.isEvenDistributed;
         }
-        entries = [...table.entryList.entries];
-        isEvenDistributed = table.isEvenDistributed;
-    });
+    }
 
     function roll() {
         rollResult = table.roll();

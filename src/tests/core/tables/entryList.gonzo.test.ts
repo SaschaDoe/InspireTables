@@ -55,4 +55,14 @@ describe('entry list gonzo', () => {
         checkIntervals(entryList, [
             33,33,33]);
     });
+
+    test('prob 10, 90 - gonzo 2 = 90, 10', () => {
+        let entryList = new EntryList()
+            .withGonzo(2)
+            .with(new Entry().withProbability(10))
+            .with(new Entry().withProbability(90));
+
+        checkIntervals(entryList, [
+            90,10]);
+    });
 });
