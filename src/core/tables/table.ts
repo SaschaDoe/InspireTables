@@ -9,6 +9,7 @@ export class Table {
     dice: Dice = new Dice();
     entryList: EntryList = new EntryList();
 
+
     get isEvenDistributed() {
         for (let entry of this.entryList.entries) {
             if (entry.setting.probabilityAsWord !== "even" || entry.setting.probabilityInPercent !== 0) {
@@ -17,6 +18,11 @@ export class Table {
             }
         }
         return true;
+    }
+
+    changeGonzo(gonzoFactor: number){
+        this.entryList.gonzoFactor = gonzoFactor;
+        this.entryList.setProbabilities();
     }
 
     protected addProbabilityListWithWords(realisticLowTechIllnessAdjectives: [string, string][]) {

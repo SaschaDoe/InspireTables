@@ -19,7 +19,7 @@
 <div class="text-green-900">
     <div class="ml-4">
         <div class="flex items-center">
-            <span class="text-blue-700">{result.entry.name} - {result.entry.descriptionText}</span>
+            <span class="text-blue-700">{result.entry.setting.probabilityInPercent.toFixed(2)}% - {result.entry.descriptionText}</span>
         </div>
         <div class="ml-4">
             {#each Object.entries(result.entities) as [entityType, entityList]}

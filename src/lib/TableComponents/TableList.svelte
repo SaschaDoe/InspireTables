@@ -16,23 +16,21 @@
     $: sliderLabel = getSliderLabel(sliderValue);
 
     function getSliderLabel(value: number): string {
+        for(let category of categories){
+            for(let table of category.tables){
+                table.changeGonzo(value);
+            }
+        }
+
         if (value < 1) {
             return `Normal: ${value.toFixed(1)}`;
         } else if (value === 1) {
             return "Even";
         } else {
-            return `Flipped: ${(value - 1).toFixed(1)}`;
+            return `Flipped: ${(value).toFixed(1)}`;
         }
-    }
 
-    function getTableMode(value: number): string {
-        if (value < 1) {
-            return "normal";
-        } else if (value === 1) {
-            return "even";
-        } else {
-            return "flipped";
-        }
+
     }
 
     function setActiveCategory(categoryName: string) {
@@ -68,6 +66,7 @@
     function handleScroll() {
         showScrollToTop.set(scrollContainer.scrollTop > 100);
         updateActiveTableOnScroll();
+
     }
 
     function updateActiveTableOnScroll() {
