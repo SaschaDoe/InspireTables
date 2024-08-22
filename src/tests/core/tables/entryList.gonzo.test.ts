@@ -1,6 +1,7 @@
 import {describe, expect, test} from "vitest";
 import {EntryList} from "../../../core/tables/core/list/entryList";
 import {Entry} from "../../../core/tables/core/entry/entry";
+import {MainGenreTable} from "../../../core/tables/content/genre/mainGenres";
 
 const EPSILON = 0.01; // Define a small value for floating-point comparison
 
@@ -12,6 +13,15 @@ describe('entry list gonzo', () => {
             expect(entryList.entries[index].interval.probability).toBeCloseTo(prob, EPSILON);
         });
     }
+
+    test('prevent negative probability', () => {
+        let entryList = new MainGenreTable().entryList;
+
+        entryList.withGonzo(2);
+        entryList.setProbabilities();
+        let probability = entryList.entries[0].interval.probability;
+        expect(probability).toBeCloseTo(0, EPSILON);
+    });
 
     test('prob 10, 90 - gonzo 0 = 50, 50', () => {
         let entryList = new EntryList()

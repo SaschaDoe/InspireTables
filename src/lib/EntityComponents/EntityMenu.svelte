@@ -1,14 +1,16 @@
 <script lang="ts">
     import EntityList from "$lib/EntityComponents/EntityList.svelte";
-    import { allStores, characterStore, idGenerator, illnessStore } from "../../core/entities/persist/stores";
     import CharacterComponent from "$lib/EntityComponents/entitySpecificComponents/CharacterComponent.svelte";
     import { CharacterCreator } from "../../core/entities/character/characterCreator";
     import { writable } from 'svelte/store';
     import IndexBaseComponent from "$lib/IndexBaseComponent.svelte";
-    import IllnessComponent from "$lib/EntityComponents/entitySpecificComponents/IllnessComponent.svelte";
-    import { IllnessCreator } from "../../core/entities/status/illnessCreator";
     import EntityIndex from "$lib/EntityComponents/EntityIndex.svelte";
     import {onMount} from "svelte";
+    import IllnessComponent from "$lib/EntityComponents/entitySpecificComponents/IllnessComponent.svelte";
+    import {IllnessCreator} from "../../core/entities/status/IllnessCreator";
+    import {getStore, getStores} from "../../core/entities/persist/stores";
+    let characterStore: any;
+    let illnessStore: any;
 
     const refreshTrigger = writable(0);
 
@@ -16,6 +18,7 @@
     let activeEntityId = -1;
     let scrollContainer: HTMLDivElement;
     let showScrollToTop = writable(false);
+
 
     function scrollToTop() {
         if (scrollContainer) {
@@ -25,11 +28,13 @@
 
     async function clear() {
         try {
-            for (let store of allStores) {
+            let allEntityStores = (await getStores()).allEntityStores;
+            for (let store of allEntityStores) {
                 console.log("try to clear", store);
                 await store.clear();
             }
-            await idGenerator.clear();
+            let lastIdStore = await getStore('lastIdStore');
+            await lastIdStore.clear();
             refreshTrigger.update(n => n + 1);
         } catch (error) {
             console.error('Error clearing:', error);
@@ -138,7 +143,9 @@
         }
     }
 
-    onMount(() => {
+    onMount(async () => {
+        characterStore = await getStore('characterStore');
+        illnessStore = await getStore('illnessStore');
         activeType = "Character";
         if (scrollContainer) {
             scrollContainer.addEventListener('scroll', updateActiveEntityFromScroll);
@@ -150,6 +157,7 @@
             }
         };
     });
+
 </script>
 
 <div class="flex h-screen overflow-hidden">
@@ -171,24 +179,28 @@
         <div bind:this={scrollContainer} class="flex-1 overflow-y-auto space-y-8" id="entity-list-container">
             {#key $refreshTrigger}
                 <div  class="space-y-6">
-                    <div id="entitylist-Character">
-                    <EntityList
-                            title="Characters"
-                            entityName="Character"
-                            store={characterStore}
-                            EntityComponent={CharacterComponent}
-                            creator={new CharacterCreator()}
-                    />
-                    </div>
-                    <div id="entitylist-Illness">
-                    <EntityList
-                            title="Illnesses"
-                            entityName="Illness"
-                            store={illnessStore}
-                            EntityComponent={IllnessComponent}
-                            creator={new IllnessCreator()}
-                    />
+                    {#if characterStore}
+                        <div id="entitylist-Character">
+                            <EntityList
+                                    title="Characters"
+                                    entityName="Character"
+                                    store={characterStore}
+                                    EntityComponent={CharacterComponent}
+                                    creator={new CharacterCreator()}
+                            />
                         </div>
+                    {/if}
+                    {#if illnessStore}
+                        <div id="entitylist-Illness">
+                            <EntityList
+                                    title="Illnesses"
+                                    entityName="Illness"
+                                    store={illnessStore}
+                                    EntityComponent={IllnessComponent}
+                                    creator={new IllnessCreator()}
+                            />
+                        </div>
+                    {/if}
                 </div>
             {/key}
         </div>

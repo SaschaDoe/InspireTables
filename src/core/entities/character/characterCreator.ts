@@ -1,9 +1,9 @@
 import { Creator, type CreatedEntities } from "../creator";
 import { Character } from "./character";
 import { GenderTable } from "../../tables/content/other/genderTable";
-import { IllnessCreator } from "../status/illnessCreator";
-import { characterStore, illnessStore } from "../persist/stores";
 import type { Illness } from "../status/illness";
+import {IllnessCreator} from "../status/IllnessCreator";
+import {getStore} from "../persist/stores";
 
 export class CharacterCreator extends Creator {
     hasIllness: boolean = false;
@@ -38,11 +38,13 @@ export class CharacterCreator extends Creator {
         console.log("persist: ", entities);
         try {
             if (entities.Character && entities.Character.length > 0) {
-                await characterStore.saveSpecificEntities(entities.Character);
+                let store = await getStore('characterStore');
+                await store.saveSpecificEntities(entities.Character);
                 console.log(`Characters saved successfully.`);
             }
             if (entities.Illness && entities.Illness.length > 0) {
-                await illnessStore.saveSpecificEntities(entities.Illness);
+                let store = await getStore('illnessStore');
+                await store.saveSpecificEntities(entities.Illness);
                 console.log(`Illnesses saved successfully.`);
             }
         } catch (error) {

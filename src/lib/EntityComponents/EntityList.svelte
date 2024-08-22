@@ -4,9 +4,9 @@
     import { onMount, onDestroy } from "svelte";
     import type { ComponentType } from "svelte";
     import { Creator, type CreatedEntities } from "../../core/entities/creator";
-    import { idGenerator } from "../../core/entities/persist/stores";
     import { EntityStoreRegistry } from "../../core/entities/persist/entityStoreRegistry";
     import { clearEntityUpdates, entityUpdateStore, notifyEntityUpdates } from "$lib/EntityComponents/entityStore";
+    import {IdGenerator} from "../../core/entities/persist/idGenerator";
 
     export let store: EntityStorageManager<Entity>;
     export let EntityComponent: ComponentType;
@@ -57,7 +57,7 @@
 
             for (const [entityType, entityArray] of Object.entries(newEntities)) {
                 await Promise.all(entityArray.map(async (entity) => {
-                    entity.id = await idGenerator.generateId();
+                    entity.id = await IdGenerator.generate();
                 }));
 
                 const entityStore = registry.getStore(entityType);

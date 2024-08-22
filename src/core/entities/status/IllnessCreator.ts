@@ -6,7 +6,6 @@ import {IllnessOriginTable} from "../../tables/content/illness/illnessOriginTabl
 import {IllnessWorldEffectTable} from "../../tables/content/illness/illnessWorldEffectTable";
 import {IllnessLoreTable} from "../../tables/content/illness/illnessLoreTable";
 import {IllnessTransmissionTable} from "../../tables/content/illness/illnessTransmissionTable";
-import {illnessStore} from "../persist/stores";
 import {PrognosisTable} from "../../tables/content/illness/prognosisTable";
 import {ImpactTable} from "../../tables/content/other/impactTable";
 import {strengths} from "../../tables/content/other/strengthTable";
@@ -40,6 +39,7 @@ import type {Contagiousness} from "./contagiousness";
 import {intensityLevels} from "../../tables/content/other/intensityTable";
 import {difficultyLevels} from "../../tables/content/other/difficultTable";
 import {IllnessAdjectiveGenerator} from "./illnessAdjectiveGenerator";
+import {getStore} from "../persist/stores";
 
 type IllnessAttribute = keyof Illness;
 
@@ -276,7 +276,8 @@ export class IllnessCreator extends Creator{
             return;
         }
         try {
-            await illnessStore.saveSpecificEntities(entities.Illness);
+            let store = await getStore('illnessStore');
+            await store.saveSpecificEntities(entities.Illness);
             console.log(`Illnesses saved successfully.`);
         } catch (error) {
             console.error(`Failed to save illnesses:`, error);

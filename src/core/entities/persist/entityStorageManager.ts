@@ -1,6 +1,6 @@
 import type { Entity } from "../entity";
 import type { StorageStrategy } from "./storageStrategy";
-import { idGenerator } from "./stores";
+import {IdGenerator} from "./idGenerator";
 
 type Subscriber<T> = (entities: T[]) => void;
 
@@ -78,8 +78,7 @@ export class EntityStorageManager<T extends Entity> {
     async saveEntity(entity: T): Promise<void> {
         await this.initializeStorage();
         if (entity.id === -1) {
-            entity.id = await idGenerator.generateId();
-            console.log("id: ", entity.id)
+            entity.id = await IdGenerator.generate();
         }
         const index = this.entities.findIndex(e => e.id === entity.id);
         if (index !== -1) {

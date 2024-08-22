@@ -5,6 +5,8 @@
     import {allCategories} from "../../core/tables/allCategories";
     import { writable } from 'svelte/store';
     import { RangeSlider  } from '@skeletonlabs/skeleton';
+    import {getStore} from "../../core/entities/persist/stores";
+    import type {ValueStorageManager} from "../../core/entities/persist/valueStorageManager";
 
     let categories = allCategories();
     let activeCategory = "";
@@ -13,8 +15,39 @@
     let scrollContainer: HTMLDivElement;
     let sliderValue = 0;
     let tableUpdateTrigger = 0;
+    let sliderLabel: string;
+    let gonzoStore: ValueStorageManager<number>;
 
-    $: sliderLabel = getSliderLabel(sliderValue);
+    async function updateGonzoFactor(value: number) {
+        if (gonzoStore) {
+            await gonzoStore.setValue(value);
+        }
+    }
+
+    $: {
+        sliderLabel = getSliderLabel(sliderValue);
+        updateGonzoFactor(sliderValue);
+    }
+
+    onMount(async () => {
+        if (scrollContainer) {
+            scrollContainer.addEventListener('scroll', handleScroll);
+            handleScroll(); // Check initial scroll position
+        }
+
+        gonzoStore = await getStore('gonzoFactorStore');
+        let gonzoFactor = await gonzoStore.getValue();
+        if (gonzoFactor !== null) {
+            sliderValue = gonzoFactor;
+            sliderLabel = getSliderLabel(sliderValue);
+        }
+    });
+
+    onDestroy(() => {
+        if (scrollContainer) {
+            scrollContainer.removeEventListener('scroll', handleScroll);
+        }
+    });
 
     function getSliderLabel(value: number): string {
         for(let category of categories){
@@ -23,6 +56,7 @@
             }
         }
         tableUpdateTrigger += 1;
+
         if (value < 1) {
             return `Normal: ${value.toFixed(1)}`;
         } else if (value === 1) {
@@ -30,8 +64,6 @@
         } else {
             return `Flipped: ${(value).toFixed(1)}`;
         }
-
-
     }
 
     function setActiveCategory(categoryName: string) {
@@ -70,6 +102,10 @@
 
     }
 
+    function syncTables(){
+
+    }
+
     function updateActiveTableOnScroll() {
         if (!scrollContainer) return;
 
@@ -105,18 +141,7 @@
         updateTrigger += 1;
     }
 
-    onMount(() => {
-        if (scrollContainer) {
-            scrollContainer.addEventListener('scroll', handleScroll);
-            handleScroll(); // Check initial scroll position
-        }
-    });
 
-    onDestroy(() => {
-        if (scrollContainer) {
-            scrollContainer.removeEventListener('scroll', handleScroll);
-        }
-    });
 </script>
 
 <div class="flex relative h-full">
@@ -132,6 +157,7 @@
         <div class="bg-white z-10">
             <div class="flex items-center justify-between mb-4">
                 <h1 class="text-2xl font-bold text-blue-700 p-4">All Tables</h1>
+                <button on:click={syncTables}>Sync</button>
                 <div class="flex flex-col items-center w-48">
                     <span class="text-sm text-gray-600 mb-1">{sliderLabel}</span>
                     <RangeSlider

@@ -25,9 +25,15 @@ export class Table {
         this.entryList.setProbabilities();
     }
 
-    protected addProbabilityListWithWords(realisticLowTechIllnessAdjectives: [string, string][]) {
-        for (let input of realisticLowTechIllnessAdjectives) {
+    protected addProbabilityListWithWords(probabilityListWithWords: [string, string][]) {
+        for (let input of probabilityListWithWords) {
             this.entryList.with(new Entry().withText(input[1]).withProbabilityAsWord(input[0]))
+        }
+    }
+
+    protected addProbabilityList(probabilityListWithWords: [string, number][]) {
+        for (let input of probabilityListWithWords) {
+            this.entryList.with(new Entry().withText(input[0]).withProbability(input[1]))
         }
     }
 

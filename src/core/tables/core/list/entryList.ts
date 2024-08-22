@@ -22,7 +22,7 @@ export class EntryList {
 
         return this;
     }
-    
+
     with(entry: Entry){
         for (const entryElement of this.entries) {
             if(entryElement === entry){
@@ -39,6 +39,11 @@ export class EntryList {
         for(let entry of entries){
             this.with(entry);
         }
+        return this;
+    }
+
+    withGonzo(gonzoFactor: number) {
+        this.gonzoFactor = gonzoFactor;
         return this;
     }
 
@@ -77,34 +82,50 @@ export class EntryList {
         for (let i = 0; i < this.entries.length; i++) {
             let entry = this.entries[i];
             let previousEntryEndProb = 0;
-            if(previousEntry){
+            if (previousEntry) {
                 previousEntryEndProb = previousEntry.interval.end;
-
             }
             entry.interval.start = intervalStart;
             let remainingEvenProbability = cumulativeProb / remainingWeight;
             let totalEvenProbability = 100 / totalWeight;
-            if(entry.setting.probabilityInPercent != 0){
-                let gonzoAdjustedProbability = entry.setting.probabilityInPercent * (1 - this.gonzoFactor) + totalEvenProbability * this.gonzoFactor;
+            if (entry.setting.probabilityInPercent != 0) {
+                let gonzoAdjustedProbability = this.adjustProbability(
+                    entry.setting.probabilityInPercent * (1 - this.gonzoFactor) + totalEvenProbability * this.gonzoFactor
+                );
                 entry.interval.end = entry.interval.start + gonzoAdjustedProbability;
             }
-            else{ //Plain is represented as "even"
+            else { //Plain is represented as "even"
                 let weight = stringProbabilityMap.get(entry.setting.probabilityAsWord) || 100;
                 remainingWeight--;
-                entry.interval.end = previousEntryEndProb + (weight * remainingEvenProbability) * (1 - this.gonzoFactor) + totalEvenProbability * this.gonzoFactor;
+                let adjustedProbability = this.adjustProbability(
+                    (weight * remainingEvenProbability) * (1 - this.gonzoFactor) + totalEvenProbability * this.gonzoFactor
+                );
+                entry.interval.end = previousEntryEndProb + adjustedProbability;
                 cumulativeProb -= entry.interval.probability;
             }
-
             intervalStart = entry.interval.end;
             previousEntry = entry;
+        }
+
+        // Normalize probabilities to ensure they sum to 100
+        let totalProbability = this.entries[this.entries.length - 1].interval.end;
+        if (totalProbability !== 100) {
+            let scaleFactor = 100 / totalProbability;
+            let currentStart = 0;
+            for (let entry of this.entries) {
+                entry.interval.start = currentStart;
+                entry.interval.end = currentStart + (entry.interval.end - entry.interval.start) * scaleFactor;
+                currentStart = entry.interval.end;
+            }
         }
 
         let lastEntry = this.entries[this.entries.length - 1];
         lastEntry.interval.end = 100;
     }
 
-    withGonzo(gonzoFactor: number) {
-        this.gonzoFactor = gonzoFactor;
-        return this;
+    private adjustProbability(value: number, minValue: number = 0.001): number {
+        return Math.max(minValue, value);
     }
+
+
 }

@@ -95,7 +95,7 @@
                     <tr>
                         {#if !isEvenDistributed}
                             <td>
-                                {entry.interval.probability.toFixed(2)}%
+                                {@html entry.interval.probability < 0.01 ? `<0.01%` : `${entry.interval.probability.toFixed(2)}%`}
                             </td>
                         {/if}
                         <td>{entry.descriptionText}</td>

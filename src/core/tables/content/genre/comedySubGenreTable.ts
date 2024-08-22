@@ -12,7 +12,7 @@ const comedySubGenres = [
 export class ComedySubGenreTable extends Table {
     constructor() {
         super();
-        this.title = "Comedy Sub Genre";
+        this.title = "Comedy Sub GenreMix";
         this.addEntriesFromList(comedySubGenres);
     }
 }

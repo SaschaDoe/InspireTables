@@ -157,8 +157,8 @@ describe('entry list', () => {
             .with(new Entry().withProbabilityAsWord("likely"))
             .with(new Entry().withProbabilityAsWord("unlikely"));
         checkIntervals(entryList, [
-            [0, 75],
-            [75, 100],
+            [0, 85.7],
+            [85.7, 100],
         ]);
     });
 
@@ -168,9 +168,9 @@ describe('entry list', () => {
             .with(new Entry())
             .with(new Entry().withProbabilityAsWord("unlikely"));
         checkIntervals(entryList, [
-            [0, 50],
-            [50, 75],
-            [75, 100],
+            [0, 57.1],
+            [57.1, 77.5],
+            [77.5, 100],
         ]);
     });
 
