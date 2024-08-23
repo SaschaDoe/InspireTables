@@ -8,6 +8,8 @@ export class Table {
     title: string = "";
     dice: Dice = new Dice();
     entryList: EntryList = new EntryList();
+    subTables: Table[] = [];
+    isSelected = false; //For combobox selection if subtable or the original is selected
 
 
     get isEvenDistributed() {

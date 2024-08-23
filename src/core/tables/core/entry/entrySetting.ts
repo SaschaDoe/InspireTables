@@ -10,14 +10,12 @@ export class EntrySetting{
     }
     private _probabilityInPercent = 0;
     private _probabilityAsWord = probabilityBuzzwords[3][0];
-    private _isPlain = true;
 
     withProbability(probabilityInPercent: number){
         this._probabilityInPercent = probabilityInPercent;
         if(probabilityInPercent < 0){
             throw new Error(`Probability ${probabilityInPercent} is under 0`);
         }
-        this._isPlain = false;
         return this;
     }
 
@@ -30,7 +28,6 @@ export class EntrySetting{
         }
 
         this._probabilityAsWord = probabilityWord;
-        this._isPlain = false;
         return this;
     }
 

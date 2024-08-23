@@ -1,4 +1,12 @@
 // stores.ts
+import {writable} from "svelte/store";
+
+export const tableUpdateStore = writable(0);
+
+// Function to trigger an update
+export function triggerTableUpdate() {
+    tableUpdateStore.update(n => n + 1);
+}
 
 import type { StorageStrategy } from "./storageStrategy";
 import { BrowserStorageStrategy } from "./browserStorageStrategy";

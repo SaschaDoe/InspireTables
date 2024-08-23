@@ -1,13 +1,14 @@
 <script lang="ts">
     import { onMount, onDestroy } from 'svelte';
-    import Table from "$lib/TableComponents/Table.svelte";
     import CategoryIndex from "./CategoryIndex.svelte";
     import {allCategories} from "../../core/tables/allCategories";
     import { writable } from 'svelte/store';
     import { RangeSlider  } from '@skeletonlabs/skeleton';
-    import {getStore} from "../../core/entities/persist/stores";
+    import {getStore, tableUpdateStore, triggerTableUpdate} from "../../core/entities/persist/stores";
     import type {ValueStorageManager} from "../../core/entities/persist/valueStorageManager";
-
+    import {MainGenreTable} from "../../core/tables/content/genre/mainGenres";
+    import TableComponent from "$lib/TableComponents/Table.svelte";
+    import type {Table} from "../../core/tables/table";
     let categories = allCategories();
     let activeCategory = "";
     let activeTable = "";
@@ -17,6 +18,8 @@
     let tableUpdateTrigger = 0;
     let sliderLabel: string;
     let gonzoStore: ValueStorageManager<number>;
+    let loadedTables: Table[] = []
+    let wasLoaded = false;
 
     async function updateGonzoFactor(value: number) {
         if (gonzoStore) {
@@ -28,6 +31,8 @@
         sliderLabel = getSliderLabel(sliderValue);
         updateGonzoFactor(sliderValue);
     }
+
+    $: tableUpdateTrigger = $tableUpdateStore;
 
     onMount(async () => {
         if (scrollContainer) {
@@ -41,6 +46,13 @@
             sliderValue = gonzoFactor;
             sliderLabel = getSliderLabel(sliderValue);
         }
+
+        let genreForBooks = new MainGenreTable();
+        genreForBooks.entryList.entries[0].withProbability(25);
+        genreForBooks.entryList.entries[1].withProbability(5);
+        genreForBooks.title = "Main Genres - Genre For Books";
+        loadedTables.push(genreForBooks);
+        addSubTables();
     });
 
     onDestroy(() => {
@@ -69,6 +81,12 @@
     function setActiveCategory(categoryName: string) {
         activeCategory = categoryName;
         activeTable = ""; // Reset active table when changing category
+        let category = categories.find(c => c.name === categoryName);
+        let firstTable = category?.tables[0];
+        if(firstTable){
+            scrollToTable(firstTable.title);
+        }
+
     }
 
     function setActiveTable(event: CustomEvent<{categoryName: string, tableName: string}>) {
@@ -103,7 +121,50 @@
     }
 
     function syncTables(){
+        if(wasLoaded === false){
+            let genreForRolePlay = new MainGenreTable();
+            genreForRolePlay.isSelected = true;
+            genreForRolePlay.entryList.entries[0].withProbability(29);
+            genreForRolePlay.entryList.entries[1].withProbability(1);
+            genreForRolePlay.title = "Main Genres - Genre For Role Play";
+            //The real name is MainGenres_GenreForRolePlay.txt
+            loadedTables.push(genreForRolePlay);
+            addSubTables();
+            wasLoaded = true;
+            //add sub tables
 
+        }
+
+
+       //TODO: how to update the Table Components?
+
+        //Load these Tables and show them in dropmenues
+        //Save menue decission and when loading the tables again look if the decessions are viable
+    }
+
+    function addSubTables() {
+        for (let loadedTable of loadedTables) {
+            let mainTableTitle = loadedTable.title.slice(0, loadedTable.title.indexOf(" - "));
+            for (let category of categories) {
+                for (let table of category.tables) {
+                    if (table.title.includes(mainTableTitle)) {
+                        // Check if the subtable is already present
+                        const isSubTableAlreadyPresent = table.subTables.some(
+                            existingSubTable => existingSubTable.title === loadedTable.title
+                        );
+
+                        // Only add the subtable if it's not already present
+                        if (!isSubTableAlreadyPresent) {
+                            table.subTables.push(loadedTable);
+                        }
+                    }
+                }
+            }
+        }
+
+        triggerTableUpdate();
+        tableUpdateTrigger += 1;
+        categories = [...categories];
     }
 
     function updateActiveTableOnScroll() {
@@ -157,7 +218,15 @@
         <div class="bg-white z-10">
             <div class="flex items-center justify-between mb-4">
                 <h1 class="text-2xl font-bold text-blue-700 p-4">All Tables</h1>
-                <button on:click={syncTables}>Sync</button>
+                <button
+                        on:click={syncTables}
+                        class="btn variant-filled-primary flex items-center space-x-2"
+                >
+                    <span>Sync</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+                    </svg>
+                </button>
                 <div class="flex flex-col items-center w-48">
                     <span class="text-sm text-gray-600 mb-1">{sliderLabel}</span>
                     <RangeSlider
@@ -179,7 +248,7 @@
                     <div class="space-y-4">
                         {#each category.tables as table}
                             <div id="table-{table.title.replace(/\s+/g, '-').toLowerCase()}">
-                                <Table {table} {tableUpdateTrigger}></Table>
+                                <TableComponent {table} {tableUpdateTrigger} on:tableUpdated={triggerTableUpdate}></TableComponent>
                             </div>
                         {/each}
                     </div>
