@@ -4,11 +4,19 @@
     import {allCategories} from "../../core/tables/allCategories";
     import { writable } from 'svelte/store';
     import { RangeSlider  } from '@skeletonlabs/skeleton';
-    import {getStore, tableUpdateStore, triggerTableUpdate} from "../../core/entities/persist/stores";
+    import {
+        getStorageStrategy,
+        getStore,
+        tableUpdateStore,
+        triggerTableUpdate
+    } from "../../core/entities/persist/stores";
     import type {ValueStorageManager} from "../../core/entities/persist/valueStorageManager";
-    import {MainGenreTable} from "../../core/tables/content/genre/mainGenres";
     import TableComponent from "$lib/TableComponents/Table.svelte";
-    import type {Table} from "../../core/tables/table";
+    import {Table} from "../../core/tables/table";
+    import {TableStorageManager} from "../../core/entities/persist/tableStorageManager";
+    import type {StorageStrategy} from "../../core/entities/persist/storageStrategy";
+    import {mapCategories} from "../../core/tables/category";
+    import {FunctionFactory} from "../../core/tables/core/entry/functionFactory";
     let categories = allCategories();
     let activeCategory = "";
     let activeTable = "";
@@ -18,8 +26,8 @@
     let tableUpdateTrigger = 0;
     let sliderLabel: string;
     let gonzoStore: ValueStorageManager<number>;
-    let loadedTables: Table[] = []
-    let wasLoaded = false;
+    let storageStrategy: StorageStrategy;
+    let tableManager: TableStorageManager;
 
     async function updateGonzoFactor(value: number) {
         if (gonzoStore) {
@@ -34,25 +42,40 @@
 
     $: tableUpdateTrigger = $tableUpdateStore;
 
+    function updateCategories(loadedTables: Table[]){
+        categories = mapCategories(categories, loadedTables);
+        triggerTableUpdate();
+        tableUpdateTrigger += 1;
+        console.log("Categories updated: ", categories);
+    }
+
     onMount(async () => {
+        storageStrategy = await getStorageStrategy();
+        tableManager = new TableStorageManager(storageStrategy);
         if (scrollContainer) {
             scrollContainer.addEventListener('scroll', handleScroll);
             handleScroll(); // Check initial scroll position
         }
 
         gonzoStore = await getStore('gonzoFactorStore');
-        let gonzoFactor = await gonzoStore.getValue();
-        if (gonzoFactor !== null) {
-            sliderValue = gonzoFactor;
-            sliderLabel = getSliderLabel(sliderValue);
+        let gonzoFactor = 0;
+        try{
+            let value = await gonzoStore.getValue();
+            if(value !== null){
+                gonzoFactor = value;
+            }
+        }catch{
+            await gonzoStore.setValue(gonzoFactor);
         }
 
-        let genreForBooks = new MainGenreTable();
-        genreForBooks.entryList.entries[0].withProbability(25);
-        genreForBooks.entryList.entries[1].withProbability(5);
-        genreForBooks.title = "Main Genres - Genre For Books";
-        loadedTables.push(genreForBooks);
-        addSubTables();
+        sliderValue = gonzoFactor;
+        sliderLabel = getSliderLabel(sliderValue);
+
+        try {
+            await syncTables();
+        } catch (error) {
+            console.error('Error loading tables in onMount:', error);
+        }
     });
 
     onDestroy(() => {
@@ -60,6 +83,26 @@
             scrollContainer.removeEventListener('scroll', handleScroll);
         }
     });
+
+    async function syncTables() {
+        try{
+            await tableManager.saveAllCategoriesIn('/tables/', allCategories());
+        }catch(error){
+            console.log("error while saving all categories", error);
+        }
+
+        try {
+            let loadedTables = await tableManager.getTablesWithThereSubTablesFrom('/tables/', categories);
+            let realTables = loadedTables.map(tableJson => Table.fromJSON(tableJson, new FunctionFactory()));
+            updateCategories(realTables);
+        } catch (error) {
+            console.error('Error syncing tables:', error);
+        }
+
+        triggerTableUpdate();
+        tableUpdateTrigger += 1;
+        categories = [...categories];
+    }
 
     function getSliderLabel(value: number): string {
         for(let category of categories){
@@ -120,53 +163,6 @@
 
     }
 
-    function syncTables(){
-        if(wasLoaded === false){
-            let genreForRolePlay = new MainGenreTable();
-            genreForRolePlay.isSelected = true;
-            genreForRolePlay.entryList.entries[0].withProbability(29);
-            genreForRolePlay.entryList.entries[1].withProbability(1);
-            genreForRolePlay.title = "Main Genres - Genre For Role Play";
-            //The real name is MainGenres_GenreForRolePlay.txt
-            loadedTables.push(genreForRolePlay);
-            addSubTables();
-            wasLoaded = true;
-            //add sub tables
-
-        }
-
-
-       //TODO: how to update the Table Components?
-
-        //Load these Tables and show them in dropmenues
-        //Save menue decission and when loading the tables again look if the decessions are viable
-    }
-
-    function addSubTables() {
-        for (let loadedTable of loadedTables) {
-            let mainTableTitle = loadedTable.title.slice(0, loadedTable.title.indexOf(" - "));
-            for (let category of categories) {
-                for (let table of category.tables) {
-                    if (table.title.includes(mainTableTitle)) {
-                        // Check if the subtable is already present
-                        const isSubTableAlreadyPresent = table.subTables.some(
-                            existingSubTable => existingSubTable.title === loadedTable.title
-                        );
-
-                        // Only add the subtable if it's not already present
-                        if (!isSubTableAlreadyPresent) {
-                            table.subTables.push(loadedTable);
-                        }
-                    }
-                }
-            }
-        }
-
-        triggerTableUpdate();
-        tableUpdateTrigger += 1;
-        categories = [...categories];
-    }
-
     function updateActiveTableOnScroll() {
         if (!scrollContainer) return;
 
@@ -187,7 +183,6 @@
                     if (matchingTable) {
                         activeCategory = category.name;
                         activeTable = matchingTable.title;
-                        console.log('Active Category:', activeCategory, 'Active Table:', activeTable);
                         return;
                     }
                 }

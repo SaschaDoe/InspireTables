@@ -1,13 +1,14 @@
-import { Table } from "../../table";
-import { FunctionEntry } from "./functionEntry";
+import {Table} from "../../table";
+import {FunctionEntry} from "./functionEntry";
 import {EntryPart} from "./entryPart";
 import {EntrySetting} from "./entrySetting";
 import {Interval} from "../../interval";
+import type {FunctionFactory} from "./functionFactory";
 
 export class Entry {
-    parts: EntryPart[] = [];
-    interval = new Interval();
-    setting = new EntrySetting();
+    public parts: EntryPart[] = [];
+    public interval = new Interval();
+    public setting = new EntrySetting();
 
     withSetting(setting: EntrySetting) {
         this.setting = setting;
@@ -50,18 +51,30 @@ export class Entry {
     }
 
     get descriptionText(): string {
-        return this.parts.map(part => {
+        return this.parts.map((part) => {
+            let output: string;
             if (part.input instanceof Table) {
-                return `{${part.input.title}}`;
+                output = `{${part.input.title}}`;
             } else if (part.input instanceof FunctionEntry) {
-                return `{${part.input.description}}`;
+                output = `{${part.input.description}}`;
             } else {
-                return part.input;
+                output = part.input;
             }
+            return output;
         }).join('');
     }
 
+    static fromJSON(json: any, functionFactory: FunctionFactory): Entry {
+        const entry = new Entry();
 
+        entry.setting = EntrySetting.fromJSON(json.setting);
+        entry.parts = json.parts.map((partJson: any) =>
+            EntryPart.fromJSON(partJson, functionFactory)
+        );
 
+        let descriptionText = entry.descriptionText;
+        console.log(descriptionText);
+        return entry;
+    }
 
 }

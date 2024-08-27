@@ -11,20 +11,33 @@ export function triggerTableUpdate() {
 import type { StorageStrategy } from "./storageStrategy";
 import { BrowserStorageStrategy } from "./browserStorageStrategy";
 import { TauriStorageStrategy } from "./tauriStorageStrategy";
+import {tauri} from "@tauri-apps/api";
 
 // Function to determine if we're in a Tauri environment
 function isInTauriEnvironment(): boolean {
-    if (typeof window !== 'undefined') {
-        return 'window.__TAURI__' in window;
+    if (typeof window !== 'undefined' && window !== null) {
+        // Check if __TAURI__ object exists on window
+        return window.__TAURI__ !== undefined;
     }
-    return false; // Default to false in non-browser environments
+    return false;
+}
+
+async function isTauriEnvironment(): Promise<boolean> {
+    try {
+        await tauri.invoke('tauri');
+        return true;
+    } catch (e) {
+        return false;
+    }
 }
 
 // Function to get the appropriate storage strategy
-export function getStorageStrategy(): StorageStrategy {
-    if (isInTauriEnvironment()) {
+export async function getStorageStrategy(): Promise<StorageStrategy> {
+    if (isInTauriEnvironment() || await isTauriEnvironment()) {
+        console.log("is in tauri environment");
         return new TauriStorageStrategy();
     }
+    console.log("is in browser Environment");
     return new BrowserStorageStrategy();
 }
 
@@ -34,10 +47,10 @@ export async function initializeStores() {
     const { ValueStorageManager } = await import("./valueStorageManager");
     const { EntityStoreRegistry } = await import("./entityStoreRegistry");
 
-    const characterStore = new EntityStorageManager('character', getStorageStrategy());
-    const illnessStore = new EntityStorageManager('illness', getStorageStrategy());
-    const gonzoFactorStore = new ValueStorageManager<number>('gonzoFactor', getStorageStrategy());
-    const lastIdStore = new ValueStorageManager<number>('lastId', getStorageStrategy());
+    const characterStore = new EntityStorageManager('character',await getStorageStrategy());
+    const illnessStore = new EntityStorageManager('illness',await getStorageStrategy());
+    const gonzoFactorStore = new ValueStorageManager<number>('gonzoFactor',await getStorageStrategy());
+    const lastIdStore = new ValueStorageManager<number>('lastId',await getStorageStrategy());
 
     const allEntityStores = [
         illnessStore,

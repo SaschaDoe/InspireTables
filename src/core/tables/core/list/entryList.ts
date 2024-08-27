@@ -1,5 +1,7 @@
 import {Entry} from "../entry/entry";
 import {probabilityBuzzwords} from "./probabilityBuzzwords";
+import type {FunctionFactory} from "../entry/functionFactory";
+import {Interval} from "../../interval";
 
 export class EntryList {
     entries: Entry[] = [];
@@ -48,11 +50,13 @@ export class EntryList {
     }
 
     setProbabilities(){
+
         this.isProbabilitySet = true;
         //calculate remaining probability after number entries
         let cumulativeProb = 100;
         for(let i = 0; i < this.entries.length; i++){
             let entry = this.entries[i];
+            entry.interval = new Interval();
             let probability = entry.setting.probabilityInPercent;
             cumulativeProb -= probability;
             if(cumulativeProb < 0){
@@ -125,6 +129,13 @@ export class EntryList {
 
     private adjustProbability(value: number, minValue: number = 0.001): number {
         return Math.max(minValue, value);
+    }
+
+    static fromJSON(json: any, functionFactory: FunctionFactory): EntryList {
+        const entryList = new EntryList();
+        entryList.entries = json.entries.map((entryJson: any) => Entry.fromJSON(entryJson, functionFactory));
+        entryList.gonzoFactor = json.gonzoFactor;
+        return entryList;
     }
 
 

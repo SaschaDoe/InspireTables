@@ -53,7 +53,10 @@
         "providerShortName": null,
         "signingIdentity": null
       },
-      "resources": [],
+      "resources": [
+        "../tables",
+        "../values"
+      ],
       "shortDescription": "",
       "targets": "all",
       "windows": {

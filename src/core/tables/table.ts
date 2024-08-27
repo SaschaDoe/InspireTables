@@ -3,6 +3,7 @@ import {Entry} from "./core/entry/entry";
 import {Dice} from "./dice";
 import {FunctionEntry} from "./core/entry/functionEntry";
 import {EntryList} from "./core/list/entryList";
+import type {FunctionFactory} from "./core/entry/functionFactory";
 
 export class Table {
     title: string = "";
@@ -10,7 +11,6 @@ export class Table {
     entryList: EntryList = new EntryList();
     subTables: Table[] = [];
     isSelected = false; //For combobox selection if subtable or the original is selected
-
 
     get isEvenDistributed() {
         for (let entry of this.entryList.entries) {
@@ -72,4 +72,29 @@ export class Table {
 
         return rollResult;
     }
+
+
+static fromJSON(json: any, functionFactory: FunctionFactory): Table {
+
+   const table = new Table();
+   table.title = json.title;
+
+   // Create and configure the Dice object
+   table.dice = new Dice();
+   if (json.dice.numberOfSides) {
+       table.dice.withSides(json.dice.numberOfSides);
+   }
+   if (json.dice.percentage !== undefined) {
+       table.dice.withPercentage(json.dice.percentage);
+   }
+
+   table.entryList = EntryList.fromJSON(json.entryList, functionFactory);
+   table.subTables = json.subTables.map((subTableJson: any) => Table.fromJSON(subTableJson, functionFactory));
+   table.isSelected = json.isSelected;
+   console.log("Set Probability again for", table);
+   table.entryList.setProbabilities();
+   console.log("Probability is set for", table);
+   return table;
+}
+
 }

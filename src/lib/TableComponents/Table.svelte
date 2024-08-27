@@ -26,16 +26,13 @@
 
     $: {
         if (tableUpdateTrigger !== undefined || selectedSubTable !== undefined) {
-            console.log("Table update or selection change triggered");
             if (tableUpdateTrigger !== undefined) {
-                console.log("Table update triggered")
                 if (!table.entryList.isProbabilitySet) {
                     table.entryList.setProbabilities();
                 }
                 entries = [...table.entryList.entries];
                 isEvenDistributed = table.isEvenDistributed;
                 hasSubTables = table.subTables.length > 0;
-                console.log("Has subtables:", hasSubTables);
 
             }
             initializeSelectedSubTable();
@@ -44,7 +41,6 @@
     }
 
     function updateCurrentTable() {
-        console.log("Updating current table");
         if (selectedSubTable === originalTableString) {
             currentTable = table;
         } else {
@@ -57,7 +53,6 @@
         entries = [...currentTable.entryList.entries];
         isEvenDistributed = currentTable.isEvenDistributed;
         hasSubTables = table.subTables.length > 0;
-        console.log("Has subtables:", hasSubTables);
     }
 
     onMount(() => {

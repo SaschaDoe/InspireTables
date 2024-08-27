@@ -24,7 +24,6 @@ export class ValueStorageManager<T> {
 
     private async initializeStorage(): Promise<void> {
         if (this.initialized) return;
-
         try {
             await this.loadValue();
             console.log(`Storage initialized for ${this.key}`);
@@ -44,7 +43,7 @@ export class ValueStorageManager<T> {
 
     private async loadValue(): Promise<void> {
         const filePath = this.getFilePath();
-        const jsonString = await this.storageStrategy.loadFile(filePath);
+        let jsonString = await this.storageStrategy.loadFile(filePath);
         if (jsonString.trim() === '') {
             this.value = null;
         } else {
