@@ -72,7 +72,7 @@
         sliderLabel = getSliderLabel(sliderValue);
 
         try {
-            await syncTables();
+            await loadTables();
         } catch (error) {
             console.error('Error loading tables in onMount:', error);
         }
@@ -84,13 +84,7 @@
         }
     });
 
-    async function syncTables() {
-        try{
-            await tableManager.saveAllCategoriesIn('/tables/', allCategories());
-        }catch(error){
-            console.log("error while saving all categories", error);
-        }
-
+    async function loadTables(){
         try {
             let loadedTables = await tableManager.getTablesWithThereSubTablesFrom('/tables/', categories);
             let realTables = loadedTables.map(tableJson => Table.fromJSON(tableJson, new FunctionFactory()));
@@ -102,6 +96,19 @@
         triggerTableUpdate();
         tableUpdateTrigger += 1;
         categories = [...categories];
+    }
+
+    async function saveTables(){
+        try{
+            await tableManager.saveAllCategoriesIn('/tables/', categories);
+        }catch(error){
+            console.log("error while saving all categories", error);
+        }
+    }
+
+    async function syncTables() {
+        saveTables();
+        loadTables();
     }
 
     function getSliderLabel(value: number): string {

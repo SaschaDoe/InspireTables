@@ -14,18 +14,18 @@ export class TableStorageManager {
 
     public async saveAllCategoriesIn(directoryPath: string, categories: Category[]): Promise<void> {
         try {
-            console.log("try to save all categories");
             for (const category of categories) {
                 let categoryPath = `${directoryPath}/${category.name}`;
                 let doesDirectoryExists = await this.storageStrategy.doesDirectoryExists(categoryPath);
-                console.log(`doesDirectoryExists for ${category.name}`, doesDirectoryExists);
                 if(!doesDirectoryExists){
                     await this.storageStrategy.createDirectory(categoryPath)
                 }
                 for (const table of category.tables) {
+                    if(table.isSelected){
+                        console.log("is selected before saving: ",table.title);
+                    }
                     let tablePath = `${categoryPath}/${table.title}.json`;
                     let tableAsJson = JSON.stringify(table);
-                    console.log(`try to save ${table.title} in `, tablePath);
                     await this.storageStrategy.saveFile(tablePath,tableAsJson);
                 }
             }
@@ -88,9 +88,13 @@ export class TableStorageManager {
         console.log("getAllTables: ", allTables.length);
         let subTables: Table[] = [];
         for (let table of allTables) {
-            console.log("Loaded table with title", table.title);
+
+
             const tableTitleSplit = table.title.split(' - ');
             if(tableTitleSplit.length > 1){
+                if(table.isSelected){
+                    console.log("Table was selected before: ", table.title);
+                }
                 subTables.push(table);
                 console.log("found subtable: ", table);
             }else{

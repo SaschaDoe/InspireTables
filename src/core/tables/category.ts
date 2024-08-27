@@ -27,6 +27,9 @@ export function mapCategories(categories: Category[], loadedTables: Table[]) {
 
         category.tables.forEach(oldTable => {
             const realTable = tableMap.get(oldTable.title);
+            if(realTable?.isSelected){
+                console.log("is really Selected", realTable.title);
+            }
             if (realTable) {
                 updatedCategory.withTable(realTable);
             } else {
