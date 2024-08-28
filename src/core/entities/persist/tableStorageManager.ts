@@ -11,6 +11,23 @@ export class TableStorageManager {
         console.log('loadAllFilesIn method exists:', 'loadAllFilesIn' in this.storageStrategy);
     }
 
+    public async saveTable(directoryPath: string, category: string, table: Table): Promise<void> {
+        try {
+            let categoryPath = `${directoryPath}/${category}`;
+            let doesDirectoryExists = await this.storageStrategy.doesDirectoryExists(categoryPath);
+            if(!doesDirectoryExists){
+                await this.storageStrategy.createDirectory(categoryPath);
+            }
+            let tablePath = `${categoryPath}/${table.title}.json`;
+            let tableAsJson = JSON.stringify(table);
+            await this.storageStrategy.saveFile(tablePath, tableAsJson);
+            console.log(`Table ${table.title} saved successfully.`);
+        } catch(error) {
+            console.error(`Error saving table ${table.title}:`, error);
+            throw error;
+        }
+    }
+
 
     public async saveAllCategoriesIn(directoryPath: string, categories: Category[]): Promise<void> {
         try {
@@ -31,28 +48,6 @@ export class TableStorageManager {
             }
         }catch(error){
             console.log("error when saving tables ", error);
-        }
-    }
-
-    private getFilePath(table: Table): string {
-        return `tables/${table.title}.json`;
-    }
-
-    public async saveAllTablesIn(directoryPath: string, tables: Table[]): Promise<void> {
-        try {
-            if (this.storageStrategy.createDirectory) {
-                await this.storageStrategy.createDirectory(directoryPath);
-            }
-
-            for (const table of tables) {
-                const filePath = `${directoryPath}/${this.getFilePath(table)}`;
-                const fileContent = JSON.stringify(table);
-                await this.storageStrategy.saveFile(filePath, fileContent);
-            }
-            console.log(`Successfully saved ${tables.length} tables in ${directoryPath}`);
-        } catch (error) {
-            console.error('Error saving tables:', error);
-            throw error;
         }
     }
 

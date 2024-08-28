@@ -8,12 +8,21 @@
     import { EntityStoreRegistry } from "../../core/entities/persist/entityStoreRegistry";
     import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
     import { ListBox, ListBoxItem } from '@skeletonlabs/skeleton';
-    import {onMount} from "svelte";
+    import {
+        getStorageStrategy,
+    } from "../../core/entities/persist/stores";
+    import {createEventDispatcher, onMount} from "svelte";
 
+    import favoriteSelected from "../../../static/favorite_star_selected.png";
+    import favoriteUnSelected from "../../../static/favorite_star_unSelected.png"
 
+    import {TableStorageManager} from "../../core/entities/persist/tableStorageManager";
+    import type {StorageStrategy} from "../../core/entities/persist/storageStrategy";
+    import {Category} from "../../core/tables/category";
+    const dispatch = createEventDispatcher();
     let showModal: boolean = false;
     export let table: Table = new MainGenreTable();
-
+    export const category = new Category();
     export let tableUpdateTrigger = 0;
     let modalDescription = "";
     let rollResult = new RollResult(new Entry());
@@ -24,6 +33,8 @@
     let selectedSubTable: string = originalTableString;
     let currentTable: Table = table;
 
+    let isFavorite: boolean = false;
+
     $: {
         if (tableUpdateTrigger !== undefined || selectedSubTable !== undefined) {
             if (tableUpdateTrigger !== undefined) {
@@ -33,7 +44,6 @@
                 entries = [...table.entryList.entries];
                 isEvenDistributed = table.isEvenDistributed;
                 hasSubTables = table.subTables.length > 0;
-
             }
             initializeSelectedSubTable();
             updateCurrentTable();
@@ -54,15 +64,17 @@
         isEvenDistributed = currentTable.isEvenDistributed;
         hasSubTables = table.subTables.length > 0;
     }
-
-    onMount(() => {
+    let storageStrategy: StorageStrategy;
+    let tableStorageManager: TableStorageManager;
+    onMount(async () => {
         initializeSelectedSubTable();
+        storageStrategy = await getStorageStrategy();
+        tableStorageManager = new TableStorageManager(storageStrategy);
     });
 
     function initializeSelectedSubTable() {
         const selectedSubTables = table.subTables.filter(subTable => subTable.isSelected);
         if (selectedSubTables.length > 0) {
-            // If multiple subtables are selected, we'll use the first one
             selectedSubTable = selectedSubTables[0].title;
             updateCurrentTable();
         }
@@ -77,13 +89,26 @@
 
     $: hasSubTables = false;
 
+    async function toggleFavorite(): Promise<void> {
+        currentTable.isFavorite = !currentTable.isFavorite;
+        try {
+            await tableStorageManager.saveTable('tables', category.name, currentTable);
+            console.log(`Table ${currentTable.title} is now ${currentTable.isFavorite ? 'favorited' : 'unfavorited'}`);
+            dispatch('favoriteToggled', { table: currentTable, category: category.name });
+        } catch (error) {
+            console.error('Error saving table favorite status:', error);
+            // Revert the favorite status if saving failed
+            currentTable.isFavorite = !currentTable.isFavorite;
+        }
+    }
+
+
     function roll() {
         rollResult = currentTable.roll();
         modalDescription = rollResult.combinedString;
         hasEntities = Object.values(rollResult.entities).some(entityArray => entityArray.length > 0);
         showModal = true;
     }
-
 
     function handleClose(): void {
         console.log('Modal closed');
@@ -117,7 +142,6 @@
         return fullTitle.startsWith(prefix) ? fullTitle.slice(prefix.length) : fullTitle;
     }
 
-
 </script>
 
 <Modal
@@ -139,7 +163,16 @@
 <div class="container mx-auto p-4">
     <div class="bg-surface-100 border border-surface-300 shadow-lg p-6">
         <div class="flex justify-between items-center mb-4">
-            <h1 class="text-2xl font-bold text-blue-700">{currentTable.title}</h1>
+            <div class="flex items-center space-x-2">
+                <button on:click={toggleFavorite} class="focus:outline-none">
+                    <img
+                            src={currentTable.isFavorite ? favoriteSelected : favoriteUnSelected}
+                            alt={currentTable.isFavorite ? "Favorite" : "Not favorite"}
+                            class="w-6 h-6"
+                    />
+                </button>
+                <h1 class="text-2xl font-bold text-blue-700">{currentTable.title}</h1>
+            </div>
             <div class="flex items-center space-x-4">
                 {#if hasSubTables}
                     <button class="btn variant-filled w-48 justify-between" use:popup={popupCombobox}>

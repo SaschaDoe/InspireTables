@@ -1,5 +1,5 @@
 {
-  "name": "",
+  "name": "inspire_tables",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -33,6 +33,7 @@
   "dependencies": {
     "@floating-ui/dom": "1.6.7",
     "@sveltejs/adapter-static": "^3.0.2",
-    "@tauri-apps/api": "^1.6.0"
+    "@tauri-apps/api": "^1.6.0",
+    "lucide-svelte": "^0.436.0"
   }
 }

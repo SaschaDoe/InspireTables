@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { slide } from 'svelte/transition';
+    //import { slide } from 'svelte/transition';
 
     export let title: string;
     export let id: number;
@@ -28,9 +28,9 @@
 
     <div class="contents">
         {#if !isHidden}
-            <div transition:slide|local class="col-span-2 info">
+            <!-- <div transition:slide|local class="col-span-2 info"> -->
                 <slot></slot>
-            </div>
+            <!-- </div> -->
         {/if}
     </div>
 </div>

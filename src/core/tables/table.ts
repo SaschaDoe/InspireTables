@@ -11,6 +11,7 @@ export class Table {
     entryList: EntryList = new EntryList();
     subTables: Table[] = [];
     isSelected = false; //For combobox selection if subtable or the original is selected
+    isFavorite = false;
 
     get isEvenDistributed() {
         for (let entry of this.entryList.entries) {
@@ -91,6 +92,7 @@ static fromJSON(json: any, functionFactory: FunctionFactory): Table {
    table.entryList = EntryList.fromJSON(json.entryList, functionFactory);
    table.subTables = json.subTables.map((subTableJson: any) => Table.fromJSON(subTableJson, functionFactory));
    table.isSelected = json.isSelected;
+    table.isFavorite = json.isFavorite || false
    console.log("Set Probability again for", table);
    table.entryList.setProbabilities();
    console.log("Probability is set for", table);

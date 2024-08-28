@@ -33,10 +33,11 @@ async function isTauriEnvironment(): Promise<boolean> {
 
 // Function to get the appropriate storage strategy
 export async function getStorageStrategy(): Promise<StorageStrategy> {
+/*
     if (isInTauriEnvironment() || await isTauriEnvironment()) {
         console.log("is in tauri environment");
         return new TauriStorageStrategy();
-    }
+    }*/
     console.log("is in browser Environment");
     return new BrowserStorageStrategy();
 }

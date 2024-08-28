@@ -4,8 +4,8 @@ export class BrowserStorageStrategy implements StorageStrategy {
     loadFileFromExactPath(path: string): Promise<string> {
         throw new Error("Method not implemented.");
     }
-    doesDirectoryExists(path: string): Promise<boolean> {
-        throw new Error("Method not implemented.");
+    async doesDirectoryExists(path: string): Promise<boolean> {
+        return Promise.resolve(true);
     }
     async loadFile(path: string): Promise<string> {
         const data = localStorage.getItem(path);

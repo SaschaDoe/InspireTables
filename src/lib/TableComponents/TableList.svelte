@@ -46,8 +46,12 @@
         categories = mapCategories(categories, loadedTables);
         triggerTableUpdate();
         tableUpdateTrigger += 1;
+        updateFavoriteTables();
         console.log("Categories updated: ", categories);
     }
+    let favoriteTables: any[] = [];
+
+
 
     onMount(async () => {
         storageStrategy = await getStorageStrategy();
@@ -76,6 +80,8 @@
         } catch (error) {
             console.error('Error loading tables in onMount:', error);
         }
+
+        updateFavoriteTables();
     });
 
     onDestroy(() => {
@@ -89,6 +95,7 @@
             let loadedTables = await tableManager.getTablesWithThereSubTablesFrom('/tables/', categories);
             let realTables = loadedTables.map(tableJson => Table.fromJSON(tableJson, new FunctionFactory()));
             updateCategories(realTables);
+            updateFavoriteTables();
         } catch (error) {
             console.error('Error syncing tables:', error);
         }
@@ -129,13 +136,21 @@
     }
 
     function setActiveCategory(categoryName: string) {
+
         activeCategory = categoryName;
         activeTable = ""; // Reset active table when changing category
-        let category = categories.find(c => c.name === categoryName);
-        let firstTable = category?.tables[0];
-        if(firstTable){
-            scrollToTable(firstTable.title);
+        if (categoryName === "Favorites") {
+            if (favoriteTables.length > 0) {
+                scrollToTable(favoriteTables[0].title);
+            }
+        }else{
+            let category = categories.find(c => c.name === categoryName);
+            let firstTable = category?.tables[0];
+            if(firstTable){
+                scrollToTable(firstTable.title);
+            }
         }
+
 
     }
 
@@ -204,6 +219,48 @@
         updateTrigger += 1;
     }
 
+    function updateFavoriteTables() {
+        favoriteTables = categories.flatMap(category =>
+            category.tables
+                .filter(table => table.isFavorite)
+                .map(table => ({ ...table, category: category.name }))
+        );
+    }
+
+    function handleRemoveFavorite(event: CustomEvent) {
+        const { categoryName, tableName } = event.detail;
+        updateTableFavoriteStatus(categoryName, tableName, false);
+    }
+
+    async function updateTableFavoriteStatus(categoryName: string, tableName: string, isFavorite: boolean) {
+        // Find the category and update the table
+        const categoryIndex = categories.findIndex(c => c.name === categoryName);
+        if (categoryIndex !== -1) {
+            const tableIndex = categories[categoryIndex].tables.findIndex(t => t.title === tableName);
+            if (tableIndex !== -1) {
+                categories[categoryIndex].tables[tableIndex].isFavorite = isFavorite;
+
+                // Save the updated table
+                try {
+                    await tableManager.saveTable('tables', categoryName, categories[categoryIndex].tables[tableIndex]);
+                    console.log(`Table ${tableName} favorite status updated to ${isFavorite}`);
+                } catch (error) {
+                    console.error('Error saving table favorite status:', error);
+                    // Revert the change if saving failed
+                    categories[categoryIndex].tables[tableIndex].isFavorite = !isFavorite;
+                }
+            }
+        }
+        updateFavoriteTables();
+        categories = [...categories]; // Trigger reactivity
+    }
+
+
+    function handleFavoriteToggled(event: CustomEvent) {
+        const { table, category } = event.detail;
+        updateTableFavoriteStatus(category, table.title, table.isFavorite);
+    }
+
 
 </script>
 
@@ -212,8 +269,10 @@
             {categories}
             {activeCategory}
             {activeTable}
+            {favoriteTables}
             on:setActiveCategory={(event) => setActiveCategory(event.detail)}
             on:setActiveTable={setActiveTable}
+            on:removeFavorite={handleRemoveFavorite}
     />
 
     <div class="flex-1 flex flex-col h-screen">
@@ -250,7 +309,13 @@
                     <div class="space-y-4">
                         {#each category.tables as table}
                             <div id="table-{table.title.replace(/\s+/g, '-').toLowerCase()}">
-                                <TableComponent {table} {tableUpdateTrigger} on:tableUpdated={triggerTableUpdate}></TableComponent>
+                                <TableComponent
+                                        {table}
+                                        {category}
+                                        {tableUpdateTrigger}
+                                        on:tableUpdated={triggerTableUpdate}
+                                        on:favoriteToggled={handleFavoriteToggled}
+                                />
                             </div>
                         {/each}
                     </div>
