@@ -2,11 +2,12 @@
     import { createEventDispatcher } from 'svelte';
     import { slide } from 'svelte/transition';
     import { writable } from "svelte/store";
+    import SearchBar from './SearchBar.svelte';
 
-    export let categories: any[];
+    export let categories: { name: string; tables: { title: string }[] }[] = [];
     export let activeCategory: string = "";
     export let activeTable: string = "";
-    export let favoriteTables: any[] = [];
+    export let favoriteTables: { category: string; title: string }[] = [];
 
     const dispatch = createEventDispatcher();
 
@@ -25,6 +26,9 @@
     let isIndexVisible = true;
     let expandedCategories = writable(new Set<string>());
     let isFavoritesExpanded = writable(false);
+    let searchTerm = writable("");
+    let filteredCategories = writable(categories);
+    let filteredFavorites = writable(favoriteTables);
 
     function toggleIndex() {
         isIndexVisible = !isIndexVisible;
@@ -45,9 +49,25 @@
         isFavoritesExpanded.update(value => !value);
     }
 
+    function handleSearchResults(event: CustomEvent<{ filteredCategories: typeof categories; filteredFavorites: typeof favoriteTables }>) {
+        filteredCategories.set(event.detail.filteredCategories);
+        filteredFavorites.set(event.detail.filteredFavorites);
+    }
+
     // Reactive statement to expand active category and collapse others
     $: if (activeCategory) {
         expandedCategories.set(new Set([activeCategory]));
+    }
+
+    // Reactive statements for search functionality
+    $: if ($searchTerm) {
+        expandedCategories.set(new Set(categories.map(c => c.name)));
+        isFavoritesExpanded.set(true);
+    } else {
+        expandedCategories.set(new Set([activeCategory]));
+        isFavoritesExpanded.set(false);
+        filteredCategories.set(categories);
+        filteredFavorites.set(favoriteTables);
     }
 </script>
 
@@ -60,6 +80,18 @@
             >
                 ←
             </button>
+            <div class="flex-grow">
+                <SearchBar
+                        bind:value={$searchTerm}
+                        on:searchResults={handleSearchResults}
+                        placeholder="Search tables..."
+                        {categories}
+                        {favoriteTables}
+                />
+            </div>
+        </div>
+
+        <div class="flex items-center mb-4">
             <button
                     class="text-xl font-bold flex-grow text-left p-2 rounded-lg transition-colors duration-200 ease-in-out {activeCategory === 'Favorites' ? 'bg-blue-700 text-white' : 'text-blue-700 hover:bg-blue-100'}"
                     on:click={() => setActiveCategory('Favorites')}
@@ -78,7 +110,7 @@
 
         {#if $isFavoritesExpanded}
             <ul class="ml-4 mt-2 space-y-1 mb-4" transition:slide="{{ duration: 300 }}">
-                {#each favoriteTables as table}
+                {#each $filteredFavorites as table}
                     <li class="flex items-center justify-between">
                         <button
                                 class="text-sm flex-grow text-left p-1 rounded transition-colors duration-200 ease-in-out {activeTable === table.title ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-blue-100'}"
@@ -99,7 +131,7 @@
 
         <h2 class="text-2xl font-bold text-blue-700 mb-2">Categories</h2>
         <ul class="space-y-2">
-            {#each categories as category}
+            {#each $filteredCategories as category}
                 <li>
                     <div class="flex items-center justify-between">
                         <button
