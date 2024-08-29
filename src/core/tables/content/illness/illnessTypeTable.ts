@@ -20,10 +20,12 @@ export const generalIllnessNames: string[] = [
     "infestation"
 ];
 
+export const IllnessTableName = "Illness Type";
+
 export class IllnessTypeTable extends Table{
     constructor() {
         super();
-        this.title = "Illness Type";
+        this.title = IllnessTableName;
         this.addEntriesFromList(generalIllnessNames);
     }
 }

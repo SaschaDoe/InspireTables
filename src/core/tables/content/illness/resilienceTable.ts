@@ -48,6 +48,11 @@ export const resiliences = [
     "soap and detergents"
 ];
 
+/*
+This is not taken for illness because it is for now simpler to take the general environmental resilience
+and apply it where it is (like the desert for hot etc.).
+ */
+
 export class ResilienceTable extends Table {
     constructor() {
         super();

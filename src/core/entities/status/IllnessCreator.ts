@@ -1,96 +1,108 @@
-import {TimeTable} from "../../tables/content/other/timeTable";
-import {IllnessTypeTable} from "../../tables/content/illness/illnessTypeTable";
-import {IllnessSymptomTable} from "../../tables/content/illness/illnessSymptomTable";
-import {IllnessCureTable} from "../../tables/content/illness/illnessCureTable";
-import {IllnessOriginTable} from "../../tables/content/illness/illnessOriginTable";
-import {IllnessWorldEffectTable} from "../../tables/content/illness/illnessWorldEffectTable";
-import {IllnessLoreTable} from "../../tables/content/illness/illnessLoreTable";
-import {IllnessTransmissionTable} from "../../tables/content/illness/illnessTransmissionTable";
-import {PrognosisTable} from "../../tables/content/illness/prognosisTable";
-import {ImpactTable} from "../../tables/content/other/impactTable";
+import {TimeTableName} from "../../tables/content/other/timeTable";
+import {IllnessTableName} from "../../tables/content/illness/illnessTypeTable";
+import {IllnessSymptomTableName} from "../../tables/content/illness/illnessSymptomTable";
+import {IllnessCureTableName} from "../../tables/content/illness/illnessCureTable";
+import {IllnessOriginTableName} from "../../tables/content/illness/illnessOriginTable";
+import {
+    IllnessWordEffectTableName
+} from "../../tables/content/illness/illnessWorldEffectTable";
+import {IllnessLoreTableName} from "../../tables/content/illness/illnessLoreTable";
+import {
+    IllnessTransmissionTableName
+} from "../../tables/content/illness/illnessTransmissionTable";
+import {PrognosisTableName} from "../../tables/content/illness/prognosisTable";
+import {ImpactTableName} from "../../tables/content/other/impactTable";
 import {strengths} from "../../tables/content/other/strengthTable";
-import {amounts, AmountTable} from "../../tables/content/other/amountTable";
-import {VectorInvolvementTable} from "../../tables/content/illness/vectorInvolvementTable";
-import {SeasonalityTable} from "../../tables/content/illness/seasonalityTable";
-import {HostDiversityTable} from "../../tables/content/illness/hostDiversityTable";
-import {GeographicSpreadTable} from "../../tables/content/illness/geographicSpreadTable";
-import {CrossSpeciesTransmissionTable} from "../../tables/content/illness/crossSpeciesTransmissionTable";
-import {CureEffectivenessTable} from "../../tables/content/illness/cureEffectivnessTable";
-import {CureAvailabilityTable} from "../../tables/content/illness/cureAvailabilityTable";
-import {CureSideEffectsTable} from "../../tables/content/illness/cureSideEffectsTable";
-import {CureDurationTable} from "../../tables/content/illness/cureDurationTable";
-import {CureComplexityTable} from "../../tables/content/illness/cureComplexityTable";
+import {amounts, AmountTable, AmountTableName} from "../../tables/content/other/amountTable";
+import {VectorInvolvementTableName} from "../../tables/content/illness/vectorInvolvementTable";
+import {SeasonalityTableName} from "../../tables/content/illness/seasonalityTable";
+import {HostDiversityTableName} from "../../tables/content/illness/hostDiversityTable";
+import {GeographicSpreadTableName} from "../../tables/content/illness/geographicSpreadTable";
+import {
+    CrossSpeciesTransmissionTableName
+} from "../../tables/content/illness/crossSpeciesTransmissionTable";
+import {CureEffectivenessTableName} from "../../tables/content/illness/cureEffectivnessTable";
+import {CureAvailabilityTableName} from "../../tables/content/illness/cureAvailabilityTable";
+import {CureSideEffectsTableName} from "../../tables/content/illness/cureSideEffectsTable";
+import {CureDurationTableName} from "../../tables/content/illness/cureDurationTable";
+import {CureComplexityTableName} from "../../tables/content/illness/cureComplexityTable";
 import {AttributeDefinition} from "../attributeDefinition";
-import {SymptomObviousnessTable} from "../../tables/content/illness/symptomObviousnessTable";
-import {SymptomConsistencyTable} from "../../tables/content/illness/symptomConsistencyTable";
-import {IncubationPeriodTable} from "../../tables/content/illness/incubationPeriodTable";
-import {IllnessMimicryTable} from "../../tables/content/illness/illnessMimicryTable";
-import {DetectionMethodComplexityTable} from "../../tables/content/illness/detectionMethodComplexityTable";
-import {type CreatedEntities, Creator} from "../creator";
+import {
+    SymptomObviousnessTableName
+} from "../../tables/content/illness/symptomObviousnessTable";
+import {
+    SymptomConsistencyTableName
+} from "../../tables/content/illness/symptomConsistencyTable";
+import {IncubationPeriodTableName} from "../../tables/content/illness/incubationPeriodTable";
+import {IllnessMimicryTableName} from "../../tables/content/illness/illnessMimicryTable";
+import {
+    DetectionMethodComplexityTableName
+} from "../../tables/content/illness/detectionMethodComplexityTable";
 import {Illness} from "./illness";
-import type {Table} from "../../tables/table";
 import {Experiment} from "../experiment";
 import type {CureDifficulty} from "./cureDifficulty";
 import type {Severity} from "./severity";
-import {SpeedTable} from "../../tables/content/other/speedTable";
-import {AsymptomaticSpreadTable} from "../../tables/content/illness/asymptomaticSpreadTable";
-import {EnvironmentalResilienceTable} from "../../tables/content/illness/environmentalResilienceTable";
+import {SpeedTableName} from "../../tables/content/other/speedTable";
+import {
+    AsymptomaticSpreadTableName
+} from "../../tables/content/illness/asymptomaticSpreadTable";
+import {
+    EnvironmentalResilienceTableName
+} from "../../tables/content/illness/environmentalResilienceTable";
 import type {Contagiousness} from "./contagiousness";
 import {intensityLevels} from "../../tables/content/other/intensityTable";
 import {difficultyLevels} from "../../tables/content/other/difficultTable";
 import {IllnessAdjectiveGenerator} from "./illnessAdjectiveGenerator";
 import {getStore} from "../persist/stores";
+import {BaseCreator} from "../baseCreator";
+import {CreationResult} from "../creationResult";
 
 type IllnessAttribute = keyof Illness;
 
-export class IllnessCreator extends Creator{
+export class IllnessCreator extends BaseCreator<Illness>{
     attributeDefinitions: AttributeDefinition[] = [
-        new AttributeDefinition().withName('type').withTable(new IllnessTypeTable()),
-        new AttributeDefinition().withName('time').withTable(new TimeTable()).withWeight(-1),
-        new AttributeDefinition().withName('onset').withTable(new TimeTable()),
-        new AttributeDefinition().withName('impactOnFunctioning').withTable(new ImpactTable()),
-        new AttributeDefinition().withName('origin').withTable(new IllnessOriginTable()),
-        new AttributeDefinition().withName('worldEffect').withTable(new IllnessWorldEffectTable()),
-        new AttributeDefinition().withName('lore').withTable(new IllnessLoreTable()),
-        new AttributeDefinition().withName('age').withTable(new TimeTable()),
-        new AttributeDefinition().withName('transmission').withTable(new IllnessTransmissionTable()),
-        new AttributeDefinition().withName('prognosis').withTable(new PrognosisTable()),
-        new AttributeDefinition().withName('crossSpeciesTransmission').withTable(new CrossSpeciesTransmissionTable()),
-        new AttributeDefinition().withName('geographicSpread').withTable(new GeographicSpreadTable()),
-        new AttributeDefinition().withName('hostDiversity').withTable(new HostDiversityTable()),
-        new AttributeDefinition().withName('seasonality').withTable(new SeasonalityTable()),
-        new AttributeDefinition().withName('vectorInvolvement').withTable(new VectorInvolvementTable()),
-        new AttributeDefinition().withName('cure').withTable(new IllnessCureTable()),
-        new AttributeDefinition().withName('cureEffectiveness').withTable(new CureEffectivenessTable()),
-        new AttributeDefinition().withName('cureAvailability').withTable(new CureAvailabilityTable()),
-        new AttributeDefinition().withName('cureSideEffects').withTable(new CureSideEffectsTable()),
-        new AttributeDefinition().withName('cureDuration').withTable(new CureDurationTable()),
-        new AttributeDefinition().withName('cureComplexity').withTable(new CureComplexityTable()),
-        new AttributeDefinition().withName('symptomObviousness').withTable(new SymptomObviousnessTable()),
-        new AttributeDefinition().withName('symptomConsistency').withTable(new SymptomConsistencyTable()),
-        new AttributeDefinition().withName('incubationPeriod').withTable(new IncubationPeriodTable()),
-        new AttributeDefinition().withName('illnessMimicry').withTable(new IllnessMimicryTable()),
-        new AttributeDefinition().withName('detectionMethodComplexity').withTable(new DetectionMethodComplexityTable()),
-        new AttributeDefinition().withName('reproductionRate').withTable(new SpeedTable()),// weight: -1
-        new AttributeDefinition().withName('incubationPeriod').withTable(new TimeTable()),// weight: -1
-        new AttributeDefinition().withName('infectiousPeriod').withTable(new TimeTable()),
-        new AttributeDefinition().withName('attackRate').withTable(new AmountTable()),
-        new AttributeDefinition().withName('asymptomaticSpread').withTable(new AsymptomaticSpreadTable()),
-        new AttributeDefinition().withName('environmentalResilience').withTable(new EnvironmentalResilienceTable()),
+        new AttributeDefinition().withName('type').withTable(IllnessTableName),
+        new AttributeDefinition().withName('time').withTable(TimeTableName).withWeight(-1),
+        new AttributeDefinition().withName('onset').withTable(TimeTableName),
+        new AttributeDefinition().withName('impactOnFunctioning').withTable(ImpactTableName),
+        new AttributeDefinition().withName('origin').withTable(IllnessOriginTableName),
+        new AttributeDefinition().withName('worldEffect').withTable(IllnessWordEffectTableName),
+        new AttributeDefinition().withName('lore').withTable(IllnessLoreTableName),
+        new AttributeDefinition().withName('age').withTable(TimeTableName),
+        new AttributeDefinition().withName('transmission').withTable(IllnessTransmissionTableName),
+        new AttributeDefinition().withName('prognosis').withTable(PrognosisTableName),
+        new AttributeDefinition().withName('crossSpeciesTransmission').withTable(CrossSpeciesTransmissionTableName),
+        new AttributeDefinition().withName('geographicSpread').withTable(GeographicSpreadTableName),
+        new AttributeDefinition().withName('hostDiversity').withTable(HostDiversityTableName),
+        new AttributeDefinition().withName('seasonality').withTable(SeasonalityTableName),
+        new AttributeDefinition().withName('vectorInvolvement').withTable(VectorInvolvementTableName),
+        new AttributeDefinition().withName('cure').withTable(IllnessCureTableName),
+        new AttributeDefinition().withName('cureEffectiveness').withTable(CureEffectivenessTableName),
+        new AttributeDefinition().withName('cureAvailability').withTable(CureAvailabilityTableName),
+        new AttributeDefinition().withName('cureSideEffects').withTable(CureSideEffectsTableName),
+        new AttributeDefinition().withName('cureDuration').withTable(CureDurationTableName),
+        new AttributeDefinition().withName('cureComplexity').withTable(CureComplexityTableName),
+        new AttributeDefinition().withName('symptomObviousness').withTable(SymptomObviousnessTableName),
+        new AttributeDefinition().withName('symptomConsistency').withTable(SymptomConsistencyTableName),
+        new AttributeDefinition().withName('incubationPeriod').withTable(IncubationPeriodTableName),
+        new AttributeDefinition().withName('illnessMimicry').withTable(IllnessMimicryTableName),
+        new AttributeDefinition().withName('detectionMethodComplexity').withTable(DetectionMethodComplexityTableName),
+        new AttributeDefinition().withName('reproductionRate').withTable(SpeedTableName),// weight: -1
+        new AttributeDefinition().withName('incubationPeriod').withTable(TimeTableName),// weight: -1
+        new AttributeDefinition().withName('infectiousPeriod').withTable(TimeTableName),
+        new AttributeDefinition().withName('attackRate').withTable(AmountTableName),
+        new AttributeDefinition().withName('asymptomaticSpread').withTable(AsymptomaticSpreadTableName),
+        new AttributeDefinition().withName('environmentalResilience').withTable(EnvironmentalResilienceTableName),
     ];
 
-    getEntityType(): string {
-        return 'Illness';
-    }
-
-    create(): CreatedEntities {
+    create(): CreationResult {
         let illness = new Illness();
 
         illness.adjective = new IllnessAdjectiveGenerator().withDice(this.dice).generate();
 
         for (const pair of this.attributeDefinitions) {
             if (this.isIllnessAttribute(pair.name)) {
-                this.rollAndSetAttribute(illness, pair.name, pair.table);
+                this.rollAndSetAttribute(illness, pair.name, pair.tableName);
             } else {
                 console.warn(`Attribute ${pair.name} is not a valid key of Illness.`);
             }
@@ -109,11 +121,11 @@ export class IllnessCreator extends Creator{
         this.calculateContagiousness(illness, contagiousness);
         this.calculateKnown(illness);
 
-        return { Illness: [illness] };
+        return new CreationResult();
     }
 
-    private rollAndSetAttribute(illness: Illness, attribute: IllnessAttribute, table: Table): void {
-        const value = table.withDice(this.dice).roll().combinedString;
+    private rollAndSetAttribute(illness: Illness, attribute: IllnessAttribute, tableName: string): void {
+        const value = this.tableManager.getTable(tableName).withDice(this.dice).roll().combinedString;
         this.setIllnessAttribute(illness, attribute, value);
         this.setIllnessAttribute(illness, `${attribute}Known` as IllnessAttribute, new AmountTable().withDice(this.dice).roll().combinedString);
         this.setIllnessAttribute(illness, `${attribute}InternalKnown` as IllnessAttribute, new AmountTable().withDice(this.dice).roll().combinedString);
@@ -124,7 +136,7 @@ export class IllnessCreator extends Creator{
         const numberOfSymptoms = this.dice.rollWith(3);
         illness[symptomType] = [];
         for (let i = 0; i < numberOfSymptoms; i++) {
-            illness[symptomType].push(new IllnessSymptomTable().withDice(this.dice).roll().combinedString);
+            illness[symptomType].push(this.tableManager.getTable(IllnessSymptomTableName).withDice(this.dice).roll().combinedString);
         }
         this.setIllnessAttribute(illness, `${symptomType}Known` as IllnessAttribute, new AmountTable().withDice(this.dice).roll().combinedString);
         this.setIllnessAttribute(illness, `${symptomType}InternalKnown` as IllnessAttribute, new AmountTable().withDice(this.dice).roll().combinedString);
@@ -270,14 +282,10 @@ export class IllnessCreator extends Creator{
         return allDefinitions.filter(def => neededAttributes.includes(def.name));
     }
 
-    async persist(entities: CreatedEntities): Promise<void> {
-        if (!entities.Illness || entities.Illness.length === 0) {
-            console.log("No illnesses to persist.");
-            return;
-        }
+    async persist(illness: Illness): Promise<void> {
         try {
             let store = await getStore('illnessStore');
-            await store.saveSpecificEntities(entities.Illness);
+            await store.saveEntity(illness);
             console.log(`Illnesses saved successfully.`);
         } catch (error) {
             console.error(`Failed to save illnesses:`, error);

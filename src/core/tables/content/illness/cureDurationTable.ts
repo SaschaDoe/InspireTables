@@ -17,10 +17,12 @@ export const cureDuration = [
     "quick cure, but requires lengthy preparation beforehand"
 ];
 
+export const CureDurationTableName = "Cure Duration";
+
 export class CureDurationTable extends Table {
     constructor() {
         super();
-        this.title = "Cure Duration";
+        this.title = CureDurationTableName;
         this.addEntriesFromList(cureDuration);
     }
 }

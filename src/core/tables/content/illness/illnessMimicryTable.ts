@@ -13,10 +13,12 @@ export const illnessMimicry = [
     "chameleon-like, adapts symptoms to mimic concurrent conditions"
 ];
 
+export const IllnessMimicryTableName = "Illness Mimicry";
+
 export class IllnessMimicryTable extends Table {
     constructor() {
         super();
-        this.title = "Illness Mimicry";
+        this.title = IllnessMimicryTableName;
         this.addEntriesFromList(illnessMimicry);
     }
 }

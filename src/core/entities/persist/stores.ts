@@ -49,6 +49,7 @@ export async function initializeStores() {
     const { EntityStoreRegistry } = await import("./entityStoreRegistry");
 
     const characterStore = new EntityStorageManager('character',await getStorageStrategy());
+    const genreMixStore = new EntityStorageManager('genreMix',await getStorageStrategy());
     const illnessStore = new EntityStorageManager('illness',await getStorageStrategy());
     const gonzoFactorStore = new ValueStorageManager<number>('gonzoFactor',await getStorageStrategy());
     const lastIdStore = new ValueStorageManager<number>('lastId',await getStorageStrategy());
@@ -60,11 +61,13 @@ export async function initializeStores() {
 
     const registry = EntityStoreRegistry.getInstance();
     registry.registerStore('Character', characterStore);
+    registry.registerStore('GenreMix', genreMixStore);
     registry.registerStore('Illness', illnessStore);
 
     return {
         characterStore,
         illnessStore,
+        genreMixStore,
         gonzoFactorStore,
         lastIdStore,
         allEntityStores,

@@ -10,10 +10,12 @@ export const speeds = [
     "near impossible",
 ];
 
+export const SpeedTableName = "Speed";
+
 export class SpeedTable extends Table{
     constructor() {
         super();
-        this.title = "Speed";
+        this.title = SpeedTableName;
         this.addEntriesFromList(speeds);
     }
 }

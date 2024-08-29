@@ -54,10 +54,12 @@ const illnessMythologyLore: string[] = [
     //TODO: only probability for High Techlevel
 ];
 
+export const IllnessLoreTableName = "Illness Mythology";
+
 export class IllnessLoreTable extends Table{
     constructor() {
         super();
-        this.title = "Illness Mythology";
+        this.title = IllnessLoreTableName;
         this.addEntriesFromList(illnessMythologyLore);
     }
 }

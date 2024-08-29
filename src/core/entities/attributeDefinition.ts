@@ -2,17 +2,18 @@ import {Table} from "../tables/table";
 
 export class AttributeDefinition{
     name = "";
-    table = new Table();
+    tableName = "";
     current = "";
     weight = 1;
+    table: Table = new Table();
 
     withName(name: string){
         this.name = name;
         return this;
     }
 
-    withTable(table: Table){
-        this.table = table;
+    withTable(tableName: string){
+        this.tableName = tableName;
         return this;
     }
 
@@ -29,7 +30,7 @@ export class AttributeDefinition{
     static fromDefinition(definition: AttributeDefinition){
         return new AttributeDefinition()
             .withName(definition.name)
-            .withTable(definition.table)
+            .withTable(definition.tableName)
             .withWeight(definition.weight)
             .withCurrentValue(definition.current);
     }

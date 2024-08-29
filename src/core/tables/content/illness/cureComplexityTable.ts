@@ -17,10 +17,12 @@ export const cureComplexity = [
     "needs precise environmental conditions to be effective"
 ];
 
+export const CureComplexityTableName = "Cure Complexity";
+
 export class CureComplexityTable extends Table {
     constructor() {
         super();
-        this.title = "Cure Complexity";
+        this.title = CureComplexityTableName;
         this.addEntriesFromList(cureComplexity);
     }
 }

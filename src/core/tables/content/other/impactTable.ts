@@ -9,11 +9,11 @@ export const impacts = [
     "severe",
     "extreme",
 ];
-
+export const ImpactTableName = "Impact"
 export class ImpactTable extends Table{
     constructor(){
         super();
-        this.title = "Impact"
+        this.title = ImpactTableName;
         this.addEntriesFromList(impacts);
 
     }

@@ -13,10 +13,12 @@ export const incubationPeriod = [
     "lifelong dormancy with sudden onset"
 ];
 
+export const IncubationPeriodTableName = "Incubation Period";
+
 export class IncubationPeriodTable extends Table {
     constructor() {
         super();
-        this.title = "Incubation Period";
+        this.title = IncubationPeriodTableName;
         this.addEntriesFromList(incubationPeriod);
     }
 }

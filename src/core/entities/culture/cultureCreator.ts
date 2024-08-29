@@ -7,7 +7,6 @@ export class CultureCreator{
     
     create(){
         const culture = new Culture();
-        //TODO add differentiation of custom culture and culture from table
         culture.name = "TODO"
         let firstDerivation = new CultureNameTable().withDice(this.dice).roll().combinedString;
         culture.derivations.push(firstDerivation)

@@ -10,10 +10,12 @@ export const amounts = [
     "nothing"
 ]
 
+export const AmountTableName = "Amount";
+
 export class AmountTable extends Table {
     constructor() {
         super();
-        this.title = "Amount";
+        this.title = AmountTableName;
         this.addEntriesFromList(amounts);
     }
 }

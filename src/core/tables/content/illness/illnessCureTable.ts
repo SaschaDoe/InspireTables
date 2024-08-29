@@ -33,10 +33,12 @@ const generalCures: string[] = [
     "ancient relics or artifacts"
 ];
 
+export const IllnessCureTableName = "Illness Cure";
+
 export class IllnessCureTable extends Table{
     constructor() {
         super();
-        this.title = "Illness Cure";
+        this.title = IllnessCureTableName;
         this.addEntriesFromList(generalCures);
     }
 }

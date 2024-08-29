@@ -10,10 +10,12 @@ export const crossSpeciesTransmissionLevels = [
     "cross-phylum transmission"
 ];
 
+export const CrossSpeciesTransmissionTableName = "Cross-Species Transmission";
+
 export class CrossSpeciesTransmissionTable extends Table {
     constructor() {
         super();
-        this.title = "Cross-Species Transmission";
+        this.title = CrossSpeciesTransmissionTableName;
         this.addEntriesFromList(crossSpeciesTransmissionLevels);
     }
 }

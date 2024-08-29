@@ -43,10 +43,12 @@ export const cureAvailability = [
     "mythical cure, existence unconfirmed"
 ];
 
+export const CureAvailabilityTableName = "Cure Availability";
+
 export class CureAvailabilityTable extends Table {
     constructor() {
         super();
-        this.title = "Cure Availability";
+        this.title = CureAvailabilityTableName;
         this.addEntriesFromList(cureAvailability);
     }
 }

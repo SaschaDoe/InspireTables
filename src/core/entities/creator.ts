@@ -1,28 +1,25 @@
-import { Dice } from "../tables/dice";
-import type { Entity } from "./entity";
+import type {Dice} from "../tables/dice";
+import type {CreatedEntities} from "../tables/core/entry/functionType";
 
-export interface CreatedEntities {
-    [key: string]: Entity[];
-}
-
-export abstract class Creator {
-    dice: Dice = new Dice();
+export interface Creator {
+    /**
+     * The dice used for random generation, if needed.
+     */
+    dice: Dice;
 
     /**
      * Create new entities without persisting them.
-     * This method should be implemented by derived classes.
      */
-    abstract create(): CreatedEntities;
+    create(): CreatedEntities;
 
     /**
      * Persist the entities.
-     * This method should be implemented by derived classes.
+     * @param entities The entities to persist.
      */
-    abstract persist(entities: CreatedEntities): Promise<void>;
+    persist(entities: CreatedEntities): Promise<void>;
 
     /**
      * Get the entity type this creator is responsible for.
-     * This method should be implemented by derived classes.
      */
-    abstract getEntityType(): string;
+    getEntityType(): string;
 }

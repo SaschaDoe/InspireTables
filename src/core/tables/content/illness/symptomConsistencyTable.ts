@@ -13,10 +13,12 @@ export const symptomConsistency = [
     "no consistent pattern of symptoms"
 ];
 
+export const SymptomConsistencyTableName = "Symptom Consistency";
+
 export class SymptomConsistencyTable extends Table {
     constructor() {
         super();
-        this.title = "Symptom Consistency";
+        this.title = SymptomConsistencyTableName;
         this.addEntriesFromList(symptomConsistency);
     }
 }

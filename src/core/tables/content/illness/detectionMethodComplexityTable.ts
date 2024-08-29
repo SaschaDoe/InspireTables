@@ -13,10 +13,12 @@ export const detectionMethodComplexity = [
     "requires experimental or cutting-edge detection methods"
 ];
 
+export const DetectionMethodComplexityTableName = "Detection Method Complexity";
+
 export class DetectionMethodComplexityTable extends Table {
     constructor() {
         super();
-        this.title = "Detection Method Complexity";
+        this.title = DetectionMethodComplexityTableName;
         this.addEntriesFromList(detectionMethodComplexity);
     }
 }

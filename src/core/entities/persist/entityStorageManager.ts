@@ -16,6 +16,11 @@ export class EntityStorageManager<T extends Entity> {
         this.storageStrategy = storageStrategy;
     }
 
+    async getEntityCount(): Promise<number> {
+        await this.initializeStorage();
+        return this.entities.length;
+    }
+
     async clear(): Promise<void> {
         await this.initializeStorage();
         this.entities = [];

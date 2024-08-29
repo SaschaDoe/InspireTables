@@ -8,10 +8,12 @@ export const prognosis = [
     "grave",
 ];
 
+export const PrognosisTableName = "Prognosis";
+
 export class PrognosisTable extends Table{
     constructor(){
         super();
-        this.title = "Prognosis"
+        this.title = PrognosisTableName;
         this.addEntriesFromList(prognosis);
 
     }

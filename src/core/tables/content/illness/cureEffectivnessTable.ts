@@ -17,10 +17,12 @@ export const cureEffectiveness = [
     "nearly always results in a complete cure"
 ];
 
+export const CureEffectivenessTableName = "Cure Effectiveness";
+
 export class CureEffectivenessTable extends Table {
     constructor() {
         super();
-        this.title = "Cure Effectiveness";
+        this.title = CureEffectivenessTableName;
         this.addEntriesFromList(cureEffectiveness);
     }
 }

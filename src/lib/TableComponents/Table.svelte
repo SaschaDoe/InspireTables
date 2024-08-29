@@ -33,8 +33,6 @@
     let selectedSubTable: string = originalTableString;
     let currentTable: Table = table;
 
-    let isFavorite: boolean = false;
-
     $: {
         if (tableUpdateTrigger !== undefined || selectedSubTable !== undefined) {
             if (tableUpdateTrigger !== undefined) {

@@ -18,10 +18,12 @@ export const cureSideEffects = [
     "temporarily grants enhanced abilities"
 ];
 
+export const CureSideEffectsTableName = "Cure Side Effects";
+
 export class CureSideEffectsTable extends Table {
     constructor() {
         super();
-        this.title = "Cure Side Effects";
+        this.title = CureSideEffectsTableName;
         this.addEntriesFromList(cureSideEffects);
     }
 }

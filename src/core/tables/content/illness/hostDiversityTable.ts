@@ -10,10 +10,12 @@ export const hostDiversityLevels = [
     "affects both plants and animals"
 ];
 
+export const HostDiversityTableName = "Host Diversity";
+
 export class HostDiversityTable extends Table {
     constructor() {
         super();
-        this.title = "Host Diversity";
+        this.title = HostDiversityTableName;
         this.addEntriesFromList(hostDiversityLevels);
     }
 }

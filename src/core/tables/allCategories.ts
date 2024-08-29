@@ -42,6 +42,9 @@ import {
 } from "./content/illness/adjective/unrealisticLessProbableLowTechIllnessAdjectiveTable";
 import {RealisticLowTechIllnessAdjectiveTable} from "./content/illness/adjective/realisticLowTechIllnessAdjectiveTable";
 
+export const IllnessCategoryName = "Illness";
+export const OtherCategoryName = "Other";
+
 export function allCategories(): Category[] {
     let allCategories: Category[] = [];
 
@@ -59,7 +62,7 @@ export function allCategories(): Category[] {
     allCategories.push(genreCategory);
 
     let illnessCategory = new Category()
-        .withName("Illness")
+        .withName(IllnessCategoryName)
         .withTable(new RealisticLowTechIllnessAdjectiveTable())
         .withTable(new IllnessCureTable())
         .withTable(new IllnessLoreTable)
@@ -79,7 +82,7 @@ export function allCategories(): Category[] {
     allCategories.push(illnessCategory);
 
     let otherCategory = new Category()
-        .withName("Other")
+        .withName(OtherCategoryName)
         .withTable(new TimeTable())
         .withTable(new StrengthTable())
         .withTable(new ProbabilityTable())

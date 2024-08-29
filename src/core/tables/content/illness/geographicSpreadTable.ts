@@ -10,10 +10,12 @@ export const geographicSpreadLevels = [
     "ubiquitous worldwide"
 ];
 
+export const GeographicSpreadTableName = "Geographic Spread";
+
 export class GeographicSpreadTable extends Table {
     constructor() {
         super();
-        this.title = "Geographic Spread";
+        this.title = GeographicSpreadTableName;
         this.addEntriesFromList(geographicSpreadLevels);
     }
 }

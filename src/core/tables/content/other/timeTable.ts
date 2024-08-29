@@ -15,6 +15,8 @@ export const times = [
     "infinite",
 ];
 
+export const TimeTableName = "Time"
+
 export class TimeTable extends Table{
     constructor() {
         super();

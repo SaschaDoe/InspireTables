@@ -53,10 +53,12 @@ export const illnessWorldImpacts: string[] = [
     "triggering of apocalyptic or world-changing events"
 ];
 
+export const IllnessWordEffectTableName = "Illness World Effect";
+
 export class IllnessWorldEffectTable extends Table{
     constructor() {
         super();
-        this.title = "Illness World Effect";
+        this.title = IllnessWordEffectTableName;
         this.addEntriesFromList(illnessWorldImpacts);
     }
 }

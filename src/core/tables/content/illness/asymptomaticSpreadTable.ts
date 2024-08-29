@@ -10,10 +10,12 @@ export const asymptomaticSpread = [
     "asymptomatic carriers are super-spreaders"
 ];
 
+export const AsymptomaticSpreadTableName = "Asymptomatic Spread";
+
 export class AsymptomaticSpreadTable extends Table{
     constructor() {
         super();
-        this.title = "Asymptomatic Spread";
+        this.title = AsymptomaticSpreadTableName;
         this.addEntriesFromList(asymptomaticSpread);
     }
 }

@@ -29,10 +29,12 @@ const illnessTransmissionMethods: string[] = [
     "hyperspace travel effects"
 ];
 
+export const IllnessTransmissionTableName = "Illness Transmission";
+
 export class IllnessTransmissionTable extends Table{
     constructor() {
         super();
-        this.title = "Illness Transmission";
+        this.title = IllnessTransmissionTableName;
         this.addEntriesFromList(illnessTransmissionMethods);
     }
 }

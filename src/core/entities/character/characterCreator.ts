@@ -1,59 +1,56 @@
-import { Creator, type CreatedEntities } from "../creator";
 import { Character } from "./character";
-import { GenderTable } from "../../tables/content/other/genderTable";
-import type { Illness } from "../status/illness";
 import {IllnessCreator} from "../status/IllnessCreator";
 import {getStore} from "../persist/stores";
+import {BaseCreator} from "../baseCreator";
+import {CreationResult} from "../creationResult";
+import {RollResult} from "../../tables/rollResult";
+import {ComparisonResult, RelationalOperator} from "../../tables/comparisonResult";
+import {genderTableName} from "../../tables/content/other/genderTable";
 
-export class CharacterCreator extends Creator {
+export class CharacterCreator extends BaseCreator<Character> {
     hasIllness: boolean = false;
 
-    create(): CreatedEntities {
+    create(): CreationResult {
+        let creationResult = new CreationResult();
         let character = new Character();
-        character.gender = new GenderTable().withDice(this.dice).roll().combinedString;
-        const illnesses = this.setIllness(character);
+        let genderTable = this.tableManager.getTable(genderTableName);
+        if(genderTable){
+            let genderRollResult = genderTable.withDice(this.dice).roll();
+            creationResult.addRollResult(genderRollResult);
+            character.gender = genderRollResult.combinedString;
+        }
+        this.setIllness(character, creationResult);
 
-        return {
-            Character: [character],
-            Illness: illnesses
-        };
+        creationResult.addCreation(character);
+        return creationResult;
     }
 
-    private setIllness(character: Character): Illness[] {
+    private setIllness(character: Character, creationResult: CreationResult) {
         if (!this.hasIllness) {
-            this.hasIllness = this.dice.getRandom() > 0.1;
+            let comparisonResult = new ComparisonResult(
+                this.dice.getRandom(),
+                RelationalOperator.GREATER,
+                0.1,
+                "has illness");
+            creationResult.addRollResult(new RollResult().withComparisonResult(comparisonResult))
+            this.hasIllness = comparisonResult.compare();
         }
         if (this.hasIllness) {
-            const createdEntities = new IllnessCreator().create();
-            if (createdEntities.Illness && createdEntities.Illness.length > 0) {
-                const illness = createdEntities.Illness[0] as Illness;
-                character.illnesses.push(illness);
-                return [illness];
-            }
+            let illnessResult = new IllnessCreator(this.tableManager).create();
+            character.illnesses.push(illnessResult.getCreation());
+            creationResult.addCreationResult(illnessResult);
         }
-        return [];
     }
 
-    async persist(entities: CreatedEntities): Promise<void> {
-        console.log("persist: ", entities);
+    async persist(character: Character): Promise<void> {
+        console.log("persist character", character.id);
         try {
-            if (entities.Character && entities.Character.length > 0) {
-                let store = await getStore('characterStore');
-                await store.saveSpecificEntities(entities.Character);
-                console.log(`Characters saved successfully.`);
-            }
-            if (entities.Illness && entities.Illness.length > 0) {
-                let store = await getStore('illnessStore');
-                await store.saveSpecificEntities(entities.Illness);
-                console.log(`Illnesses saved successfully.`);
-            }
+            let store = await getStore('characterStore');
+            await store.saveEntity(character);
+            console.log(`Characters saved successfully.`);
         } catch (error) {
             console.error(`Failed to save entities:`, error);
             throw error;
         }
-    }
-
-    getEntityType(): string {
-        return 'Character';
     }
 }

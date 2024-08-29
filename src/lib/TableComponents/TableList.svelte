@@ -213,12 +213,6 @@
         }
     }
 
-    let updateTrigger = 0;
-
-    function triggerUpdate() {
-        updateTrigger += 1;
-    }
-
     function updateFavoriteTables() {
         favoriteTables = categories.flatMap(category =>
             category.tables

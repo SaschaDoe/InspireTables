@@ -10,10 +10,12 @@ export const seasonalityPatterns = [
     "correlated with specific weather events (e.g., heavy rainfall)"
 ];
 
+export const SeasonalityTableName = "Seasonality";
+
 export class SeasonalityTable extends Table {
     constructor() {
         super();
-        this.title = "Seasonality";
+        this.title = SeasonalityTableName;
         this.addEntriesFromList(seasonalityPatterns);
     }
 }

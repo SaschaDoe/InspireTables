@@ -50,6 +50,20 @@ export class Table {
         return this;
     }
 
+    rollSubTable(): RollResult{
+        if(this.isSelected){
+            return this.roll();
+        }
+
+        for (const subTable of this.subTables) {
+            if(subTable.isSelected){
+                return subTable.roll();
+            }
+        }
+
+        return this.roll();
+    }
+
     roll(): RollResult {
         if(!this.entryList.isProbabilitySet){
             this.entryList.setProbabilities();
@@ -57,7 +71,7 @@ export class Table {
 
         let result = this.dice.rollIntervalFloat(1, 100);
         let entry = this.entryList.getEntry(result);
-        let rollResult = new RollResult(entry).withRolledIndex(result);
+        let rollResult = new RollResult().withEntry(entry).withRolledIndex(result);
 
         for (let part of entry.parts) {
             let input = part.input;

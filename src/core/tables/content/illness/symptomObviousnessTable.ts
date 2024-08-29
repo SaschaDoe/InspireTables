@@ -13,10 +13,12 @@ export const symptomObviousness = [
     "symptoms that seem to contradict each other"
 ];
 
+export const SymptomObviousnessTableName = "Symptom Obviousness";
+
 export class SymptomObviousnessTable extends Table {
     constructor() {
         super();
-        this.title = "Symptom Obviousness";
+        this.title = SymptomObviousnessTableName;
         this.addEntriesFromList(symptomObviousness);
     }
 }

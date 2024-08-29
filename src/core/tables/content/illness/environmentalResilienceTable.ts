@@ -12,10 +12,12 @@ export const environmentalResilience = [
     "thrives and replicates outside host"
 ];
 
+export const EnvironmentalResilienceTableName = "Environmental Resilience";
+
 export class EnvironmentalResilienceTable extends Table{
     constructor() {
         super();
-        this.title = "Environmental Resilience";
+        this.title = EnvironmentalResilienceTableName;
         this.addEntriesFromList(environmentalResilience);
     }
 }

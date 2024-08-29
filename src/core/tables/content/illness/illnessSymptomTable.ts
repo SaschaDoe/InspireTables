@@ -62,10 +62,12 @@ const illnessSymptoms: string[] = [
     "vulnerable",
 ];
 
+export const IllnessSymptomTableName = "Illness Symptom";
+
 export class IllnessSymptomTable extends Table{
     constructor() {
         super();
-        this.title = "Illness Symptom";
+        this.title = IllnessSymptomTableName;
         this.addEntriesFromList(illnessSymptoms);
     }
 }

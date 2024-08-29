@@ -3,16 +3,23 @@
     import { EntityStorageManager } from "../../core/entities/persist/entityStorageManager";
     import { onMount, onDestroy } from "svelte";
     import type { ComponentType } from "svelte";
-    import { Creator, type CreatedEntities } from "../../core/entities/creator";
+    import {BaseCreator, type CreatedEntities, type Creator} from "../../core/entities/baseCreator";
     import { EntityStoreRegistry } from "../../core/entities/persist/entityStoreRegistry";
     import { clearEntityUpdates, entityUpdateStore, notifyEntityUpdates } from "$lib/EntityComponents/entityStore";
     import {IdGenerator} from "../../core/entities/persist/idGenerator";
+    import type {StorageStrategy} from "../../core/entities/persist/storageStrategy";
+    import type {FunctionFactory} from "../../core/tables/core/entry/functionFactory";
+    import {TableManager} from "../../core/entities/persist/tableManager";
 
     export let store: EntityStorageManager<Entity>;
     export let EntityComponent: ComponentType;
     export let creator: Creator;
     export let title = "No Title";
     export let entityName: string;
+
+    export let storageStrategy: StorageStrategy;
+    export let functionFactory: FunctionFactory;
+    let tableManager: TableManager;
 
     let entities: Entity[] = [];
     let loading = true;

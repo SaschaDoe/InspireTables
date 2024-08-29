@@ -3,8 +3,9 @@ import type {Dice} from "../tables/dice";
 
 interface AttributeDefinition {
     name: string;
-    table: Table;
+    tableName: string;
     weight: number;
+    table: Table;
 }
 
 function AlwaysZero<T>(): [number, T] {

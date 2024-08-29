@@ -43,10 +43,12 @@ export const illnessOrigins: string[] = [
     "interdimensional rift"
 ];
 
+export const IllnessOriginTableName = "Illness Origin";
+
 export class IllnessOriginTable extends Table{
     constructor() {
         super();
-        this.title = "Illness Origin";
+        this.title = IllnessOriginTableName;
         this.addEntriesFromList(illnessOrigins);
     }
 }

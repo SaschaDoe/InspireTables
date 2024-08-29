@@ -10,10 +10,12 @@ export const vectorInvolvementLevels = [
     "complex life cycle involving intermediate hosts and vectors"
 ];
 
+export const VectorInvolvementTableName = "Vector Involvement";
+
 export class VectorInvolvementTable extends Table {
     constructor() {
         super();
-        this.title = "Vector Involvement";
+        this.title = VectorInvolvementTableName;
         this.addEntriesFromList(vectorInvolvementLevels);
     }
 }

@@ -18,10 +18,12 @@ export const mainGenresWithProbabilities: [string, number][] = [
     ["comedy", 1],
 ];
 
+export const MainGenreTableName = "Main Genre";
+
 export class MainGenreTable extends Table {
     constructor() {
         super();
-        this.title = "Main Genres";
+        this.title = MainGenreTableName;
         this.addProbabilityList(mainGenresWithProbabilities);
     }
 }
