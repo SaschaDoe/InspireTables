@@ -3,15 +3,30 @@ import {getStore} from "../persist/stores";
 import {GenreCreator} from "./genreCreator";
 import {CreationResult} from "../creationResult";
 import {BaseCreator} from "../baseCreator";
+import type {Genre} from "./genre";
+import {NarrativeMediumTypes} from "../campaign/narrativeMediumTypes";
 
-export class GenreMixCreator extends BaseCreator<GenreMix> {
+export class GenreMixCreator extends BaseCreator {
+    narrativeMedium: NarrativeMediumTypes = NarrativeMediumTypes.RPG;
+
+    withNarrativeMedium(narrativeMedium: NarrativeMediumTypes){
+        this.narrativeMedium = narrativeMedium;
+        return this;
+    }
+
     create(): CreationResult {
         let genreMix = new GenreMix();
 
         let creationResult = new CreationResult();
-        let primaryGenreCreationResult = new GenreCreator(this.tableManager).create();
+        let primaryGenreCreationResult = new GenreCreator(this.tableManager)
+            .withNarrativeMedium(this.narrativeMedium)
+            .create();
         creationResult.addCreationResult(primaryGenreCreationResult);
-        genreMix.primaryGenre = primaryGenreCreationResult.getCreation();
+        let genre = primaryGenreCreationResult.getCreation() as Genre;
+        if(genre){
+            genreMix.primaryGenre = genre;
+        }
+
         creationResult.addCreation(genreMix);
 
         return creationResult;
