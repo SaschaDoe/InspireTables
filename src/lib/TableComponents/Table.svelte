@@ -19,6 +19,7 @@
     import {TableStorageManager} from "../../core/entities/persist/tableStorageManager";
     import type {StorageStrategy} from "../../core/entities/persist/storageStrategy";
     import {Category} from "../../core/tables/category";
+    import FavoriteStar from "$lib/FavoriteStar.svelte";
     const dispatch = createEventDispatcher();
     let showModal: boolean = false;
     export let table: Table = new MainGenreTable();
@@ -140,6 +141,10 @@
         return fullTitle.startsWith(prefix) ? fullTitle.slice(prefix.length) : fullTitle;
     }
 
+    async function handleToggleFavorite(): Promise<void> {
+        await toggleFavorite();
+    }
+
 </script>
 
 <Modal
@@ -162,13 +167,10 @@
     <div class="bg-surface-100 border border-surface-300 shadow-lg p-6">
         <div class="flex justify-between items-center mb-4">
             <div class="flex items-center space-x-2">
-                <button on:click={toggleFavorite} class="focus:outline-none">
-                    <img
-                            src={currentTable.isFavorite ? favoriteSelected : favoriteUnSelected}
-                            alt={currentTable.isFavorite ? "Favorite" : "Not favorite"}
-                            class="w-6 h-6"
-                    />
-                </button>
+                <FavoriteStar
+                        isFavorite={currentTable.isFavorite}
+                        on:toggleFavorite={handleToggleFavorite}
+                />
                 <h1 class="text-2xl font-bold text-blue-700">{currentTable.title}</h1>
             </div>
             <div class="flex items-center space-x-4">
