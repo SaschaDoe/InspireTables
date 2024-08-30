@@ -8,6 +8,7 @@ export type ResultItem =
 export class CreationResult {
     private results: ResultItem[] = [];
     private creation: Entity| null = null;
+    private type = "";
 
     addRollResult(rollResult: RollResult) {
         this.results.push({ type: 'roll', result: rollResult });
@@ -44,6 +45,14 @@ export class CreationResult {
         }
 
         throw new Error(`This creation result created nothing`);
+    }
+
+    getType(){
+        return this.type;
+    }
+
+    setType(typeString: string){
+        this.type = typeString;
     }
 
 }

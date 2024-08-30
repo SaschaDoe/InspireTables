@@ -7,7 +7,7 @@ import {RollResult} from "../../tables/rollResult";
 import {ComparisonResult, RelationalOperator} from "../../tables/comparisonResult";
 import {genderTableName} from "../../tables/content/other/genderTable";
 
-export class CharacterCreator extends BaseCreator<Character> {
+export class CharacterCreator extends BaseCreator{
     hasIllness: boolean = false;
 
     create(): CreationResult {

@@ -3,23 +3,16 @@
     import { EntityStorageManager } from "../../core/entities/persist/entityStorageManager";
     import { onMount, onDestroy } from "svelte";
     import type { ComponentType } from "svelte";
-    import {BaseCreator, type CreatedEntities, type Creator} from "../../core/entities/baseCreator";
     import { EntityStoreRegistry } from "../../core/entities/persist/entityStoreRegistry";
     import { clearEntityUpdates, entityUpdateStore, notifyEntityUpdates } from "$lib/EntityComponents/entityStore";
     import {IdGenerator} from "../../core/entities/persist/idGenerator";
-    import type {StorageStrategy} from "../../core/entities/persist/storageStrategy";
-    import type {FunctionFactory} from "../../core/tables/core/entry/functionFactory";
-    import {TableManager} from "../../core/entities/persist/tableManager";
+    import type {BaseCreator} from "../../core/entities/baseCreator";
 
     export let store: EntityStorageManager<Entity>;
     export let EntityComponent: ComponentType;
-    export let creator: Creator;
+    export let creator: BaseCreator;
     export let title = "No Title";
     export let entityName: string;
-
-    export let storageStrategy: StorageStrategy;
-    export let functionFactory: FunctionFactory;
-    let tableManager: TableManager;
 
     let entities: Entity[] = [];
     let loading = true;
@@ -56,24 +49,23 @@
 
     async function createEntity() {
         try {
-            const newEntities: CreatedEntities = creator.create();
+            const newEntities = creator.create();
             console.log("created new Entities in EntityList: ", newEntities);
 
             const registry = EntityStoreRegistry.getInstance();
             const updatedEntityTypes: string[] = [];
 
-            for (const [entityType, entityArray] of Object.entries(newEntities)) {
-                await Promise.all(entityArray.map(async (entity) => {
-                    entity.id = await IdGenerator.generate();
-                }));
-
-                const entityStore = registry.getStore(entityType);
+            for(let creationResult of newEntities.getCreationResults()){
+                let entity = creationResult.getCreation();
+                entity.id = await IdGenerator.generate();
+                let typeString = creationResult.getType();
+                const entityStore = registry.getStore(typeString);
                 if (entityStore) {
-                    await entityStore.saveSpecificEntities(entityArray);
-                    console.log(`Entities of type ${entityType} saved successfully in ${entityStore}`);
-                    updatedEntityTypes.push(entityType);
-                } else {
-                    console.error(`No store found for entity type: ${entityType}`);
+                    await entityStore.saveEntity(entity);
+                    console.log(`Entities of type ${typeString} saved successfully in ${entityStore}`);
+                    updatedEntityTypes.push(typeString);
+                }else {
+                    console.error(`No store found for entity type: ${typeString}`);
                 }
             }
 

@@ -2,10 +2,21 @@
 	import {Tab, TabGroup} from "@skeletonlabs/skeleton";
 	import TableList from "$lib/TableComponents/TableList.svelte";
 	import EntityMenu from "$lib/EntityComponents/EntityMenu.svelte";
+	import {TableManager} from "../core/entities/persist/tableManager";
+	import {onMount} from "svelte";
+	import {getStorageStrategy} from "../core/entities/persist/stores";
+	import {FunctionFactory} from "../core/tables/core/entry/functionFactory";
 	let isDragging = false;
 	let initialX: number;
 	let initialWidthLeft: number;
 	let tabSet: number = 0;
+	let tableManager: TableManager;
+
+	onMount(async () => {
+		let storageStrategy = await getStorageStrategy();
+		tableManager = await TableManager.getInstance(storageStrategy, new FunctionFactory());
+	})
+
 	function handleMouseDown(event: MouseEvent) {
 		isDragging = true;
 		initialX = event.clientX;
@@ -98,7 +109,7 @@
 				{#if tabSet === 0}
 					<TableList></TableList>
 				{:else if tabSet === 1}
-					<EntityMenu></EntityMenu>
+					<EntityMenu {tableManager}></EntityMenu>
 				{:else if tabSet === 2}
 					(tab panel 3 contents)
 				{/if}

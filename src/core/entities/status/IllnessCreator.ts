@@ -59,7 +59,7 @@ import {CreationResult} from "../creationResult";
 
 type IllnessAttribute = keyof Illness;
 
-export class IllnessCreator extends BaseCreator<Illness>{
+export class IllnessCreator extends BaseCreator{
     attributeDefinitions: AttributeDefinition[] = [
         new AttributeDefinition().withName('type').withTable(IllnessTableName),
         new AttributeDefinition().withName('time').withTable(TimeTableName).withWeight(-1),
