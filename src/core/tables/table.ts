@@ -4,12 +4,14 @@ import {Dice} from "./dice";
 import {FunctionEntry} from "./core/entry/functionEntry";
 import {EntryList} from "./core/list/entryList";
 import type {FunctionFactory} from "./core/entry/functionFactory";
+import {CreationResult} from "../entities/creationResult";
 
 export class Table {
     title: string = "";
     dice: Dice = new Dice();
     entryList: EntryList = new EntryList();
     subTables: Table[] = [];
+
     isSelected = false; //For combobox selection if subtable or the original is selected
     isFavorite = false;
 
@@ -78,10 +80,12 @@ export class Table {
             if (input instanceof Table) {
                 let subResult = input.roll();
                 rollResult.results.push(subResult);
-                rollResult.addEntities(subResult.entities);
+                let creationResult = new CreationResult();
+                creationResult.addRollResult(subResult);
+                rollResult.addCreationResult(creationResult);
             } else if (input instanceof FunctionEntry) {
-                let entities = input.costumeFunction(null); // You might want to pass appropriate input here
-                rollResult.addEntities(entities);
+                let creationResult = input.costumeFunction(null,null); // You might want to pass appropriate input here
+                rollResult.addCreationResult(creationResult);
             }
         }
 

@@ -1,11 +1,11 @@
 import {Entry} from "./core/entry/entry";
-import type {CreatedEntities} from "./core/entry/functionType";
 import {ComparisonResult} from "./comparisonResult";
+import type {CreationResult} from "../entities/creationResult";
 
 export class RollResult {
     entry: Entry = new Entry();
     results: RollResult[] = [];
-    entities: CreatedEntities = {};
+    creationResults: CreationResult[] = [];
     rolledIndex = -1;
     comparison: ComparisonResult | null = null;
 
@@ -19,13 +19,8 @@ export class RollResult {
         return this;
     }
 
-    addEntities(entities: CreatedEntities) {
-        for (const [key, value] of Object.entries(entities)) {
-            if (!this.entities[key]) {
-                this.entities[key] = [];
-            }
-            this.entities[key].push(...value);
-        }
+    addCreationResult(creationResults: CreationResult){
+        this.creationResults.push(creationResults);
     }
 
     get combinedString(): string {

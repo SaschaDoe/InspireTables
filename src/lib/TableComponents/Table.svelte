@@ -12,10 +12,6 @@
         getStorageStrategy,
     } from "../../core/entities/persist/stores";
     import {createEventDispatcher, onMount} from "svelte";
-
-    import favoriteSelected from "../../../static/favorite_star_selected.png";
-    import favoriteUnSelected from "../../../static/favorite_star_unSelected.png"
-
     import {TableStorageManager} from "../../core/entities/persist/tableStorageManager";
     import type {StorageStrategy} from "../../core/entities/persist/storageStrategy";
     import {Category} from "../../core/tables/category";
@@ -26,7 +22,7 @@
     export const category = new Category();
     export let tableUpdateTrigger = 0;
     let modalDescription = "";
-    let rollResult = new RollResult(new Entry());
+    let rollResult = new RollResult().withEntry(new Entry());
     let hasEntities: boolean = false;
     const originalTableString = "original"
     let entries: Entry[] = [];
@@ -105,7 +101,11 @@
     function roll() {
         rollResult = currentTable.roll();
         modalDescription = rollResult.combinedString;
-        hasEntities = Object.values(rollResult.entities).some(entityArray => entityArray.length > 0);
+        for(let creationResult of rollResult.creationResults){
+            if(creationResult.getCreation()){
+                hasEntities = true;
+            }
+        }
         showModal = true;
     }
 
@@ -123,10 +123,11 @@
 
     function handlePersistClick(): void {
         console.log("start handle persist")
-        for (const [entityType, entities] of Object.entries(rollResult.entities)) {
-            const store = EntityStoreRegistry.getInstance().getStore(entityType);
+        for(let creationResult of rollResult.creationResults){
+            let store = EntityStoreRegistry.getInstance().getStore(creationResult.getType());
             if (store) {
-                for (const entity of entities) {
+                let entity = creationResult.getCreation();
+                if(entity){
                     console.log("Save ",entity)
                     console.log("into ",store)
                     store.saveEntity(entity);

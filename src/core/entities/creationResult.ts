@@ -39,12 +39,12 @@ export class CreationResult {
         this.creation = entity;
     }
 
-    getCreation<T extends Entity>(): T {
+    getCreation<T extends Entity>(): T | null {
         if(this.creation){
             return this.creation as T;
         }
 
-        throw new Error(`This creation result created nothing`);
+        return null;
     }
 
     getType(){

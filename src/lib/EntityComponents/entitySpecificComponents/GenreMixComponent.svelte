@@ -9,12 +9,5 @@
 </script>
 
 <BaseEntityComponent title="Character" id={entity.id} {isHidden} {enableHidden}>
-    <p>{entity.gender}</p>
-    {#if entity.illnesses && entity.illnesses.length > 0}
-        {#each entity.illnesses as illness}
-            <p>{illness.adjective} {illness.origin}</p>
-        {/each}
-    {:else}
-        <p>No illnesses</p>
-    {/if}
+    <p>{entity.primaryGenre}</p>
 </BaseEntityComponent>

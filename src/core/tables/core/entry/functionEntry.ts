@@ -1,8 +1,10 @@
 import {type CreatedEntities, FunctionType, Nothing} from "./functionType";
 import type {FunctionFactory} from "./functionFactory";
+import type {TableManager} from "../../../entities/persist/tableManager";
+import type {CreationResult} from "../../../entities/creationResult";
 
 export class FunctionEntry {
-    costumeFunction: (input: any) => CreatedEntities = Nothing;
+    costumeFunction: (input: any, tableManager: TableManager | null) => CreationResult = Nothing;
     description = "";
     functionType: FunctionType = FunctionType.Nothing;
 
