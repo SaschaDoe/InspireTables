@@ -7,16 +7,15 @@
 	import {getStorageStrategy} from "../core/entities/persist/stores";
 	import {FunctionFactory} from "../core/tables/core/entry/functionFactory";
 	import CampaignComponent from "$lib/CampaignComponents/CampaignComponent.svelte";
+	import Profile from "$lib/ProfileComponents/Profile.svelte";
+	import {type Writable, writable} from "svelte/store";
+	import type {Campaign} from "../core/entities/campaign/campaign";
 	let isDragging = false;
 	let initialX: number;
 	let initialWidthLeft: number;
 	let tabSet: number = 0;
-	let tableManager: TableManager;
 
-	onMount(async () => {
-		let storageStrategy = await getStorageStrategy();
-		tableManager = await TableManager.getInstance(storageStrategy, new FunctionFactory());
-	})
+	export let selectedCampaign: Writable<Campaign | null> = writable(null);
 
 	function handleMouseDown(event: MouseEvent) {
 		isDragging = true;
@@ -27,6 +26,12 @@
 		}
 		window.addEventListener('mousemove', handleMouseMove);
 		window.addEventListener('mouseup', handleMouseUp);
+	}
+
+	function changeTab(newTabIndex: number) {
+		tabSet = newTabIndex;
+		activeTab = newTabIndex;  // Add this line
+		console.log("overloaded");
 	}
 
 	function handleMouseMove(event: MouseEvent) {
@@ -56,6 +61,7 @@
 		}
 	}
 
+	let activeTab = 0;
 </script>
 
 <style>
@@ -103,19 +109,22 @@
 
 <div class="flex h-screen">
 	<div id="left-panel" class="w-1/2 border-r border-gray-300">
-		<TabGroup>
-			<Tab class="text-blue-500" bind:group={tabSet} name="tab1" value={0}>Campaigns</Tab>
-			<Tab class="text-blue-500" bind:group={tabSet} name="tab2" value={1}>Tables</Tab>
+
+
+		<TabGroup bind:selected={activeTab}>
+			<Tab class="text-blue-500" bind:group={tabSet} name="tab1" value={0}>Profile</Tab>
+			<Tab class="text-blue-500" bind:group={tabSet} name="tab2" value={1}>Campaign</Tab>
 			<Tab class="text-blue-500" bind:group={tabSet} name="tab3" value={2}>Entities</Tab>
+			<Tab class="text-blue-500" bind:group={tabSet} name="tab4" value={3}>Tables</Tab>
 			<svelte:fragment slot="panel">
 				{#if tabSet === 0}
-					<CampaignComponent></CampaignComponent>
+					<Profile {selectedCampaign} {changeTab}></Profile>
 				{:else if tabSet === 1}
-					<TableList></TableList>
+					<CampaignComponent {selectedCampaign}></CampaignComponent>
 				{:else if tabSet === 2}
 					<EntityMenu></EntityMenu>
 				{:else if tabSet === 3}
-					(tab panel 3 contents)
+					<TableList></TableList>
 				{/if}
 			</svelte:fragment>
 		</TabGroup>

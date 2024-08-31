@@ -1,6 +1,13 @@
 // stores.ts
 import {writable} from "svelte/store";
 
+
+import type { StorageStrategy } from "./storageStrategy";
+import { BrowserStorageStrategy } from "./browserStorageStrategy";
+import { TauriStorageStrategy } from "./tauriStorageStrategy";
+import {tauri} from "@tauri-apps/api";
+import type {Campaign} from "../campaign/campaign";
+
 export const tableUpdateStore = writable(0);
 
 // Function to trigger an update
@@ -8,10 +15,9 @@ export function triggerTableUpdate() {
     tableUpdateStore.update(n => n + 1);
 }
 
-import type { StorageStrategy } from "./storageStrategy";
-import { BrowserStorageStrategy } from "./browserStorageStrategy";
-import { TauriStorageStrategy } from "./tauriStorageStrategy";
-import {tauri} from "@tauri-apps/api";
+export const tabSet = writable(0);
+export const selectedCampaign = writable<Campaign | null>(null);
+
 
 // Function to determine if we're in a Tauri environment
 function isInTauriEnvironment(): boolean {
@@ -48,8 +54,9 @@ export async function initializeStores() {
     const { ValueStorageManager } = await import("./valueStorageManager");
     const { EntityStoreRegistry } = await import("./entityStoreRegistry");
 
-    const characterStore = new EntityStorageManager('character',await getStorageStrategy());
     const campaignStore = new EntityStorageManager('campaign',await getStorageStrategy());
+    const adventureStore = new EntityStorageManager('adventure',await getStorageStrategy());
+    const characterStore = new EntityStorageManager('character',await getStorageStrategy());
     const genreMixStore = new EntityStorageManager('genreMix',await getStorageStrategy());
     const illnessStore = new EntityStorageManager('illness',await getStorageStrategy());
     const gonzoFactorStore = new ValueStorageManager<number>('gonzoFactor',await getStorageStrategy());
@@ -57,12 +64,14 @@ export async function initializeStores() {
 
     const allEntityStores = [
         campaignStore,
+        adventureStore,
         characterStore,
         illnessStore,
     ];
 
     const registry = EntityStoreRegistry.getInstance();
     registry.registerStore('Campaign', campaignStore);
+    registry.registerStore('Adventure', campaignStore);
     registry.registerStore('Character', characterStore);
     registry.registerStore('GenreMix', genreMixStore);
     registry.registerStore('Illness', illnessStore);
@@ -70,6 +79,7 @@ export async function initializeStores() {
 
     return {
         campaignStore,
+        adventureStore,
         characterStore,
         illnessStore,
         genreMixStore,
