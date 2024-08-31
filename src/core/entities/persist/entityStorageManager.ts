@@ -1,10 +1,11 @@
 import type { Entity } from "../entity";
 import type { StorageStrategy } from "./storageStrategy";
 import {IdGenerator} from "./idGenerator";
+import {AutoDeletableEntity, type Deletable} from "../deletable";
 
 type Subscriber<T> = (entities: T[]) => void;
 
-export class EntityStorageManager<T extends Entity> {
+export class EntityStorageManager<T extends Entity & Deletable> {
     private entityType: string;
     private entities: T[] = [];
     private initialized: boolean = false;
@@ -68,6 +69,44 @@ export class EntityStorageManager<T extends Entity> {
         console.log(`Saved ${this.entities.length} entities to ${filePath}`);
         this.notifySubscribers();
     }
+
+    async deleteEntity(id: number): Promise<void> {
+        await this.initializeStorage();
+        const index = this.entities.findIndex(e => e.id === id);
+        if (index !== -1) {
+            this.entities.splice(index, 1);
+            console.log(`Deleted entity with id ${id}`);
+            await this.saveEntities();
+        } else {
+            console.log(`Entity with id ${id} not found`);
+        }
+    }
+
+    async cascadeDelete(entity: T, getStore: (storeName: string) => Promise<EntityStorageManager<Entity & Deletable>>): Promise<void> {
+        const entitiesToDelete = await entity.prepareForDeletion();
+
+        // Group entities by type
+        const entitiesByType: { [key: string]: (Entity & Deletable)[] } = {};
+        for (const entityToDelete of entitiesToDelete) {
+            const type = entityToDelete.getEntityType();
+            if (!entitiesByType[type]) {
+                entitiesByType[type] = [];
+            }
+            entitiesByType[type].push(entityToDelete);
+        }
+
+        // Delete entities from each store
+        for (const [type, entities] of Object.entries(entitiesByType)) {
+            const typeStore = await getStore(type);
+            for (const entityToDelete of entities) {
+                await typeStore.deleteEntity(entityToDelete.id);
+            }
+        }
+
+        // Finally, delete the main entity
+        await this.deleteEntity(entity.id);
+    }
+
 
     async getAllEntities(): Promise<T[]> {
         await this.initializeStorage();
