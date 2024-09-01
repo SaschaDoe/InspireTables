@@ -5,7 +5,7 @@
     import { FunctionFactory } from "../../core/tables/core/entry/functionFactory";
     import { CampaignCreator } from "../../core/entities/campaign/campaignCreator";
     import { NarrativeMediumTypes } from "../../core/entities/campaign/narrativeMediumTypes";
-    import { getStorageStrategy, getStore, selectedCampaign } from "../../core/entities/persist/stores";
+    import { getStorageStrategy, getStore, selectedCampaign, clearAllStores } from "../../core/entities/persist/stores";
     import type {EntityStorageManager} from "../../core/entities/persist/entityStorageManager";
     import type {Entity} from "../../core/entities/entity";
     import type {Deletable} from "../../core/entities/deletable";
@@ -21,6 +21,10 @@
     export let changeTab: (tabIndex: number) => void = nothing;
 
     onMount(async () => {
+        await loadCampaigns();
+    });
+
+    async function loadCampaigns() {
         let storageStrategy = await getStorageStrategy();
         tableManager = await TableManager.getInstance(storageStrategy, new FunctionFactory());
         let campaignStore = await getStore('campaignStore');
@@ -28,8 +32,10 @@
 
         if (campaigns.length !== 0) {
             selectedCampaign.set(campaigns[0]);
+        } else {
+            selectedCampaign.set(null);
         }
-    });
+    }
 
     function viewCampaignDetails(campaign: Campaign) {
         selectedCampaign.set(campaign);
@@ -75,17 +81,39 @@
             }
         }
     }
+
+    async function handleClearAll() {
+        if (confirm("Are you sure you want to clear all data? This action cannot be undone.")) {
+            try {
+                await clearAllStores();
+                campaigns = [];
+                selectedCampaign.set(null);
+                alert("All data has been cleared successfully.");
+            } catch (error) {
+                console.error('Error clearing all data:', error);
+                alert('An error occurred while clearing all data. Please check the console for more details.');
+            }
+        }
+    }
 </script>
 
 <div class="p-4 bg-gray-100 min-h-screen">
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-3xl font-bold text-gray-800">Campaigns</h1>
-        <button
-                on:click={addNewCampaign}
-                class="px-3 py-1 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors duration-200 text-xl font-bold"
-        >
-            +
-        </button>
+        <div class="space-x-2">
+            <button
+                    on:click={addNewCampaign}
+                    class="px-3 py-1 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors duration-200 text-xl font-bold"
+            >
+                +
+            </button>
+            <button
+                    on:click={handleClearAll}
+                    class="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors duration-200 text-sm font-bold"
+            >
+                Clear All
+            </button>
+        </div>
     </div>
     {#if campaigns.length > 0}
         <ul class="space-y-4">

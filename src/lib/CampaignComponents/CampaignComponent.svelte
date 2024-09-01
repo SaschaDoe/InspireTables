@@ -14,11 +14,11 @@
     import type { Entity } from "../../core/entities/entity";
     import type { Deletable } from "../../core/entities/deletable";
     import type { Stores } from "svelte/store";
-    import type { Campaign } from "../../core/entities/campaign/campaign";
+    import { Campaign } from "../../core/entities/campaign/campaign";
 
     let adventures: Adventure[] = [];
     let tableManager: TableManager;
-    let campaign: Campaign | null = null;
+    let campaign: Campaign = new Campaign();
 
     function nothing(tabIndex: number) {
         console.log("not overloaded");
@@ -30,8 +30,8 @@
         tableManager = await TableManager.getInstance(storageStrategy, new FunctionFactory());
 
         selectedCampaign.subscribe(value => {
-            campaign = value;
-            if (campaign) {
+            if(value !== null){
+                campaign = value;
                 adventures = campaign.adventures;
             }
         });
@@ -95,7 +95,7 @@
 
 <div class="p-4 bg-gray-100 min-h-screen">
     <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-800">Adventures</h1>
+        <h1 class="text-3xl font-bold text-gray-800">Campaign: {campaign.id}</h1>
         <button
                 on:click={addNewAdventure}
                 class="px-3 py-1 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors duration-200 text-xl font-bold"
@@ -110,7 +110,6 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <h2 class="text-xl font-semibold text-gray-700">{adventure.name || `Adventure ${adventure.id}`}</h2>
-                            <!-- Add more adventure details here if needed -->
                         </div>
                         <button
                                 on:click={() => deleteAdventure(adventure)}

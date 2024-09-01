@@ -114,3 +114,25 @@ export async function getStore<K extends keyof Stores>(storeName: K): Promise<St
     const stores = await getStores();
     return stores[storeName];
 }
+
+export async function clearAllStores(): Promise<void> {
+    const stores = await getStores();
+
+    // Clear all entity stores
+    for (const store of stores.allEntityStores) {
+        await store.clear();
+    }
+
+    // Clear value stores
+    await stores.gonzoFactorStore.clear();
+    await stores.lastIdStore.clear();
+
+    // Reset selected campaign and adventure
+    selectedCampaign.set(null);
+    selectedAdventure.set(null);
+
+    // Trigger a table update
+    triggerTableUpdate();
+
+    console.log("All stores have been cleared");
+}
