@@ -15,10 +15,24 @@
     import type { Deletable } from "../../core/entities/deletable";
     import type { Stores } from "svelte/store";
     import { Campaign } from "../../core/entities/campaign/campaign";
+    import {NarrativeMediumTypes} from "../../core/entities/campaign/narrativeMediumTypes";
+    import {ListBox, ListBoxItem,popup, type PopupSettings} from "@skeletonlabs/skeleton";
 
     let adventures: Adventure[] = [];
     let tableManager: TableManager;
     let campaign: Campaign = new Campaign();
+    let campaignName = "";
+    let campaignDescription = "";
+    let narrativeMediumType: NarrativeMediumTypes = NarrativeMediumTypes.Book;  // Initialize with a default value
+
+    const popupCombobox: PopupSettings = {
+        event: 'click',
+        target: 'popupCombobox',
+        placement: 'bottom',
+        closeQuery: '.listbox-item'
+    };
+
+    const narrativeMediumOptions = Object.values(NarrativeMediumTypes);
 
     function nothing(tabIndex: number) {
         console.log("not overloaded");
@@ -26,6 +40,7 @@
     export let changeTab: (tabIndex: number) => void = nothing;
 
     onMount(async () => {
+        console.log(narrativeMediumOptions);
         let storageStrategy = await getStorageStrategy();
         tableManager = await TableManager.getInstance(storageStrategy, new FunctionFactory());
 
@@ -33,6 +48,9 @@
             if(value !== null){
                 campaign = value;
                 adventures = campaign.adventures;
+                campaignName = campaign.name;
+                campaignDescription = campaign.description;
+                narrativeMediumType = campaign.settings.narrativeMediumType || NarrativeMediumTypes.Book;  // Safeguard if value is missing
             }
         });
 
@@ -40,6 +58,15 @@
             await addNewAdventure();
         }
     });
+
+    async function updateCampaign() {
+        campaign.name = campaignName;
+        campaign.description = campaignDescription;
+        campaign.settings.narrativeMediumType = narrativeMediumType;
+        let campaignStore = await getStore('campaignStore');
+        await campaignStore.saveEntity(campaign);
+        selectedCampaign.set(campaign);
+    }
 
     function viewAdventureDetails(updatedAdventure: Adventure) {
         selectedAdventure.update(adventure => {
@@ -94,8 +121,51 @@
 </script>
 
 <div class="p-4 bg-gray-100 min-h-screen">
+    <div class="mb-6">
+        <h1 class="text-3xl font-bold text-gray-800 mb-4">Campaign: {campaign.id}</h1>
+        <div class="bg-white shadow-md rounded-lg p-4">
+            <div class="mb-4">
+                <label for="campaignName" class="block text-sm font-medium text-gray-700">Campaign Name</label>
+                <input
+                        type="text"
+                        id="campaignName"
+                        bind:value={campaignName}
+                        on:blur={updateCampaign}
+                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+            </div>
+            <div class="mb-4">
+                <label for="campaignDescription" class="block text-sm font-medium text-gray-700">Campaign Description</label>
+                <textarea
+                        id="campaignDescription"
+                        bind:value={campaignDescription}
+                        on:blur={updateCampaign}
+                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        rows="3"
+                ></textarea>
+            </div>
+            <div class="mb-4">
+                <label for="narrativeMediumType" class="block text-sm font-medium text-gray-700">Narrative Medium Type</label>
+                <button class="btn variant-filled w-full justify-between" use:popup={popupCombobox}>
+                    <span class="capitalize">{narrativeMediumType}</span>
+                    <span>↓</span>
+                </button>
+                <div class="card w-32 shadow-xl" data-popup="popupCombobox">
+                    <ListBox rounded="rounded-none">
+                        {#each narrativeMediumOptions as option}
+                            <ListBoxItem bind:group={narrativeMediumType} name="narrativeMedium" value={option}>
+                                {option}
+                            </ListBoxItem>
+                        {/each}
+                    </ListBox>
+                    <div class="arrow bg-surface-100-800-token" />
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-800">Campaign: {campaign.id}</h1>
+        <h2 class="text-2xl font-bold text-gray-800">Adventures</h2>
         <button
                 on:click={addNewAdventure}
                 class="px-3 py-1 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors duration-200 text-xl font-bold"
