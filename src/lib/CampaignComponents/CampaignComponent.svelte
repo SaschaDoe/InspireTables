@@ -27,11 +27,19 @@
     let campaignName = "";
     let campaignDescription = "";
     let narrativeMediumType: NarrativeMediumTypes = NarrativeMediumTypes.Book;  // Initialize with a default value
+    let worldGenerated = false;
 
-    function generateWorld() {
+    async function generateWorld() {
         let campaignCreator = new CampaignCreator(tableManager)
             .withNarrativeMedium(campaign.settings.narrativeMediumType);
-        campaignCreator.generateWorld(campaign);
+        await campaignCreator.generateWorld(campaign);
+        if(campaign.world.id > -1){
+            worldGenerated = true;
+            console.log("true");
+        }else{
+            console.log(campaign.world);
+        }
+        console.log(campaign);
     }
 
     const popupCombobox: PopupSettings = {
@@ -64,6 +72,9 @@
                 campaignName = campaign.name;
                 campaignDescription = campaign.description;
                 narrativeMediumType = campaign.settings.narrativeMediumType || NarrativeMediumTypes.Book;
+                if(campaign.world.id > 0){
+                    worldGenerated = true;
+                }
             }
         });
 
@@ -128,10 +139,15 @@
             }
         }
     }
-
-    $: let worldDefined = !!campaign.world;
 </script>
 
+{#if campaign.id < 0}
+    <div class="p-4 bg-gray-100 min-h-screen">
+        <div class="mb-6">
+            <h1 class="text-3xl font-bold text-gray-800 mb-4">No campaign loaded</h1>
+        </div>
+    </div>
+    {:else}
 <div class="p-4 bg-gray-100 min-h-screen">
     <div class="mb-6">
         <h1 class="text-3xl font-bold text-gray-800 mb-4">Campaign: {campaign.id}</h1>
@@ -185,7 +201,7 @@
         <ButtonComponent
                 text="+"
                 onClick={addNewAdventure}
-                enabled={worldDefined}
+                enabled={worldGenerated}
         />
     </div>
     {#if adventures.length > 0}
@@ -216,3 +232,4 @@
         <p class="text-gray-600">No adventures available for this campaign.</p>
     {/if}
 </div>
+    {/if}

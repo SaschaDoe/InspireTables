@@ -8,6 +8,7 @@ import {NarrativeMediumTypes} from "./narrativeMediumTypes";
 import {Settings} from "./settings";
 import {WorldCreator} from "../world/worldCreator";
 import type {World} from "../world/world";
+import {getStore} from "../persist/stores";
 
 export class CampaignCreator extends BaseCreator {
     narrativeMedium: NarrativeMediumTypes = NarrativeMediumTypes.RPG;
@@ -33,15 +34,20 @@ export class CampaignCreator extends BaseCreator {
         return creationResult;
     }
 
-    generateWorld(campaign: Campaign){
+    async generateWorld(campaign: Campaign){
         let worldCreationResult = new WorldCreator(this.tableManager)
             .withGenreMix(campaign.genreMix)
             .create();
         campaign.world = worldCreationResult.getCreation() as World;
+        let worldStore = await getStore('worldStore');
+        await worldStore.saveEntity(campaign.world);
+        await this.persist(campaign);
     }
 
-    persist(entity: Entity): Promise<void> {
-        throw new Error("Method not implemented.");
+    async persist(entity: Entity): Promise<void> {
+        let campaign = entity as Campaign;
+        let campaignStore = await getStore('campaignStore');
+        await campaignStore.saveEntity(campaign);
     }
 
 }
