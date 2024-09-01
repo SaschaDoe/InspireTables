@@ -82,13 +82,13 @@ export class EntityStorageManager<T extends Entity & Deletable> {
         }
     }
 
-    async cascadeDelete(entity: T, getStore: (storeName: string) => Promise<EntityStorageManager<Entity & Deletable>>): Promise<void> {
+    async cascadeDelete(entity: T, getStore: (type: string) => Promise<EntityStorageManager<AutoDeletableEntity>>): Promise<void> {
         const entitiesToDelete = await entity.prepareForDeletion();
 
         // Group entities by type
-        const entitiesByType: { [key: string]: (Entity & Deletable)[] } = {};
+        const entitiesByType: { [key: string]: AutoDeletableEntity[] } = {};
         for (const entityToDelete of entitiesToDelete) {
-            const type = entityToDelete.getEntityType();
+            const type = entityToDelete.entityType;
             if (!entitiesByType[type]) {
                 entitiesByType[type] = [];
             }
@@ -98,9 +98,14 @@ export class EntityStorageManager<T extends Entity & Deletable> {
         // Delete entities from each store
         for (const [type, entities] of Object.entries(entitiesByType)) {
             const typeStore = await getStore(type);
-            for (const entityToDelete of entities) {
-                await typeStore.deleteEntity(entityToDelete.id);
+            if(typeStore){
+                for (const entityToDelete of entities) {
+                    await typeStore.deleteEntity(entityToDelete.id);
+                }
+            }else{
+                console.error("no typeStore defined for", type);
             }
+
         }
 
         // Finally, delete the main entity

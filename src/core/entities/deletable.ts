@@ -2,11 +2,13 @@ import {Entity} from "./entity";
 
 export interface Deletable {
     prepareForDeletion(): Promise<(Entity & Deletable)[]>;
-    getEntityType(): string;
+    readonly entityType: string;
 }
 
 export abstract class AutoDeletableEntity extends Entity implements Deletable {
-    abstract getEntityType(): string;
+    get entityType(): string {
+        return this.constructor.name;
+    }
 
     async prepareForDeletion(): Promise<(Entity & Deletable)[]> {
         const entitiesToDelete: (Entity & Deletable)[] = [];

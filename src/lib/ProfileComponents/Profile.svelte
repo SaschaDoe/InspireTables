@@ -9,6 +9,7 @@
     import type {EntityStorageManager} from "../../core/entities/persist/entityStorageManager";
     import type {Entity} from "../../core/entities/entity";
     import type {Deletable} from "../../core/entities/deletable";
+    import type {Stores} from "svelte/store";
 
     let campaigns: Campaign[] = [];
     let tableManager: TableManager;
@@ -25,11 +26,9 @@
         let campaignStore = await getStore('campaignStore');
         campaigns = await campaignStore.getAllEntities() as Campaign[];
 
-        if (campaigns.length === 0) {
-            await addNewCampaign();
+        if (campaigns.length !== 0) {
+            selectedCampaign.set(campaigns[0]);
         }
-
-        selectedCampaign.set(campaigns[0]);
     });
 
     function viewCampaignDetails(campaign: Campaign) {
@@ -49,17 +48,20 @@
     }
 
     async function deleteCampaign(campaign: Campaign) {
-        console.log('Campaign prototype chain:', Object.getPrototypeOf(campaign));
-
         if (confirm(`Are you sure you want to delete the campaign "${campaign.name || 'Unnamed Campaign'}"? This will also delete all related entities.`)) {
             try {
                 const campaignStore = await getStore('campaignStore') as unknown as EntityStorageManager<Campaign>;
+
+                const getTypedStore = (storeName: string): Promise<EntityStorageManager<Entity & Deletable>> =>
+                    getStore(storeName as keyof Stores) as Promise<EntityStorageManager<Entity & Deletable>>;
+
                 if (typeof campaign.prepareForDeletion === 'function') {
-                    await campaignStore.cascadeDelete(campaign, (storeName: string) => getStore(storeName) as Promise<EntityStorageManager<Entity & Deletable>>);
+                    await campaignStore.cascadeDelete(campaign, getTypedStore);
                 } else {
                     const newCampaign = Object.assign(new Campaign(), campaign);
-                    await campaignStore.cascadeDelete(newCampaign, (storeName: string) => getStore(storeName) as Promise<EntityStorageManager<Entity & Deletable>>);
+                    await campaignStore.cascadeDelete(newCampaign, getTypedStore);
                 }
+
                 campaigns = campaigns.filter(c => c.id !== campaign.id);
 
                 if (campaigns.length > 0) {

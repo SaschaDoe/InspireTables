@@ -4,8 +4,9 @@ import {Attributes} from "./attribute";
 import {BigFive} from "./bigFive";
 import {Voice} from "./voice";
 import type {Illness} from "../status/illness";
+import {AutoDeletableEntity} from "../deletable";
 
-export class Character extends Entity {
+export class Character extends AutoDeletableEntity {
     name = "";
     race = "";
     culture: Culture = new Culture();

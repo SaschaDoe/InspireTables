@@ -1,6 +1,7 @@
 import { Entity } from "../entity";
+import {AutoDeletableEntity} from "../deletable";
 
-export class Genre extends Entity {
+export class Genre extends AutoDeletableEntity{
     name: string = "";
 
     // Core genre attributes for story generation

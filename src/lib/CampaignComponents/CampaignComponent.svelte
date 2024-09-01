@@ -1,112 +1,134 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import {getStorageStrategy, getStore, selectedCampaign,} from "../../core/entities/persist/stores";
+    import { Adventure } from "../../core/entities/adventure/adventure";
     import { TableManager } from "../../core/entities/persist/tableManager";
     import { FunctionFactory } from "../../core/tables/core/entry/functionFactory";
-    import type { Adventure } from "../../core/entities/adventure/adventure";
     import { AdventureCreator } from "../../core/entities/adventure/adventureCreator";
-    import type {Campaign} from "../../core/entities/campaign/campaign";
+    import {
+        getStorageStrategy,
+        getStore,
+        selectedAdventure,
+        selectedCampaign
+    } from "../../core/entities/persist/stores";
+    import type { EntityStorageManager } from "../../core/entities/persist/entityStorageManager";
+    import type { Entity } from "../../core/entities/entity";
+    import type { Deletable } from "../../core/entities/deletable";
+    import type { Stores } from "svelte/store";
+    import type { Campaign } from "../../core/entities/campaign/campaign";
 
     let adventures: Adventure[] = [];
-    let currentAdventure: Adventure | null = null;
-    let campaign: Campaign | null;
+    let tableManager: TableManager;
+    let campaign: Campaign | null = null;
 
-    selectedCampaign.subscribe(value => {
-        campaign = value;
-        if (campaign) {
-            adventures = campaign.adventures;
-        }
-    });
+    function nothing(tabIndex: number) {
+        console.log("not overloaded");
+    }
+    export let changeTab: (tabIndex: number) => void = nothing;
 
     onMount(async () => {
         let storageStrategy = await getStorageStrategy();
-        let tableManager = await TableManager.getInstance(storageStrategy, new FunctionFactory());
-        let adventureStore = await getStore('adventureStore');
-        let allAdventures = await adventureStore.getAllEntities() as Adventure[];
-        /*
+        tableManager = await TableManager.getInstance(storageStrategy, new FunctionFactory());
+
         selectedCampaign.subscribe(value => {
-            currentCampaign = value;
+            campaign = value;
+            if (campaign) {
+                adventures = campaign.adventures;
+            }
         });
-        */
 
-        if(campaign){
-            for (const adventure of allAdventures) {
-                for(const campaignAdventure of campaign.adventures){
-                    if(adventure.id === campaignAdventure.id){
-                        adventures.push(adventure);
-                    }
-                }
-            }
-
-            if (adventures.length > 0) {
-                currentAdventure = adventures[0];
-            }
+        if (adventures.length === 0) {
+            await addNewAdventure();
         }
-
     });
 
-    function updateAdventureName(event: Event) {
-        const input = event.target as HTMLInputElement;
-        if (currentAdventure) {
-            currentAdventure.name = input.value;
-        }
+    function viewAdventureDetails(updatedAdventure: Adventure) {
+        selectedAdventure.update(adventure => {
+            if (adventure) {
+                adventure = updatedAdventure;
+            }
+            return adventure;
+        });
+        changeTab(2);
+        console.log("adventure view details clicked");
     }
 
-    async function addAdventure() {
-        let storageStrategy = await getStorageStrategy();
-        let tableManager = await TableManager.getInstance(storageStrategy, new FunctionFactory());
-        let newAdventure = new AdventureCreator(tableManager).create().getCreation() as Adventure;
+    async function addNewAdventure() {
+        if (!campaign) return;
+
+        let newAdventure = new AdventureCreator(tableManager)
+            .create()
+            .getCreation() as Adventure;
         adventures = [...adventures, newAdventure];
-        currentAdventure = newAdventure;
+        campaign.adventures = adventures;
+        let adventureStore = await getStore('adventureStore');
+        await adventureStore.saveEntity(newAdventure);
+        selectedCampaign.set(campaign);
+    }
+
+    async function deleteAdventure(adventure: Adventure) {
+        if (!campaign) return;
+
+        if (confirm(`Are you sure you want to delete the adventure "${adventure.name || 'Unnamed Adventure'}"? This action cannot be undone.`)) {
+            try {
+                const adventureStore = await getStore('adventureStore') as unknown as EntityStorageManager<Adventure>;
+
+                const getTypedStore = (storeName: string): Promise<EntityStorageManager<Entity & Deletable>> =>
+                    getStore(storeName as keyof Stores) as Promise<EntityStorageManager<Entity & Deletable>>;
+
+                if (typeof adventure.prepareForDeletion === 'function') {
+                    await adventureStore.cascadeDelete(adventure, getTypedStore);
+                } else {
+                    const newAdventure = Object.assign(new Adventure(), adventure);
+                    await adventureStore.cascadeDelete(newAdventure, getTypedStore);
+                }
+
+                adventures = adventures.filter(a => a.id !== adventure.id);
+                campaign.adventures = adventures;
+                selectedCampaign.set(campaign);
+            } catch (error) {
+                console.error('Error deleting adventure:', error);
+                alert('An error occurred while deleting the adventure. Please check the console for more details.');
+            }
+        }
     }
 </script>
 
-{#if campaign}
-
-    <div class="p-4 bg-gray-100 min-h-screen">
-        <h1 class="text-3xl font-bold mb-6 text-gray-800">Adventures</h1>
-
-        {#if adventures.length === 0}
-            <p class="text-gray-600 mb-4">No Adventures Yet</p>
-        {:else}
-            <ul class="space-y-4 mb-6">
-                {#each adventures as adventure (adventure.id)}
-                    <li class="bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition-shadow duration-200">
-                        <h2 class="text-xl font-semibold text-gray-700">{adventure.name || 'Unnamed Adventure'}</h2>
-                        <button class="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200 text-sm">
-                            View Details
-                        </button>
-                    </li>
-                {/each}
-            </ul>
-        {/if}
-
+<div class="p-4 bg-gray-100 min-h-screen">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-800">Adventures</h1>
         <button
-                on:click={addAdventure}
-                class="mb-6 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors duration-200 shadow-md"
+                on:click={addNewAdventure}
+                class="px-3 py-1 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors duration-200 text-xl font-bold"
         >
-            Add Adventure
+            +
         </button>
-
-        {#if currentAdventure}
-            <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-                <h2 class="text-2xl font-bold mb-4 text-gray-800">Adventure Details</h2>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="adventureName">
-                        Adventure Name
-                    </label>
-                    <input
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="adventureName"
-                            type="text"
-                            bind:value={currentAdventure.name}
-                            on:input={updateAdventureName}
-                    />
-                </div>
-            </div>
-        {/if}
     </div>
-
-{:else}
-    <p>No campaign selected</p>
-{/if}
+    {#if adventures.length > 0}
+        <ul class="space-y-4">
+            {#each adventures as adventure (adventure.id)}
+                <li class="bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition-shadow duration-200">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h2 class="text-xl font-semibold text-gray-700">{adventure.name || `Adventure ${adventure.id}`}</h2>
+                            <!-- Add more adventure details here if needed -->
+                        </div>
+                        <button
+                                on:click={() => deleteAdventure(adventure)}
+                                class="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors duration-200 text-sm font-bold"
+                        >
+                            -
+                        </button>
+                    </div>
+                    <button
+                            on:click={() => viewAdventureDetails(adventure)}
+                            class="mt-3 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200"
+                    >
+                        View Details
+                    </button>
+                </li>
+            {/each}
+        </ul>
+    {:else}
+        <p class="text-gray-600">No adventures available for this campaign.</p>
+    {/if}
+</div>

@@ -1,7 +1,8 @@
 import { Entity } from "../entity";
 import {Genre} from "./genre";
+import {AutoDeletableEntity} from "../deletable";
 
-export class GenreMix extends Entity {
+export class GenreMix extends AutoDeletableEntity {
     //Genres themselves have more attributes like the tropes they could have and the tropes
     //they actually play or contradict etc. 
 

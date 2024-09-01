@@ -9,9 +9,4 @@ export class Campaign extends AutoDeletableEntity{
     settings: Settings = new Settings();
     genreMix: GenreMix = new GenreMix();
     adventures: Adventure[] = [];
-
-    getEntityType(): string {
-        return "Campaign";
-    }
-
 }

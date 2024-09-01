@@ -1,6 +1,7 @@
 import { Entity } from "../entity";
+import {AutoDeletableEntity} from "../deletable";
 
-export class Illness extends Entity {
+export class Illness extends AutoDeletableEntity{
     adjective = "";
     type = "";
 
