@@ -17,6 +17,9 @@
     import { Campaign } from "../../core/entities/campaign/campaign";
     import {NarrativeMediumTypes} from "../../core/entities/campaign/narrativeMediumTypes";
     import {ListBox, ListBoxItem,popup, type PopupSettings} from "@skeletonlabs/skeleton";
+    import ButtonComponent from "$lib/Shared/ButtonComponent.svelte";
+    import {CampaignCreator} from "../../core/entities/campaign/campaignCreator";
+
 
     let adventures: Adventure[] = [];
     let tableManager: TableManager;
@@ -24,6 +27,12 @@
     let campaignName = "";
     let campaignDescription = "";
     let narrativeMediumType: NarrativeMediumTypes = NarrativeMediumTypes.Book;  // Initialize with a default value
+
+    function generateWorld() {
+        let campaignCreator = new CampaignCreator(tableManager)
+            .withNarrativeMedium(campaign.settings.narrativeMediumType);
+        campaignCreator.generateWorld(campaign);
+    }
 
     const popupCombobox: PopupSettings = {
         event: 'click',
@@ -54,9 +63,11 @@
                 adventures = campaign.adventures;
                 campaignName = campaign.name;
                 campaignDescription = campaign.description;
-                narrativeMediumType = campaign.settings.narrativeMediumType || NarrativeMediumTypes.Book;  // Safeguard if value is missing
+                narrativeMediumType = campaign.settings.narrativeMediumType || NarrativeMediumTypes.Book;
             }
         });
+
+
     });
 
     async function updateCampaign() {
@@ -117,6 +128,8 @@
             }
         }
     }
+
+    $: let worldDefined = !!campaign.world;
 </script>
 
 <div class="p-4 bg-gray-100 min-h-screen">
@@ -164,11 +177,16 @@
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-bold text-gray-800">Adventures</h2>
         <button
-                on:click={addNewAdventure}
-                class="px-3 py-1 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors duration-200 text-xl font-bold"
+                on:click={generateWorld}
+                class="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-200 text-xl font-bold"
         >
-            +
+            Generate World
         </button>
+        <ButtonComponent
+                text="+"
+                onClick={addNewAdventure}
+                enabled={worldDefined}
+        />
     </div>
     {#if adventures.length > 0}
         <ul class="space-y-4">

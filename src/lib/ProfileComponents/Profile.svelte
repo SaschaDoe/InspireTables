@@ -48,9 +48,9 @@
             .withNarrativeMedium(NarrativeMediumTypes.Book)
             .create()
             .getCreation() as Campaign;
-        campaigns = [...campaigns, newCampaign];
         let campaignStore = await getStore('campaignStore');
         await campaignStore.saveEntity(newCampaign);
+        campaigns = [...campaigns, newCampaign];
     }
 
     async function deleteCampaign(campaign: Campaign) {
