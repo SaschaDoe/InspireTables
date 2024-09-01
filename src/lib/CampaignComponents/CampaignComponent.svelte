@@ -34,6 +34,10 @@
 
     const narrativeMediumOptions = Object.values(NarrativeMediumTypes);
 
+    $: if (campaignName !== campaign.name || campaignDescription !== campaign.description || narrativeMediumType !== campaign.settings.narrativeMediumType) {
+        updateCampaign();
+    }
+
     function nothing(tabIndex: number) {
         console.log("not overloaded");
     }
@@ -53,13 +57,13 @@
                 narrativeMediumType = campaign.settings.narrativeMediumType || NarrativeMediumTypes.Book;  // Safeguard if value is missing
             }
         });
-
-        if (adventures.length === 0) {
-            await addNewAdventure();
-        }
     });
 
     async function updateCampaign() {
+        if(campaign.id < 0){
+            return;
+        }
+        console.log("update campaign is triggered", campaign);
         campaign.name = campaignName;
         campaign.description = campaignDescription;
         campaign.settings.narrativeMediumType = narrativeMediumType;
@@ -69,14 +73,9 @@
     }
 
     function viewAdventureDetails(updatedAdventure: Adventure) {
-        selectedAdventure.update(adventure => {
-            if (adventure) {
-                adventure = updatedAdventure;
-            }
-            return adventure;
-        });
+        selectedAdventure.set(updatedAdventure);
         changeTab(2);
-        console.log("adventure view details clicked");
+        console.log("adventure view details clicked", updatedAdventure);
     }
 
     async function addNewAdventure() {
@@ -130,8 +129,7 @@
                         type="text"
                         id="campaignName"
                         bind:value={campaignName}
-                        on:blur={updateCampaign}
-                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"
                 />
             </div>
             <div class="mb-4">
@@ -139,8 +137,7 @@
                 <textarea
                         id="campaignDescription"
                         bind:value={campaignDescription}
-                        on:blur={updateCampaign}
-                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"
                         rows="3"
                 ></textarea>
             </div>

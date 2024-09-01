@@ -81,7 +81,7 @@
 				{:else if tabSet === 1}
 					<CampaignComponent {selectedCampaign} {changeTab}></CampaignComponent>
 				{:else if tabSet === 2}
-					<AdventureComponent {selectedAdventure}></AdventureComponent>
+					<AdventureComponent></AdventureComponent>
 				{:else if tabSet === 3}
 					<EntityMenu></EntityMenu>
 				{:else if tabSet === 4}
