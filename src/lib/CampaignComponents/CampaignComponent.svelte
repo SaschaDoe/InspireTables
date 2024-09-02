@@ -61,7 +61,6 @@
     export let changeTab: (tabIndex: number) => void = nothing;
 
     onMount(async () => {
-        console.log(narrativeMediumOptions);
         let storageStrategy = await getStorageStrategy();
         tableManager = await TableManager.getInstance(storageStrategy, new FunctionFactory());
 
@@ -202,7 +201,7 @@
             {:else}
             <button
                     on:click={() => changeTab(3)}
-                    class="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-200 text-xl font-bold"
+                    class="mt-3 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200"
             >
                 Goto Entities
             </button>

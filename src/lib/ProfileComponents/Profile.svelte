@@ -1,26 +1,56 @@
 <script lang="ts">
     import { Campaign } from "../../core/entities/campaign/campaign";
     import { onMount } from "svelte";
+    import {popup, type PopupSettings} from "@skeletonlabs/skeleton";
     import { TableManager } from "../../core/entities/persist/tableManager";
     import { FunctionFactory } from "../../core/tables/core/entry/functionFactory";
     import { CampaignCreator } from "../../core/entities/campaign/campaignCreator";
     import { NarrativeMediumTypes } from "../../core/entities/campaign/narrativeMediumTypes";
-    import { getStorageStrategy, getStore, selectedCampaign, clearAllStores } from "../../core/entities/persist/stores";
+    import {
+        getStorageStrategy,
+        getStore,
+        selectedCampaign,
+        clearAllStores,
+        selectedProfile
+    } from "../../core/entities/persist/stores";
     import type {EntityStorageManager} from "../../core/entities/persist/entityStorageManager";
     import type {Entity} from "../../core/entities/entity";
     import type {Deletable} from "../../core/entities/deletable";
     import type {Stores} from "svelte/store";
+    import {ListBox, ListBoxItem} from "@skeletonlabs/skeleton";
+    import {Profile} from "../../core/entities/profile/profile";
 
     let campaigns: Campaign[] = [];
+    let profile: Profile = new Profile();
     let tableManager: TableManager;
+    let narrativeMediumType: NarrativeMediumTypes = NarrativeMediumTypes.Book;
+    const narrativeMediumOptions = Object.values(NarrativeMediumTypes);
 
     function nothing(tabIndex: number){
         console.log("not overloaded");
     }
-    // Create a function to change the active tab
     export let changeTab: (tabIndex: number) => void = nothing;
 
     onMount(async () => {
+        let profileStore = await getStore('profileStore');
+        let profiles = await profileStore.getAllEntities() as Profile[];
+
+        if(profiles.length === 0) {
+            return;
+        }
+
+        for (const p of profiles) {
+            if(p.isSelected){
+                profile = p;
+                narrativeMediumType = p.narrativeMediumType || NarrativeMediumTypes.Book;
+                break;
+            }
+        }
+
+        if(!profile){
+            profile = profiles[0];
+        }
+
         await loadCampaigns();
     });
 
@@ -85,7 +115,12 @@
     async function handleClearAll() {
         if (confirm("Are you sure you want to clear all data? This action cannot be undone.")) {
             try {
-                await clearAllStores();
+                let idStore = await getStore('lastIdStore');
+                let lastId = await idStore.getValue();
+                if(lastId != null){
+                    await clearAllStores();
+                    await idStore.setValue(lastId);
+                }
                 campaigns = [];
                 selectedCampaign.set(null);
                 alert("All data has been cleared successfully.");
@@ -95,11 +130,41 @@
             }
         }
     }
+
+    const popupCombobox: PopupSettings = {
+        event: 'click',
+        target: 'popupCombobox',
+        placement: 'bottom',
+        closeQuery: '.listbox-item'
+    };
 </script>
 
 <div class="p-4 bg-gray-100 min-h-screen">
+    <!-- Profile ID Header -->
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Profile: {profile?.id || 'No Profile Selected'}</h1>
+
+    <!-- Narrative Medium Type Combo Box -->
+    <div class="mb-6">
+        <label for="narrativeMediumType" class="block text-sm font-medium text-gray-700">Narrative Medium Type</label>
+        <button class="btn variant-filled w-full justify-between" use:popup={popupCombobox}>
+            <span class="capitalize">{narrativeMediumType}</span>
+            <span>↓</span>
+        </button>
+        <div class="card w-32 shadow-xl" data-popup="popupCombobox">
+            <ListBox rounded="rounded-none">
+                {#each narrativeMediumOptions as option}
+                    <ListBoxItem bind:group={narrativeMediumType} name="narrativeMedium" value={option}>
+                        {option}
+                    </ListBoxItem>
+                {/each}
+            </ListBox>
+            <div class="arrow bg-surface-100-800-token" />
+        </div>
+    </div>
+
+    <!-- Campaigns Section -->
     <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-800">Campaigns</h1>
+        <h2 class="text-2xl font-bold text-gray-800">Campaigns</h2>
         <div class="space-x-2">
             <button
                     on:click={addNewCampaign}
@@ -115,27 +180,29 @@
             </button>
         </div>
     </div>
+
+    <!-- Campaigns List -->
     {#if campaigns.length > 0}
         <ul class="space-y-4">
             {#each campaigns as campaign, index}
-                <li class="bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition-shadow duration-200">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h2 class="text-xl font-semibold text-gray-700">{campaign.name || `Campaign`}:{campaign.id}</h2>
-                            <p class="text-gray-600 mt-2">Narrative Medium: {campaign.settings.narrativeMediumType}</p>
-                        </div>
-                        <button
-                                on:click={() => deleteCampaign(campaign)}
-                                class="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors duration-200 text-sm font-bold"
-                        >
-                            -
-                        </button>
-                    </div>
+                <li>
                     <button
+                            class="w-full text-left bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition-shadow duration-200 focus:outline-none"
                             on:click={() => viewCampaignDetails(campaign)}
-                            class="mt-3 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200"
+                            on:keydown={(event) => event.key === 'Enter' || event.key === ' ' ? viewCampaignDetails(campaign) : null}
                     >
-                        View Details
+                    <span class="flex justify-between items-start">
+                        <span class="flex flex-col">
+                            <strong class="text-xl font-semibold text-gray-700 block">{campaign.name || `Campaign`}: {campaign.id}</strong>
+                            <small class="text-gray-600 mt-2 block">Narrative Medium: {campaign.settings.narrativeMediumType}</small>
+                    </span>
+                    <button
+                    on:click|stopPropagation={() => deleteCampaign(campaign)}
+                    class="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors duration-200 text-sm font-bold"
+                    >
+                        -
+                    </button>
+        </span>
                     </button>
                 </li>
             {/each}

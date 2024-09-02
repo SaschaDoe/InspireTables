@@ -34,8 +34,15 @@
         }
     }
 
-    function viewProfileDetails(profile: Profile) {
+    async function select(profile: Profile) {
         selectedProfile.set(profile);
+        let profileStore = await getStore('profileStore');
+        let profiles = await profileStore.getAllEntities() as Profile[];
+        for (const profileElement of profiles) {
+            profileElement.isSelected = false;
+        }
+        profile.isSelected = true;
+        await profileStore.saveEntity(profile);
         changeTab(1);
         console.log("profile view details clicked");
     }
@@ -121,23 +128,21 @@
     {#if profiles.length > 0}
         <ul class="space-y-4">
             {#each profiles as profile, index}
-                <li class="bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition-shadow duration-200">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h2 class="text-xl font-semibold text-gray-700">Profile ID: {profile.id}</h2>
-                        </div>
-                        <button
-                                on:click={() => deleteProfile(profile)}
-                                class="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors duration-200 text-sm font-bold"
-                        >
-                            -
-                        </button>
-                    </div>
+                <li>
                     <button
-                            on:click={() => viewProfileDetails(profile)}
-                            class="mt-3 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200"
+                            class="w-full text-left bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition-shadow duration-200 focus:outline-none"
+                            on:click={() => select(profile)}
+                            on:keydown={(event) => event.key === 'Enter' || event.key === ' ' ? select(profile) : null}
                     >
-                        Set as current
+                        <div class="flex justify-between items-start">
+                            <h2 class="text-xl font-semibold text-gray-700">Profile ID: {profile.id}</h2>
+                            <button
+                                    on:click|stopPropagation={() => deleteProfile(profile)}
+                                    class="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors duration-200 text-sm font-bold"
+                            >
+                                -
+                            </button>
+                        </div>
                     </button>
                 </li>
             {/each}
