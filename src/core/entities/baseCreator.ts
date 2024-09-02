@@ -1,6 +1,6 @@
 import type {TableManager} from "./persist/tableManager";
 import {Dice} from "../tables/dice";
-import type {CreationResult} from "./creationResult";
+import {CreationResult} from "./creationResult";
 import type {Entity} from "./entity";
 
 export abstract class BaseCreator {
@@ -17,5 +17,11 @@ export abstract class BaseCreator {
     withDice(dice: Dice){
         this.dice = dice;
         return this;
+    }
+
+    protected initializeCreation<T extends Entity>(entity: T): CreationResult {
+        const creationResult = new CreationResult();
+        creationResult.addCreation(entity);
+        return creationResult;
     }
 }

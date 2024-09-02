@@ -8,6 +8,7 @@ import { TauriStorageStrategy } from "./tauriStorageStrategy";
 import {tauri} from "@tauri-apps/api";
 import type {Campaign} from "../campaign/campaign";
 import type {Adventure} from "../adventure/adventure";
+import type {Profile} from "../profile/profile";
 
 export const tableUpdateStore = writable(0);
 
@@ -16,7 +17,7 @@ export function triggerTableUpdate() {
     tableUpdateStore.update(n => n + 1);
 }
 
-export const tabSet = writable(0);
+export const selectedProfile = writable<Profile | null>(null);
 export const selectedCampaign = writable<Campaign | null>(null);
 export const selectedAdventure = writable<Adventure | null>(null);
 
@@ -56,6 +57,7 @@ export async function initializeStores() {
     const { ValueStorageManager } = await import("./valueStorageManager");
     const { EntityStoreRegistry } = await import("./entityStoreRegistry");
 
+    const profileStore = new EntityStorageManager('profile',await getStorageStrategy());
     const campaignStore = new EntityStorageManager('campaign',await getStorageStrategy());
     const adventureStore = new EntityStorageManager('adventure',await getStorageStrategy());
     const characterStore = new EntityStorageManager('character',await getStorageStrategy());
@@ -77,6 +79,7 @@ export async function initializeStores() {
     ];
 
     const registry = EntityStoreRegistry.getInstance();
+    registry.registerStore('Profile', profileStore);
     registry.registerStore('Campaign', campaignStore);
     registry.registerStore('Adventure', adventureStore);
     registry.registerStore('Character', characterStore);
@@ -87,6 +90,7 @@ export async function initializeStores() {
 
 
     return {
+        profileStore,
         campaignStore,
         adventureStore,
         characterStore,

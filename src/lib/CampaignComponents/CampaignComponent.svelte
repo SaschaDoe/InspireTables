@@ -192,12 +192,21 @@
 
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-bold text-gray-800">Adventures</h2>
+        {#if !worldGenerated}
         <button
                 on:click={generateWorld}
                 class="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-200 text-xl font-bold"
         >
             Generate World
         </button>
+            {:else}
+            <button
+                    on:click={() => changeTab(3)}
+                    class="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-200 text-xl font-bold"
+            >
+                Goto Entities
+            </button>
+            {/if}
         <ButtonComponent
                 text="+"
                 onClick={addNewAdventure}

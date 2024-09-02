@@ -74,8 +74,9 @@ export class EntityStorageManager<T extends Entity & Deletable> {
         await this.initializeStorage();
         const index = this.entities.findIndex(e => e.id === id);
         if (index !== -1) {
-            this.entities.splice(index, 1);
+            this.entities = this.entities.splice(index, 1);
             console.log(`Deleted entity with id ${id}`);
+            console.log("now have", this.entities);
             await this.saveEntities();
         } else {
             console.log(`Entity with id ${id} not found`);

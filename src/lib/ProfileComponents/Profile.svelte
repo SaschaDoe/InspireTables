@@ -50,7 +50,7 @@
             .getCreation() as Campaign;
         let campaignStore = await getStore('campaignStore');
         await campaignStore.saveEntity(newCampaign);
-        campaigns = [...campaigns, newCampaign];
+        await loadCampaigns();
     }
 
     async function deleteCampaign(campaign: Campaign) {

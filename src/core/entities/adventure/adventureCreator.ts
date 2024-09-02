@@ -5,10 +5,8 @@ import {Adventure} from "./adventure";
 
 export class AdventureCreator extends BaseCreator {
     create(): CreationResult {
-        let creationResult = new CreationResult();
         let adventure = new Adventure();
-        creationResult.addCreation(adventure);
-        return creationResult;
+        return this.initializeCreation(adventure);
     }
     persist(entity: Entity): Promise<void> {
         throw new Error("Method not implemented.");

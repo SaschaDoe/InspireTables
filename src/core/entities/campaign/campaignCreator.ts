@@ -19,8 +19,8 @@ export class CampaignCreator extends BaseCreator {
     }
 
     create(): CreationResult {
-        let campaign = new Campaign();
-        let creationResult = new CreationResult();
+        const campaign = new Campaign();
+        const creationResult = this.initializeCreation(campaign);
         let genreCreationResult = new GenreMixCreator(this.tableManager)
             .withNarrativeMedium(this.narrativeMedium)
             .create();
@@ -29,8 +29,6 @@ export class CampaignCreator extends BaseCreator {
         campaign.settings.narrativeMediumType = this.narrativeMedium;
         campaign.genreMix = genreCreationResult.getCreation() as GenreMix;
 
-
-        creationResult.addCreation(campaign);
         return creationResult;
     }
 
@@ -49,5 +47,4 @@ export class CampaignCreator extends BaseCreator {
         let campaignStore = await getStore('campaignStore');
         await campaignStore.saveEntity(campaign);
     }
-
 }
