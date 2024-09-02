@@ -39,7 +39,7 @@
 
     function viewCampaignDetails(campaign: Campaign) {
         selectedCampaign.set(campaign);
-        changeTab(1);
+        changeTab(2);
         console.log("profile view details clicked")
     }
 

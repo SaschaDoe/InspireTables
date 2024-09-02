@@ -96,7 +96,7 @@
 
     function viewAdventureDetails(updatedAdventure: Adventure) {
         selectedAdventure.set(updatedAdventure);
-        changeTab(2);
+        changeTab(3);
         console.log("adventure view details clicked", updatedAdventure);
     }
 

@@ -13,7 +13,7 @@
     function nothing(tabIndex: number){
         console.log("not overloaded");
     }
-    export const changeTab: (tabIndex: number) => void = nothing;
+    export let changeTab: (tabIndex: number) => void = nothing;
     let profiles: Profile[] = [];
     let tableManager: TableManager;
 
@@ -137,7 +137,7 @@
                             on:click={() => viewProfileDetails(profile)}
                             class="mt-3 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200"
                     >
-                        View Details
+                        Set as current
                     </button>
                 </li>
             {/each}
