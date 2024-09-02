@@ -1,7 +1,7 @@
 <script lang="ts">
     import { Campaign } from "../../core/entities/campaign/campaign";
     import { onMount } from "svelte";
-    import {popup, type PopupSettings} from "@skeletonlabs/skeleton";
+    import { popup, type PopupSettings } from "@skeletonlabs/skeleton";
     import { TableManager } from "../../core/entities/persist/tableManager";
     import { FunctionFactory } from "../../core/tables/core/entry/functionFactory";
     import { CampaignCreator } from "../../core/entities/campaign/campaignCreator";
@@ -9,16 +9,14 @@
     import {
         getStorageStrategy,
         getStore,
-        selectedCampaign,
         clearAllStores,
-        selectedProfile
     } from "../../core/entities/persist/stores";
-    import type {EntityStorageManager} from "../../core/entities/persist/entityStorageManager";
-    import type {Entity} from "../../core/entities/entity";
-    import type {Deletable} from "../../core/entities/deletable";
-    import type {Stores} from "svelte/store";
-    import {ListBox, ListBoxItem} from "@skeletonlabs/skeleton";
-    import {Profile} from "../../core/entities/profile/profile";
+    import type { EntityStorageManager } from "../../core/entities/persist/entityStorageManager";
+    import type { Entity } from "../../core/entities/entity";
+    import type { Deletable } from "../../core/entities/deletable";
+    import type { Stores } from "svelte/store";
+    import { ListBox, ListBoxItem } from "@skeletonlabs/skeleton";
+    import { Profile } from "../../core/entities/profile/profile";
 
     let campaigns: Campaign[] = [];
     let profile: Profile = new Profile();
@@ -43,12 +41,16 @@
             if(p.isSelected){
                 profile = p;
                 narrativeMediumType = p.narrativeMediumType || NarrativeMediumTypes.Book;
+                console.log("selected profile found", profile);
                 break;
             }
         }
 
         if(!profile){
             profile = profiles[0];
+            profile.isSelected = true;
+            narrativeMediumType = profile.narrativeMediumType || NarrativeMediumTypes.Book;
+            console.log("Profile is selected because no was", profile);
         }
 
         await loadCampaigns();
@@ -59,23 +61,24 @@
         tableManager = await TableManager.getInstance(storageStrategy, new FunctionFactory());
         let campaignStore = await getStore('campaignStore');
         campaigns = await campaignStore.getAllEntities() as Campaign[];
-
-        if (campaigns.length !== 0) {
-            selectedCampaign.set(campaigns[0]);
-        } else {
-            selectedCampaign.set(null);
-        }
     }
 
-    function viewCampaignDetails(campaign: Campaign) {
-        selectedCampaign.set(campaign);
+    async function viewCampaignDetails(campaign: Campaign) {
+        let campaignStore = await getStore('campaignStore');
+        let campaigns = await campaignStore.getAllEntities() as Campaign[];
+        for (const c of campaigns) {
+            c.isSelected = false;
+            await campaignStore.saveEntity(c);
+        }
+        campaign.isSelected = true;
+        await campaignStore.saveEntity(campaign);
         changeTab(2);
         console.log("profile view details clicked")
     }
 
     async function addNewCampaign() {
         let newCampaign = new CampaignCreator(tableManager)
-            .withNarrativeMedium(NarrativeMediumTypes.Book)
+            .withNarrativeMedium(profile.narrativeMediumType)
             .create()
             .getCreation() as Campaign;
         let campaignStore = await getStore('campaignStore');
@@ -87,10 +90,14 @@
         if (confirm(`Are you sure you want to delete the campaign "${campaign.name || 'Unnamed Campaign'}"? This will also delete all related entities.`)) {
             try {
                 const campaignStore = await getStore('campaignStore') as unknown as EntityStorageManager<Campaign>;
-
-                const getTypedStore = (storeName: string): Promise<EntityStorageManager<Entity & Deletable>> =>
-                    getStore(storeName as keyof Stores) as Promise<EntityStorageManager<Entity & Deletable>>;
-
+                campaigns = await campaignStore.getAllEntities();
+                let newSelection = false;
+                if(campaign.isSelected && campaigns.length > 1){
+                    newSelection = true;
+                }
+                const getTypedStore = async (storeName: string): Promise<EntityStorageManager<Entity & Deletable>> => {
+                    return await getStore(storeName as keyof Stores) as EntityStorageManager<Entity & Deletable>;
+                };
                 if (typeof campaign.prepareForDeletion === 'function') {
                     await campaignStore.cascadeDelete(campaign, getTypedStore);
                 } else {
@@ -98,13 +105,15 @@
                     await campaignStore.cascadeDelete(newCampaign, getTypedStore);
                 }
 
-                campaigns = campaigns.filter(c => c.id !== campaign.id);
-
-                if (campaigns.length > 0) {
-                    selectedCampaign.set(campaigns[0]);
-                } else {
-                    selectedCampaign.set(null);
+                console.log("filter out campaign with id", campaign.id);
+                campaigns = await campaignStore.getAllEntities();
+                console.log("campaigns after filtering",campaigns)
+                if(newSelection){
+                    let newSelectedCampaign = campaigns[0];
+                    newSelectedCampaign.isSelected = true;
+                    await campaignStore.saveEntity(newSelectedCampaign);
                 }
+
             } catch (error) {
                 console.error('Error deleting campaign:', error);
                 alert('An error occurred while deleting the campaign. Please check the console for more details.');
@@ -122,7 +131,6 @@
                     await idStore.setValue(lastId);
                 }
                 campaigns = [];
-                selectedCampaign.set(null);
                 alert("All data has been cleared successfully.");
             } catch (error) {
                 console.error('Error clearing all data:', error);
@@ -137,13 +145,19 @@
         placement: 'bottom',
         closeQuery: '.listbox-item'
     };
+
+    async function handleNarrativeMediumChange(newType: NarrativeMediumTypes) {
+        narrativeMediumType = newType;
+        profile.narrativeMediumType = newType;
+
+        let profileStore = await getStore('profileStore');
+        await profileStore.saveEntity(profile);
+    }
 </script>
 
 <div class="p-4 bg-gray-100 min-h-screen">
-    <!-- Profile ID Header -->
     <h1 class="text-3xl font-bold text-gray-800 mb-6">Profile: {profile?.id || 'No Profile Selected'}</h1>
 
-    <!-- Narrative Medium Type Combo Box -->
     <div class="mb-6">
         <label for="narrativeMediumType" class="block text-sm font-medium text-gray-700">Narrative Medium Type</label>
         <button class="btn variant-filled w-full justify-between" use:popup={popupCombobox}>
@@ -153,7 +167,12 @@
         <div class="card w-32 shadow-xl" data-popup="popupCombobox">
             <ListBox rounded="rounded-none">
                 {#each narrativeMediumOptions as option}
-                    <ListBoxItem bind:group={narrativeMediumType} name="narrativeMedium" value={option}>
+                    <ListBoxItem
+                            bind:group={narrativeMediumType}
+                            name="narrativeMedium"
+                            value={option}
+                            on:click={() => handleNarrativeMediumChange(option)}
+                    >
                         {option}
                     </ListBoxItem>
                 {/each}
@@ -197,8 +216,8 @@
                             <small class="text-gray-600 mt-2 block">Narrative Medium: {campaign.settings.narrativeMediumType}</small>
                     </span>
                     <button
-                    on:click|stopPropagation={() => deleteCampaign(campaign)}
-                    class="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors duration-200 text-sm font-bold"
+                            on:click|stopPropagation={() => deleteCampaign(campaign)}
+                            class="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors duration-200 text-sm font-bold"
                     >
                         -
                     </button>

@@ -17,11 +17,6 @@ export function triggerTableUpdate() {
     tableUpdateStore.update(n => n + 1);
 }
 
-export const selectedProfile = writable<Profile | null>(null);
-export const selectedCampaign = writable<Campaign | null>(null);
-export const selectedAdventure = writable<Adventure | null>(null);
-
-
 // Function to determine if we're in a Tauri environment
 function isInTauriEnvironment(): boolean {
     if (typeof window !== 'undefined' && window !== null) {
@@ -120,6 +115,7 @@ export function getStores(): Promise<Stores> {
 
 export async function getStore<K extends keyof Stores>(storeName: K): Promise<Stores[K]> {
     const stores = await getStores();
+    console.log(stores);
     return stores[storeName];
 }
 
@@ -134,10 +130,6 @@ export async function clearAllStores(): Promise<void> {
     // Clear value stores
     await stores.gonzoFactorStore.clear();
     await stores.lastIdStore.clear();
-
-    // Reset selected campaign and adventure
-    selectedCampaign.set(null);
-    selectedAdventure.set(null);
 
     // Trigger a table update
     triggerTableUpdate();

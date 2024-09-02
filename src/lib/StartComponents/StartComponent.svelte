@@ -1,6 +1,6 @@
 <script lang="ts">
     import {onMount} from "svelte";
-    import {getStorageStrategy, getStore, selectedProfile, clearAllStores} from "../../core/entities/persist/stores";
+    import {getStorageStrategy, getStore, clearAllStores} from "../../core/entities/persist/stores";
     import {TableManager} from "../../core/entities/persist/tableManager";
     import {FunctionFactory} from "../../core/tables/core/entry/functionFactory";
     import {Profile} from "../../core/entities/profile/profile";
@@ -26,16 +26,9 @@
         tableManager = await TableManager.getInstance(storageStrategy, new FunctionFactory());
         let profileStore = await getStore('profileStore');
         profiles = await profileStore.getAllEntities() as Profile[];
-
-        if (profiles.length !== 0) {
-            selectedProfile.set(profiles[0]);
-        } else {
-            selectedProfile.set(null);
-        }
     }
 
     async function select(profile: Profile) {
-        selectedProfile.set(profile);
         let profileStore = await getStore('profileStore');
         let profiles = await profileStore.getAllEntities() as Profile[];
         for (const profileElement of profiles) {
@@ -56,6 +49,22 @@
         await loadProfiles();
     }
 
+    function selectProfile(profiles: Profile[]) {
+        if(profiles.length < 1){
+            return;
+        }
+
+        let foundProfile = false;
+        for (const profile of profiles) {
+            if(profile.isSelected){
+                foundProfile = true;
+            }
+        }
+        if(!foundProfile){
+            profiles[0].isSelected = true;
+        }
+    }
+
     async function deleteProfile(profile: Profile) {
         if (confirm(`Are you sure you want to delete the profile "${profile.id || 'Unnamed Profile'}"? This will also delete all related entities.`)) {
             try {
@@ -73,11 +82,7 @@
 
                 profiles = profiles.filter(p => p.id !== profile.id);
 
-                if (profiles.length > 0) {
-                    selectedProfile.set(profiles[0]);
-                } else {
-                    selectedProfile.set(null);
-                }
+                selectProfile(profiles);
             } catch (error) {
                 console.error('Error deleting profile:', error);
                 alert('An error occurred while deleting the profile. Please check the console for more details.');

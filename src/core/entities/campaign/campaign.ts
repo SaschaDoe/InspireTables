@@ -11,4 +11,5 @@ export class Campaign extends AutoDeletableEntity{
     genreMix: GenreMix = new GenreMix();
     adventures: Adventure[] = [];
     world: World = new World();
+    isSelected = false;
 }

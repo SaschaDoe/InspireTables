@@ -2,6 +2,7 @@ import type { Entity } from "../entity";
 import type { StorageStrategy } from "./storageStrategy";
 import {IdGenerator} from "./idGenerator";
 import {AutoDeletableEntity, type Deletable} from "../deletable";
+import {getStore} from "./stores";
 
 type Subscriber<T> = (entities: T[]) => void;
 
@@ -64,7 +65,9 @@ export class EntityStorageManager<T extends Entity & Deletable> {
 
     private async saveEntities(): Promise<void> {
         const filePath = this.getFilePath();
+        console.log(this.entities)
         const jsonString = JSON.stringify(this.entities, null, 2);
+        console.log(jsonString);
         await this.storageStrategy.saveFile(filePath, jsonString);
         console.log(`Saved ${this.entities.length} entities to ${filePath}`);
         this.notifySubscribers();
@@ -74,19 +77,31 @@ export class EntityStorageManager<T extends Entity & Deletable> {
         await this.initializeStorage();
         const index = this.entities.findIndex(e => e.id === id);
         if (index !== -1) {
-            this.entities = this.entities.splice(index, 1);
+            console.log("these are entitites you could delete", this.entities)
+
+            this.entities.splice(index, 1);
             console.log(`Deleted entity with id ${id}`);
             console.log("now have", this.entities);
             await this.saveEntities();
+
+            let updatedEntities = await this.getAllEntities();
+            console.log("after loading again these are all entitites", updatedEntities)
         } else {
             console.log(`Entity with id ${id} not found`);
         }
     }
 
-    async cascadeDelete(entity: T, getStore: (type: string) => Promise<EntityStorageManager<AutoDeletableEntity>>): Promise<void> {
+    convertToStoreName(word: string): string {
+        // Convert the first character to lowercase
+        const lowercaseWord = word.charAt(0).toLowerCase() + word.slice(1);
+        // Append 'Store' to the word
+        return `${lowercaseWord}Store`;
+    }
+
+    async cascadeDelete(entity: T, shatMore: (type: string) => Promise<EntityStorageManager<AutoDeletableEntity>>): Promise<void> {
+        
         const entitiesToDelete = await entity.prepareForDeletion();
 
-        // Group entities by type
         const entitiesByType: { [key: string]: AutoDeletableEntity[] } = {};
         for (const entityToDelete of entitiesToDelete) {
             const type = entityToDelete.entityType;
@@ -95,12 +110,13 @@ export class EntityStorageManager<T extends Entity & Deletable> {
             }
             entitiesByType[type].push(entityToDelete);
         }
-
-        // Delete entities from each store
+       
         for (const [type, entities] of Object.entries(entitiesByType)) {
-            const typeStore = await getStore(type);
+            let storeName = this.convertToStoreName(type);
+            const typeStore = await getStore(storeName) as EntityStorageManager<any>;
             if(typeStore){
                 for (const entityToDelete of entities) {
+                    console.log("delete inner entity with id:", entityToDelete.id)
                     await typeStore.deleteEntity(entityToDelete.id);
                 }
             }else{
