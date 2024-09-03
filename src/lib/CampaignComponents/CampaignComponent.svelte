@@ -227,7 +227,7 @@
         </div>
         {#if adventures.length > 0}
             <ul class="space-y-4">
-                {#each adventures as adventure (adventure.id)}
+                {#each adventures as adventure}
                     <li>
                         <button
                                 class="w-full text-left bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition-shadow duration-200 focus:outline-none"

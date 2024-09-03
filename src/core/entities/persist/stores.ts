@@ -10,9 +10,11 @@ import type {Campaign} from "../campaign/campaign";
 import type {Adventure} from "../adventure/adventure";
 import type {Profile} from "../profile/profile";
 import type {Table} from "../../tables/table";
+import type {GlobalEntity} from "../profile/globalEntity";
 
 export const tableUpdateStore = writable(0);
 export const selectedProfileStore = writable<Profile | null>(null);
+export const selectedGlobalStore = writable<GlobalEntity | null>(null);
 export const selectedSubTables = writable<Table[]>([]);
 export const selectedAltTables = writable<Table[]>([]);
 

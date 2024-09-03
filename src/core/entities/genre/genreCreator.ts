@@ -1,7 +1,7 @@
 import {BaseCreator} from "../baseCreator";
 import {Genre} from "./genre";
 import {CreationResult} from "../creationResult";
-import {MainGenreTableName} from "../../tables/content/genre/mainGenres";
+import {MainGenreBooksTableName, MainGenreTableName} from "../../tables/content/genre/mainGenres";
 import {NarrativeMediumTypes} from "../campaign/narrativeMediumTypes";
 import type {Table} from "../../tables/table";
 
@@ -17,9 +17,10 @@ export class GenreCreator extends BaseCreator {
         let genre = new Genre();
         let creationResult = new CreationResult();
         let mainGenreTable: Table;
+        console.log("create genre!!!");
         if(this.narrativeMedium === NarrativeMediumTypes.Book){
-            //TODO change to a MainGenreTable for Books
-            mainGenreTable = this.tableManager.getTable(MainGenreTableName);
+            console.log("Genre Books are used");
+            mainGenreTable = this.tableManager.getTable(MainGenreBooksTableName);
         }else{
             mainGenreTable = this.tableManager.getTable(MainGenreTableName);
         }

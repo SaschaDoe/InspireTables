@@ -9,7 +9,12 @@
     import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
     import { ListBox, ListBoxItem } from '@skeletonlabs/skeleton';
     import {
-        getStorageStrategy, getStore, getStores, selectedAltTables, selectedProfileStore, selectedSubTables,
+        getStorageStrategy,
+        getStore,
+        selectedAltTables,
+        selectedGlobalStore,
+        selectedProfileStore,
+        selectedSubTables,
     } from "../../core/entities/persist/stores";
     import {createEventDispatcher, onMount} from "svelte";
     import {TableStorageManager} from "../../core/entities/persist/tableStorageManager";
@@ -60,9 +65,10 @@
         selectedProfileStore.subscribe(p => profile = p);
         storageStrategy = await getStorageStrategy();
         tableStorageManager = new TableStorageManager(storageStrategy);
-        let globalStore = await getStore('globalStore');
-        let globals = await globalStore.getAllEntities() as GlobalEntity[];
-        global = globals[0];
+        let globalPromise = get(selectedGlobalStore);
+        if(globalPromise !== null){
+            global = globalPromise;
+        }
 
         await updateCurrentTable();
     });
@@ -101,12 +107,8 @@
             }
         }else{
             if(global){
-                console.log("update current table with global")
                 for (const subTable of table.subTables) {
-                    console.log("search in ", subTable);
-                    console.log("for ", global.selectedSubTables);
                     if(global.selectedSubTables.some(selectedTable => selectedTable.title === subTable.title)){
-                        console.log("found one !!!", subTable.title);
                         selectedSubTable = subTable;
                         selectedSubTableName = getFilteredSubtableTitle(selectedSubTable.title);
                         currentTable = selectedSubTable;
@@ -121,7 +123,6 @@
                 }
                 await saveGlobal();
             }else{
-                console.log("update current table with stores")
                 for (const subTable of table.subTables) {
                     if(get(selectedSubTables).includes(subTable)){
                         selectedSubTable = subTable;
@@ -157,19 +158,10 @@
         }else{
             hasAltTables = table.altTables.length > 0;
         }
-
-
     }
 
     let storageStrategy: StorageStrategy;
     let tableStorageManager: TableStorageManager;
-
-    async function saveSelectedTablesToProfile() {
-        let profileStore = await getStore('profileStore');
-        if(profile !== null){
-            await profileStore.saveEntity(profile);
-        }
-    }
 
     async function handleAltTableChange(event: CustomEvent<Table|null>) {
         if(event.detail === null){

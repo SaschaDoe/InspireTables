@@ -9,7 +9,7 @@
 	import type {Adventure} from "../core/entities/adventure/adventure";
 	import StartComponent from "$lib/StartComponents/StartComponent.svelte";
 	import {onMount} from "svelte";
-	import {getStore, selectedProfileStore} from "../core/entities/persist/stores";
+	import {getStore, selectedGlobalStore, selectedProfileStore} from "../core/entities/persist/stores";
 	import type {GlobalEntity} from "../core/entities/profile/globalEntity";
 	import type {Profile} from "../core/entities/profile/profile";
 	import ProfileComponent from "$lib/ProfileComponents/ProfileComponent.svelte";
@@ -22,16 +22,21 @@
 	export let selectedAdventure: Writable<Adventure | null> = writable(null);
 
 	onMount(async () => {
-		if(get(selectedProfileStore) === null){
+		if(get(selectedGlobalStore) === null){
 			let globalStore = await getStore('globalStore');
 			let globals = await globalStore.getAllEntities() as GlobalEntity[];
 			let global = globals[0];
+			selectedGlobalStore.set(global);
+		}
 
+		if(get(selectedProfileStore) === null){
+			let globalEntity = get(selectedGlobalStore);
 			let profileStore = await getStore('profileStore');
 			let profiles = await profileStore.getAllEntities() as Profile[];
-
-			if(profiles.some(p => p.id === global.currentProfile?.id)){
-				selectedProfileStore.set(global.currentProfile);
+			if(globalEntity !== null){
+				if(profiles.some(p => p.id === globalEntity.currentProfile?.id)){
+					selectedProfileStore.set(globalEntity.currentProfile);
+				}
 			}
 		}
 	})

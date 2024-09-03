@@ -79,6 +79,7 @@
     }
 
     async function addNewCampaign() {
+        console.log("create new campaign with ", profile)
         let newCampaign = new CampaignCreator(tableManager)
             .withNarrativeMedium(profile.narrativeMediumType)
             .create()
