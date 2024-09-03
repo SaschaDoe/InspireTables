@@ -11,6 +11,7 @@ export class Table {
     dice: Dice = new Dice();
     entryList: EntryList = new EntryList();
     subTables: Table[] = [];
+    altTables: Table[] = [];
 
     isSelected = false; //For combobox selection if subtable or the original is selected
     isFavorite = false;

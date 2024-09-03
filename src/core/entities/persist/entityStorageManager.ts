@@ -27,7 +27,6 @@ export class EntityStorageManager<T extends Entity & Deletable> {
         await this.initializeStorage();
         this.entities = [];
         await this.saveEntities();
-        console.log(`Cleared all entities for ${this.entityType}`);
         this.notifySubscribers();
     }
 
@@ -36,7 +35,6 @@ export class EntityStorageManager<T extends Entity & Deletable> {
 
         try {
             await this.loadEntities();
-            console.log(`Storage initialized for ${this.entityType}`);
             this.initialized = true;
         } catch (error) {
             console.warn('Error initializing storage:', error);
@@ -59,17 +57,15 @@ export class EntityStorageManager<T extends Entity & Deletable> {
         } else {
             this.entities = JSON.parse(jsonString) as T[];
         }
-        console.log(`Loaded ${this.entities.length} entities from ${filePath}`);
         this.notifySubscribers();
     }
 
     private async saveEntities(): Promise<void> {
         const filePath = this.getFilePath();
-        console.log(this.entities)
+       // console.log(this.entities)
         const jsonString = JSON.stringify(this.entities, null, 2);
-        console.log(jsonString);
+       // console.log(jsonString);
         await this.storageStrategy.saveFile(filePath, jsonString);
-        console.log(`Saved ${this.entities.length} entities to ${filePath}`);
         this.notifySubscribers();
     }
 
@@ -77,17 +73,11 @@ export class EntityStorageManager<T extends Entity & Deletable> {
         await this.initializeStorage();
         const index = this.entities.findIndex(e => e.id === id);
         if (index !== -1) {
-            console.log("these are entitites you could delete", this.entities)
-
             this.entities.splice(index, 1);
-            console.log(`Deleted entity with id ${id}`);
-            console.log("now have", this.entities);
+            //console.log(`Deleted entity with id ${id}`);
             await this.saveEntities();
-
-            let updatedEntities = await this.getAllEntities();
-            console.log("after loading again these are all entitites", updatedEntities)
         } else {
-            console.log(`Entity with id ${id} not found`);
+            //console.log(`Entity with id ${id} not found`);
         }
     }
 
@@ -116,7 +106,6 @@ export class EntityStorageManager<T extends Entity & Deletable> {
             const typeStore = await getStore(storeName) as EntityStorageManager<any>;
             if(typeStore){
                 for (const entityToDelete of entities) {
-                    console.log("delete inner entity with id:", entityToDelete.id)
                     await typeStore.deleteEntity(entityToDelete.id);
                 }
             }else{
@@ -149,10 +138,9 @@ export class EntityStorageManager<T extends Entity & Deletable> {
         const index = this.entities.findIndex(e => e.id === entity.id);
         if (index !== -1) {
             this.entities[index] = entity;
-            console.log(`Updated entity with id ${entity.id}`);
         } else {
             this.entities.push(entity);
-            console.log(`Added new entity with id ${entity.id}`);
+            //console.log(`Added new entity with id ${entity.id}`);
         }
         await this.saveEntities();
     }

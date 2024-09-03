@@ -9,7 +9,7 @@
     import {
         getStorageStrategy,
         getStore,
-        clearAllStores,
+        clearAllStores, selectedProfileStore,
     } from "../../core/entities/persist/stores";
     import type { EntityStorageManager } from "../../core/entities/persist/entityStorageManager";
     import type { Entity } from "../../core/entities/entity";
@@ -30,6 +30,7 @@
     export let changeTab: (tabIndex: number) => void = nothing;
 
     onMount(async () => {
+        console.log("profile on mount")
         let profileStore = await getStore('profileStore');
         let profiles = await profileStore.getAllEntities() as Profile[];
 
@@ -49,6 +50,7 @@
         if(!profile){
             profile = profiles[0];
             profile.isSelected = true;
+            selectedProfileStore.set(profile);
             narrativeMediumType = profile.narrativeMediumType || NarrativeMediumTypes.Book;
             console.log("Profile is selected because no was", profile);
         }

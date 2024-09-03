@@ -2,6 +2,18 @@
     import type { RollResult } from "../../core/tables/rollResult";
     import { entityComponentMap } from "$lib/EntityComponents/entityComponentMap";
     import type { Entity } from "../../core/entities/entity";
+    import {onMount} from "svelte";
+
+    export let result: RollResult;
+    let entities: Entity[] = [];
+    onMount(() => {
+        for (const creationResult of result.creationResults) {
+            let entity = creationResult.getCreation();
+            if(entity !== null){
+                entities.push(entity);
+            }
+        }
+    })
 
     function getComponentForEntity(entity: Entity) {
         console.log("Getting Component for: ", entity);
@@ -13,7 +25,7 @@
         return component;
     }
 
-    export let result: RollResult;
+
 </script>
 
 <div class="text-green-900">
@@ -22,8 +34,7 @@
             <span class="text-blue-700">{result.entry.interval.probability.toFixed(2)}% - {result.entry.descriptionText}</span>
         </div>
         <div class="ml-4">
-            {#each Object.entries(result.entities) as [entityType, entityList]}
-                {#each entityList as entity}
+                {#each entities as entity}
                     {#if getComponentForEntity(entity)}
                         <svelte:component
                                 this={getComponentForEntity(entity)}
@@ -33,7 +44,6 @@
                         />
                     {/if}
                 {/each}
-            {/each}
         </div>
     </div>
 </div>

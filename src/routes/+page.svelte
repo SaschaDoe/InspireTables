@@ -3,12 +3,16 @@
 	import TableList from "$lib/TableComponents/TableList.svelte";
 	import EntityMenu from "$lib/EntityComponents/EntityMenu.svelte";
 	import CampaignComponent from "$lib/CampaignComponents/CampaignComponent.svelte";
-	import Profile from "$lib/ProfileComponents/Profile.svelte";
-	import {type Writable, writable} from "svelte/store";
+	import {get, type Writable, writable} from "svelte/store";
 	import type {Campaign} from "../core/entities/campaign/campaign";
 	import AdventureComponent from "$lib/AdventureComponents/AdventureComponent.svelte";
 	import type {Adventure} from "../core/entities/adventure/adventure";
 	import StartComponent from "$lib/StartComponents/StartComponent.svelte";
+	import {onMount} from "svelte";
+	import {getStore, selectedProfileStore} from "../core/entities/persist/stores";
+	import type {GlobalEntity} from "../core/entities/profile/globalEntity";
+	import type {Profile} from "../core/entities/profile/profile";
+	import ProfileComponent from "$lib/ProfileComponents/ProfileComponent.svelte";
 	let isDragging = false;
 	let initialX: number;
 	let initialWidthLeft: number;
@@ -16,6 +20,21 @@
 
 	export let selectedCampaign: Writable<Campaign | null> = writable(null);
 	export let selectedAdventure: Writable<Adventure | null> = writable(null);
+
+	onMount(async () => {
+		if(get(selectedProfileStore) === null){
+			let globalStore = await getStore('globalStore');
+			let globals = await globalStore.getAllEntities() as GlobalEntity[];
+			let global = globals[0];
+
+			let profileStore = await getStore('profileStore');
+			let profiles = await profileStore.getAllEntities() as Profile[];
+
+			if(profiles.some(p => p.id === global.currentProfile?.id)){
+				selectedProfileStore.set(global.currentProfile);
+			}
+		}
+	})
 
 	function handleMouseDown(event: MouseEvent) {
 		isDragging = true;
@@ -81,7 +100,7 @@
 				{#if tabSet === 0}
 					<StartComponent {changeTab}></StartComponent>
 				{:else if tabSet === 1}
-					<Profile {changeTab}></Profile>
+					<ProfileComponent {changeTab}></ProfileComponent>
 				{:else if tabSet === 2}
 					<CampaignComponent {changeTab}></CampaignComponent>
 				{:else if tabSet === 3}

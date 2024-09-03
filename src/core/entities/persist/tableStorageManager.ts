@@ -79,29 +79,37 @@ export class TableStorageManager {
     public async getTablesWithThereSubTablesFrom(directoryPath: string, categories: Category[]): Promise<Table[]> {
         let tablesWithSub: Table[] = [];
         let mainTables: Table[] = [];
-        let allTables = await this.loadAllTablesIn(directoryPath, categories);
-        console.log("getAllTables: ", allTables.length);
         let subTables: Table[] = [];
+        let alternativeTables: Table[] = [];
+
+        let allTables = await this.loadAllTablesIn(directoryPath, categories);
+
         for (let table of allTables) {
-
-
             const tableTitleSplit = table.title.split(' - ');
-            if(tableTitleSplit.length > 1){
-                if(table.isSelected){
-                    console.log("Table was selected before: ", table.title);
-                }
-                subTables.push(table);
-                console.log("found subtable: ", table);
-            }else{
+
+            if(tableTitleSplit.length === 1){
+                // This is a main table, e.g., "Time" or "Main Genre"
                 mainTables.push(table);
+            } else if(tableTitleSplit.length === 2){
+                // This is a sub table, e.g., "Time - Mars" or "Main Genre - Books V2"
+                subTables.push(table);
+            } else if(tableTitleSplit.length >= 3){
+                // This is an alternative table, e.g., "Main Genre - Book - Alt - V1" or "Main Genre - Book - Alt - V2"
+                alternativeTables.push(table);
             }
 
             tablesWithSub.push(table);
         }
-        console.log("sub tables: ", subTables)
-        console.log("main tables: ", mainTables)
+
+        console.log("sub tables: ", subTables);
+        console.log("main tables: ", mainTables);
+        console.log("alternative tables: ", alternativeTables);
+
+        // Associating sub tables and alternative tables to the main tables
         for(let mainTable of mainTables){
             let fittingSubTables: Table[] = [];
+            let fittingAltTables: Table[] = [];
+
             for(let subTable of subTables){
                 const tableTitleSplit = subTable.title.split(' - ');
                 const mainTableTitle = tableTitleSplit[0];
@@ -111,14 +119,41 @@ export class TableStorageManager {
                     console.log("found subtable: ", subTable, "for: ", mainTableTitle);
                 }
             }
-            for (let fittingSubTable of fittingSubTables){
-                mainTable.subTables.push(fittingSubTable);
+
+            for(let altTable of alternativeTables){
+                const tableTitleSplit = altTable.title.split(' - ');
+                const mainTableTitle = tableTitleSplit[0];
+                let isMatched = false;
+
+                if(mainTableTitle === mainTable.title){
+                    // Match directly to the main table
+                    if(tableTitleSplit.length === 2) {
+                        fittingAltTables.push(altTable);
+                        isMatched = true;
+                        console.log("found alt table: ", altTable, "for main table: ", mainTableTitle);
+                    }
+
+                    // Try to match it with a sub table
+                    for(let subTable of fittingSubTables) {
+                        if(tableTitleSplit.length === 3 && tableTitleSplit[1] === subTable.title.split(' - ')[1]) {
+                            subTable.altTables.push(altTable);
+                            isMatched = true;
+                            console.log("found alt table: ", altTable, "for sub table: ", subTable.title);
+                        }
+                    }
+                }
+
+                if (!isMatched) {
+                    throw new Error(`Unmatched alternative table found: ${altTable.title}`);
+                }
             }
 
+            mainTable.subTables.push(...fittingSubTables);
+            mainTable.altTables.push(...fittingAltTables);
         }
-
 
         return tablesWithSub;
     }
+
 
 }

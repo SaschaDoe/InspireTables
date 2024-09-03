@@ -9,8 +9,12 @@ import {tauri} from "@tauri-apps/api";
 import type {Campaign} from "../campaign/campaign";
 import type {Adventure} from "../adventure/adventure";
 import type {Profile} from "../profile/profile";
+import type {Table} from "../../tables/table";
 
 export const tableUpdateStore = writable(0);
+export const selectedProfileStore = writable<Profile | null>(null);
+export const selectedSubTables = writable<Table[]>([]);
+export const selectedAltTables = writable<Table[]>([]);
 
 // Function to trigger an update
 export function triggerTableUpdate() {
@@ -42,7 +46,7 @@ export async function getStorageStrategy(): Promise<StorageStrategy> {
         console.log("is in tauri environment");
         return new TauriStorageStrategy();
     }*/
-    console.log("is in browser Environment");
+    //console.log("is in browser Environment");
     return new BrowserStorageStrategy();
 }
 
@@ -52,6 +56,7 @@ export async function initializeStores() {
     const { ValueStorageManager } = await import("./valueStorageManager");
     const { EntityStoreRegistry } = await import("./entityStoreRegistry");
 
+    const globalStore = new EntityStorageManager('global',await getStorageStrategy());
     const profileStore = new EntityStorageManager('profile',await getStorageStrategy());
     const campaignStore = new EntityStorageManager('campaign',await getStorageStrategy());
     const adventureStore = new EntityStorageManager('adventure',await getStorageStrategy());
@@ -74,6 +79,7 @@ export async function initializeStores() {
     ];
 
     const registry = EntityStoreRegistry.getInstance();
+    registry.registerStore('Global', globalStore);
     registry.registerStore('Profile', profileStore);
     registry.registerStore('Campaign', campaignStore);
     registry.registerStore('Adventure', adventureStore);
@@ -85,6 +91,7 @@ export async function initializeStores() {
 
 
     return {
+        globalStore,
         profileStore,
         campaignStore,
         adventureStore,
@@ -115,7 +122,6 @@ export function getStores(): Promise<Stores> {
 
 export async function getStore<K extends keyof Stores>(storeName: K): Promise<Stores[K]> {
     const stores = await getStores();
-    console.log(stores);
     return stores[storeName];
 }
 
@@ -133,6 +139,4 @@ export async function clearAllStores(): Promise<void> {
 
     // Trigger a table update
     triggerTableUpdate();
-
-    console.log("All stores have been cleared");
 }

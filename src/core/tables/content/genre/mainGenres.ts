@@ -25,7 +25,7 @@ export class MainGenreTable extends Table {
         super();
         this.title = MainGenreTableName;
         this.addProbabilityList(mainGenresWithProbabilities);
-        this.subTables.push(new MainGenreBooksTable())
+        this.subTables.push(new MainGenreBooksTable());
     }
 }
 
@@ -54,5 +54,34 @@ export class MainGenreBooksTable extends Table {
         super();
         this.title = MainGenreBooksTableName;
         this.addProbabilityList(mainGenresWithProbabilitiesForBooks);
+        this.altTables.push(new MainGenreBooksAlt1Table());
+    }
+}
+
+export const mainGenresWithProbabilitiesForBooksAlt1: [string, number][] = [
+    ["fantasy", 10],
+    ["action", 8],
+    ["adventure", 8],
+    ["sciFi", 8],
+    ["mystery", 10],
+    ["love", 25],
+    ["thriller", 7],
+    ["crime", 6],
+    ["drama", 5],
+    ["horror", 4],
+    ["comedy", 3],
+    ["war", 2],
+    ["western", 1],
+    ["myth", 2],
+    ["explorer", 1],
+];
+
+export const MainGenreBooksAlt1TableName = "Main Genre - Books - Alt - V1";
+
+export class MainGenreBooksAlt1Table extends Table {
+    constructor() {
+        super();
+        this.title = MainGenreBooksAlt1TableName;
+        this.addProbabilityList(mainGenresWithProbabilitiesForBooksAlt1);
     }
 }

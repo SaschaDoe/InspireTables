@@ -80,4 +80,6 @@ export class TableManager {
     async saveAllTables(): Promise<void> {
         await this.tableStorageManager.saveAllCategoriesIn('/tables/', this.categories);
     }
+
+
 }

@@ -1,6 +1,11 @@
 <script lang="ts">
     import {onMount} from "svelte";
-    import {getStorageStrategy, getStore, clearAllStores} from "../../core/entities/persist/stores";
+    import {
+        getStorageStrategy,
+        getStore,
+        clearAllStores,
+        selectedProfileStore
+    } from "../../core/entities/persist/stores";
     import {TableManager} from "../../core/entities/persist/tableManager";
     import {FunctionFactory} from "../../core/tables/core/entry/functionFactory";
     import {Profile} from "../../core/entities/profile/profile";
@@ -8,7 +13,8 @@
     import type {EntityStorageManager} from "../../core/entities/persist/entityStorageManager";
     import type {Entity} from "../../core/entities/entity";
     import type {Deletable} from "../../core/entities/deletable";
-    import type {Stores} from "svelte/store";
+    import {get, type Stores} from "svelte/store";
+    import type {GlobalEntity} from "../../core/entities/profile/globalEntity";
 
     function nothing(tabIndex: number){
         console.log("not overloaded");
@@ -35,9 +41,15 @@
             profileElement.isSelected = false;
         }
         profile.isSelected = true;
+        selectedProfileStore.set(profile);
         await profileStore.saveEntity(profile);
+
+        let globalStore = await getStore('globalStore');
+        let globals = await globalStore.getAllEntities() as GlobalEntity[];
+        let global = globals[0];
+        global.currentProfile = profile;
+        await globalStore.saveEntity(global);
         changeTab(1);
-        console.log("profile view details clicked");
     }
 
     async function addNewProfile() {
@@ -58,18 +70,23 @@
         for (const profile of profiles) {
             if(profile.isSelected){
                 foundProfile = true;
+                selectedProfileStore.set(profile);
             }
         }
         if(!foundProfile){
             profiles[0].isSelected = true;
+            selectedProfileStore.set(profiles[0]);
         }
+        console.log("Profile selected: ", get(selectedProfileStore));
     }
 
     async function deleteProfile(profile: Profile) {
         if (confirm(`Are you sure you want to delete the profile "${profile.id || 'Unnamed Profile'}"? This will also delete all related entities.`)) {
             try {
                 const profileStore = await getStore('profileStore') as unknown as EntityStorageManager<Profile>;
-
+                if(profile.isSelected){
+                    selectedProfileStore.update(profile => null);
+                }
                 const getTypedStore = (storeName: string): Promise<EntityStorageManager<Entity & Deletable>> =>
                     getStore(storeName as keyof Stores) as Promise<EntityStorageManager<Entity & Deletable>>;
 
@@ -93,6 +110,11 @@
     async function handleClearAll() {
         if (confirm("Are you sure you want to clear all profiles? This action cannot be undone.")) {
             try {
+                let globalStore = await getStore('globalStore');
+                let globals = await globalStore.getAllEntities();
+                for (const global of globals) {
+                    await globalStore.deleteEntity(global.id);
+                }
                 let profileStore = await getStore('profileStore');
                 let allProfiles = await profileStore.getAllEntities() as Profile[];
                 console.log("have ", allProfiles);
