@@ -112,7 +112,7 @@
         await adventureStore.saveEntity(newAdventure);
         let campaignStore = await getStore('campaignStore');
         await campaignStore.saveEntity(campaign);
-        adventures = [...adventures, newAdventure ];
+        adventures = [...adventures ];
     }
 
     async function deleteAdventure(adventure: Adventure) {
@@ -144,6 +144,12 @@
     function gotoProfile(){
         changeTab(1);
     }
+
+    let showTooltip = false;
+
+    function toggleTooltip(show: boolean) {
+        showTooltip = show;
+    }
 </script>
 
 {#if campaign.id < 0}
@@ -156,7 +162,29 @@
 {:else}
     <div class="p-4 bg-gray-100 min-h-screen">
         <div class="mb-6">
-            <h1 class="text-3xl font-bold text-gray-800 mb-4">Campaign: {campaign.id}</h1>
+            <h1 class="text-3xl font-bold text-gray-800 mb-4 flex items-center relative">
+                Campaign: {campaign.id}
+                <button
+                        class="ml-2 text-gray-600 hover:text-gray-800 relative"
+                        on:mouseover={() => toggleTooltip(true)}
+                        on:mouseleave={() => toggleTooltip(false)}
+                        on:focus={() => toggleTooltip(true)}
+                        on:blur={() => toggleTooltip(false)}
+                        aria-label="Campaign ID Info"
+                >
+                    ?
+                </button>
+                {#if showTooltip}
+                    <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-black text-white text-xs rounded p-2 shadow-lg z-50">
+                        Campaign is not the same as a role play campaign. It is more of
+                        a long term bundle of adventures. The genre, setting and theme are
+                        just connected but not the same out of these adventures.
+                        Adventures with same genre, setting and/or theme could be set when adding
+                        them.
+                    </div>
+                {/if}
+            </h1>
+
             <div class="bg-white shadow-md rounded-lg p-4">
                 <div class="mb-4">
                     <label for="campaignName" class="block text-sm font-medium text-gray-700">Campaign Name</label>
