@@ -72,14 +72,17 @@ export class EntityStorageManager<T extends Entity & Deletable> {
     async deleteEntity(id: number): Promise<void> {
         await this.initializeStorage();
         const index = this.entities.findIndex(e => e.id === id);
+        console.log("Remove ", index);
         if (index !== -1) {
             this.entities.splice(index, 1);
-            //console.log(`Deleted entity with id ${id}`);
+            console.log(`Deleted entity with id ${id}`);
             await this.saveEntities();
         } else {
             //console.log(`Entity with id ${id} not found`);
         }
     }
+
+
 
     convertToStoreName(word: string): string {
         // Convert the first character to lowercase

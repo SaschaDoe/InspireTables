@@ -4,7 +4,7 @@
         getStorageStrategy,
         getStore,
         clearAllStores,
-        selectedProfileStore, selectedGlobalStore
+        selectedProfileStore, selectedGlobalStore, selectedCampaignStore
     } from "../../core/entities/persist/stores";
     import {TableManager} from "../../core/entities/persist/tableManager";
     import {FunctionFactory} from "../../core/tables/core/entry/functionFactory";
@@ -14,7 +14,7 @@
     import type {Entity} from "../../core/entities/entity";
     import type {Deletable} from "../../core/entities/deletable";
     import {get, type Stores} from "svelte/store";
-    import type {GlobalEntity} from "../../core/entities/profile/globalEntity";
+    import {GlobalEntity} from "../../core/entities/profile/globalEntity";
 
     function nothing(tabIndex: number){
         console.log("not overloaded");
@@ -70,10 +70,13 @@
             try {
                 const profileStore = await getStore('profileStore') as unknown as EntityStorageManager<Profile>;
                 if(globalEntity.currentProfile === profile){
+                    selectedCampaignStore.set(null);
                     globalEntity.currentProfile = null;
+                    globalEntity.currentCampaign = null;
                     selectedProfileStore.set(null);
                     let globalStore = await getStore('globalStore');
                     await globalStore.saveEntity(globalEntity);
+                    await profileStore.deleteEntity(profile.id);
                 }
                 const getTypedStore = (storeName: string): Promise<EntityStorageManager<Entity & Deletable>> =>
                     getStore(storeName as keyof Stores) as Promise<EntityStorageManager<Entity & Deletable>>;
@@ -93,25 +96,41 @@
         }
     }
 
+    async function saveProfile(profile: Profile){
+        let profileStore = await getStore('profileStore');
+        await profileStore.saveEntity(profile);
+    }
+
+    async function saveGlobal(globalEntity: GlobalEntity) {
+        let globalStore = await getStore('globalStore');
+        await globalStore.saveEntity(globalEntity);
+    }
+
     async function handleClearAll() {
         if (confirm("Are you sure you want to clear all profiles? This action cannot be undone.")) {
             try {
                 let globalStore = await getStore('globalStore');
-                let globals = await globalStore.getAllEntities();
-                for (const global of globals) {
-                    await globalStore.deleteEntity(global.id);
-                }
+                await globalStore.clear();
+
+                let newGlobalCreation = new GlobalEntity();
+                await globalStore.saveEntity(newGlobalCreation);
+
                 let profileStore = await getStore('profileStore');
-                let allProfiles = await profileStore.getAllEntities() as Profile[];
-                console.log("have ", allProfiles);
-                for (const curProfile of allProfiles) {
-                    console.log("delted",curProfile.id);
-                    await profileStore.deleteEntity(curProfile.id);
-                }
+                await profileStore.clear();
+
                 await clearAllStores();
                 profiles = [];
                 alert("All profiles have been cleared successfully.");
                 await addNewProfile();
+
+                selectedGlobalStore.set(null);
+                selectedProfileStore.set(null);
+                selectedCampaignStore.set(null);
+                let ps = await profileStore.getAllEntities() as Profile[];
+                let gl = await globalStore.getAllEntities() as GlobalEntity[];
+                console.log("profiles after clearing: ", ps);
+                console.log("globals after clearing: ", gl);
+
             } catch (error) {
                 console.error('Error clearing all profiles:', error);
                 alert('An error occurred while clearing all profiles. Please check the console for more details.');

@@ -17,7 +17,7 @@
     import {get, type Stores} from "svelte/store";
     import { ListBox, ListBoxItem } from "@skeletonlabs/skeleton";
     import { Profile } from "../../core/entities/profile/profile";
-    import type {GlobalEntity} from "../../core/entities/profile/globalEntity";
+    import {GlobalEntity} from "../../core/entities/profile/globalEntity";
 
     let campaigns: Campaign[] = [];
     let globalEntity: GlobalEntity;
@@ -35,11 +35,16 @@
         let tmpGlobal = get(selectedGlobalStore);
         if(tmpGlobal !== null){
             globalEntity = tmpGlobal;
+        }else{
+            globalEntity = new GlobalEntity();
+            selectedGlobalStore.set(globalEntity);
+            await saveGlobal(globalEntity);
         }
 
         if(globalEntity.currentProfile !== null){
             profile = globalEntity.currentProfile;
             narrativeMediumType = profile.narrativeMediumType;
+            console.log("narrative medium from onMount profile: ",narrativeMediumType)
         }
         await loadCampaigns();
     });
@@ -95,6 +100,16 @@
                     profile.campaigns.splice(index);
                     await saveProfile(profile);
                 }
+                let selectedCampaignId = get(selectedCampaignStore)?.id;
+                if(selectedCampaignId === campaign.id){
+                    selectedCampaignStore.set(null);
+                }
+
+                if(globalEntity.currentCampaign?.id === campaign.id){
+                    globalEntity.currentCampaign = null;
+                    await saveGlobal(globalEntity);
+                }
+
                 campaigns = profile.campaigns;
             } catch (error) {
                 console.error('Error deleting campaign:', error);
@@ -106,13 +121,13 @@
     async function handleClearAll() {
         if (confirm("Are you sure you want to clear all data? This action cannot be undone.")) {
             try {
-                let idStore = await getStore('lastIdStore');
-                let lastId = await idStore.getValue();
-                if(lastId != null){
-                    await clearAllStores();
-                    await idStore.setValue(lastId);
-                }
                 campaigns = [];
+                profile.campaigns = []
+                selectedCampaignStore.set(null);
+                globalEntity.currentCampaign = null;
+                console.log("global id in profile: ", globalEntity.id);
+                await saveGlobal(globalEntity);
+                await saveProfile(profile);
                 alert("All data has been cleared successfully.");
             } catch (error) {
                 console.error('Error clearing all data:', error);

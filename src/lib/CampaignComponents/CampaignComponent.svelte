@@ -68,9 +68,11 @@
         }
         if(globalEntity.currentCampaign !== null){
             campaign = globalEntity.currentCampaign;
+            console.log(globalEntity.id);
         }
         adventures = campaign.adventures;
-        console.log("adventures", adventures)
+        console.log("campaign: ", campaign);
+        console.log("adventures", adventures);
     });
 
     async function updateCampaign() {
