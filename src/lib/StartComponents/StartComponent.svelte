@@ -4,7 +4,7 @@
         getStorageStrategy,
         getStore,
         clearAllStores,
-        selectedProfileStore
+        selectedProfileStore, selectedGlobalStore
     } from "../../core/entities/persist/stores";
     import {TableManager} from "../../core/entities/persist/tableManager";
     import {FunctionFactory} from "../../core/tables/core/entry/functionFactory";
@@ -22,8 +22,20 @@
     export let changeTab: (tabIndex: number) => void = nothing;
     let profiles: Profile[] = [];
     let tableManager: TableManager;
+    let globalEntity: GlobalEntity;
 
     onMount(async () => {
+        let globalTmp = get(selectedGlobalStore);
+        if(globalTmp !== null){
+            globalEntity = globalTmp;
+        }else{
+            let globalStore = await getStore('globalStore');
+            let globals = await globalStore.getAllEntities() as GlobalEntity[];
+            let global = globals[0];
+            selectedGlobalStore.set(global);
+            globalEntity = global;
+        }
+
         await loadProfiles();
     });
 
@@ -32,60 +44,36 @@
         tableManager = await TableManager.getInstance(storageStrategy, new FunctionFactory());
         let profileStore = await getStore('profileStore');
         profiles = await profileStore.getAllEntities() as Profile[];
+        if(profiles.length === 0){
+            await addNewProfile();
+        }
     }
 
     async function select(profile: Profile) {
-        let profileStore = await getStore('profileStore');
-        let profiles = await profileStore.getAllEntities() as Profile[];
-        for (const profileElement of profiles) {
-            profileElement.isSelected = false;
-        }
-        profile.isSelected = true;
-        selectedProfileStore.set(profile);
-        await profileStore.saveEntity(profile);
-
+        globalEntity.currentProfile = profile;
         let globalStore = await getStore('globalStore');
-        let globals = await globalStore.getAllEntities() as GlobalEntity[];
-        let global = globals[0];
-        global.currentProfile = profile;
-        await globalStore.saveEntity(global);
+        await globalStore.saveEntity(globalEntity);
         changeTab(1);
     }
 
     async function addNewProfile() {
-        let newProfile = new ProfileCreator(tableManager)
-            .create()
-            .getCreation() as Profile;
+        let newProfileCreation = await new ProfileCreator(tableManager)
+            .create();
+        let newProfile = newProfileCreation.getCreation() as Profile;
         let profileStore = await getStore('profileStore');
         await profileStore.saveEntity(newProfile);
         await loadProfiles();
-    }
-
-    function selectProfile(profiles: Profile[]) {
-        if(profiles.length < 1){
-            return;
-        }
-
-        let foundProfile = false;
-        for (const profile of profiles) {
-            if(profile.isSelected){
-                foundProfile = true;
-                selectedProfileStore.set(profile);
-            }
-        }
-        if(!foundProfile){
-            profiles[0].isSelected = true;
-            selectedProfileStore.set(profiles[0]);
-        }
-        console.log("Profile selected: ", get(selectedProfileStore));
     }
 
     async function deleteProfile(profile: Profile) {
         if (confirm(`Are you sure you want to delete the profile "${profile.id || 'Unnamed Profile'}"? This will also delete all related entities.`)) {
             try {
                 const profileStore = await getStore('profileStore') as unknown as EntityStorageManager<Profile>;
-                if(profile.isSelected){
-                    selectedProfileStore.update(profile => null);
+                if(globalEntity.currentProfile === profile){
+                    globalEntity.currentProfile = null;
+                    selectedProfileStore.set(null);
+                    let globalStore = await getStore('globalStore');
+                    await globalStore.saveEntity(globalEntity);
                 }
                 const getTypedStore = (storeName: string): Promise<EntityStorageManager<Entity & Deletable>> =>
                     getStore(storeName as keyof Stores) as Promise<EntityStorageManager<Entity & Deletable>>;
@@ -98,8 +86,6 @@
                 }
 
                 profiles = profiles.filter(p => p.id !== profile.id);
-
-                selectProfile(profiles);
             } catch (error) {
                 console.error('Error deleting profile:', error);
                 alert('An error occurred while deleting the profile. Please check the console for more details.');

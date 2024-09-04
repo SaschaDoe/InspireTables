@@ -6,38 +6,39 @@
     import { AdventureCreator } from "../../core/entities/adventure/adventureCreator";
     import {
         getStorageStrategy,
-        getStore,
+        getStore, selectedGlobalStore,
     } from "../../core/entities/persist/stores";
     import type { EntityStorageManager } from "../../core/entities/persist/entityStorageManager";
     import type { Entity } from "../../core/entities/entity";
     import type { Deletable } from "../../core/entities/deletable";
-    import type { Stores } from "svelte/store";
+    import {get, type Stores} from "svelte/store";
     import { Campaign } from "../../core/entities/campaign/campaign";
     import {NarrativeMediumTypes} from "../../core/entities/campaign/narrativeMediumTypes";
     import {ListBox, ListBoxItem,popup, type PopupSettings} from "@skeletonlabs/skeleton";
     import ButtonComponent from "$lib/Shared/ButtonComponent.svelte";
     import {CampaignCreator} from "../../core/entities/campaign/campaignCreator";
+    import type {GlobalEntity} from "../../core/entities/profile/globalEntity";
 
-
+    let globalEntity: GlobalEntity;
     let adventures: Adventure[] = [];
     let tableManager: TableManager;
     let campaign: Campaign = new Campaign();
     let campaignName = "";
     let campaignDescription = "";
     let narrativeMediumType: NarrativeMediumTypes = NarrativeMediumTypes.Book;  // Initialize with a default value
-    let worldGenerated = false;
+
+    $: worldGenerated = campaign.world.id > -1;
 
     async function generateWorld() {
         let campaignCreator = new CampaignCreator(tableManager)
             .withNarrativeMedium(campaign.settings.narrativeMediumType);
         await campaignCreator.generateWorld(campaign);
-        if(campaign.world.id > -1){
-            worldGenerated = true;
-            console.log("true");
-        }else{
-            console.log(campaign.world);
-        }
-        console.log(campaign);
+        await saveCampaign(campaign);
+        campaign = { ...campaign };
+    }
+
+    async function saveCampaign(campaign: Campaign){
+
     }
 
     const popupCombobox: PopupSettings = {
@@ -61,22 +62,13 @@
     onMount(async () => {
         let storageStrategy = await getStorageStrategy();
         tableManager = await TableManager.getInstance(storageStrategy, new FunctionFactory());
-        let campaignStore = await getStore("campaignStore");
-        let campaigns = await campaignStore.getAllEntities() as Campaign[];
-        if(campaigns.length < 1){
-            return;
+        let tmpGlobal = get(selectedGlobalStore);
+        if(tmpGlobal !== null){
+            globalEntity = tmpGlobal;
         }
-
-        for(let c of campaigns) {
-            if (c.isSelected) {
-                campaign = c;
-            }
+        if(globalEntity.currentCampaign !== null){
+            campaign = globalEntity.currentCampaign;
         }
-
-        if(!campaign){
-            campaign = campaigns[0];
-        }
-
         adventures = campaign.adventures;
         console.log("adventures", adventures)
     });

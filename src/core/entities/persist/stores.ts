@@ -15,6 +15,7 @@ import type {GlobalEntity} from "../profile/globalEntity";
 export const tableUpdateStore = writable(0);
 export const selectedProfileStore = writable<Profile | null>(null);
 export const selectedGlobalStore = writable<GlobalEntity | null>(null);
+export const selectedCampaignStore = writable<Campaign | null>(null);
 export const selectedSubTables = writable<Table[]>([]);
 export const selectedAltTables = writable<Table[]>([]);
 

@@ -14,11 +14,11 @@ export class GenreMixCreator extends BaseCreator {
         return this;
     }
 
-    create(): CreationResult {
+    async create() {
         let genreMix = new GenreMix();
 
         let creationResult = new CreationResult();
-        let primaryGenreCreationResult = new GenreCreator(this.tableManager)
+        let primaryGenreCreationResult = await new GenreCreator(this.tableManager)
             .withNarrativeMedium(this.narrativeMedium)
             .create();
         creationResult.addCreationResult(primaryGenreCreationResult);

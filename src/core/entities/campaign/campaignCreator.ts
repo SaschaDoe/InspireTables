@@ -18,17 +18,17 @@ export class CampaignCreator extends BaseCreator {
         return this;
     }
 
-    create(): CreationResult {
+    async create() {
         const campaign = new Campaign();
         const creationResult = this.initializeCreation(campaign);
-        let genreCreationResult = new GenreMixCreator(this.tableManager)
+        let genreCreationResult = await new GenreMixCreator(this.tableManager)
             .withNarrativeMedium(this.narrativeMedium)
             .create();
         creationResult.addCreationResult(genreCreationResult);
         campaign.settings = new Settings();
         campaign.settings.narrativeMediumType = this.narrativeMedium;
         campaign.genreMix = genreCreationResult.getCreation() as GenreMix;
-
+        await this.setId(campaign);
         return creationResult;
     }
 

@@ -13,7 +13,7 @@ export class GenreCreator extends BaseCreator {
         return this;
     }
 
-    create(): CreationResult {
+    async create() {
         let genre = new Genre();
         let creationResult = new CreationResult();
         let mainGenreTable: Table;
@@ -29,7 +29,7 @@ export class GenreCreator extends BaseCreator {
         creationResult.addRollResult(mainGenreRollResult);
 
         genre.name = mainGenreRollResult.combinedString;
-
+        await this.setId(genre);
         creationResult.addCreation(genre);
         return creationResult;
     }

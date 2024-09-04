@@ -6,11 +6,13 @@ import {CreationResult} from "../creationResult";
 import {RollResult} from "../../tables/rollResult";
 import {ComparisonResult, RelationalOperator} from "../../tables/comparisonResult";
 import {genderTableName} from "../../tables/content/other/genderTable";
+import type {Creator} from "../creator";
+import type {Illness} from "../status/illness";
 
 export class CharacterCreator extends BaseCreator{
     hasIllness: boolean = false;
 
-    create(): CreationResult {
+    async create(): Promise<CreationResult> {
         let creationResult = new CreationResult();
         let character = new Character();
         let genderTable = this.tableManager.getTable(genderTableName);
@@ -20,12 +22,12 @@ export class CharacterCreator extends BaseCreator{
             character.gender = genderRollResult.combinedString;
         }
         this.setIllness(character, creationResult);
-
+        await this.setId(character);
         creationResult.addCreation(character);
         return creationResult;
     }
 
-    private setIllness(character: Character, creationResult: CreationResult) {
+    private async setIllness(character: Character, creationResult: CreationResult) {
         if (!this.hasIllness) {
             let comparisonResult = new ComparisonResult(
                 this.dice.getRandom(),
@@ -36,8 +38,10 @@ export class CharacterCreator extends BaseCreator{
             this.hasIllness = comparisonResult.compare();
         }
         if (this.hasIllness) {
-            let illnessResult = new IllnessCreator(this.tableManager).create();
-            character.illnesses.push(illnessResult.getCreation());
+            let illnessResult = await new IllnessCreator(this.tableManager).create();
+            let illness = illnessResult.getCreation() as Illness;
+            character.illnesses.push(illness);
+
             creationResult.addCreationResult(illnessResult);
         }
     }

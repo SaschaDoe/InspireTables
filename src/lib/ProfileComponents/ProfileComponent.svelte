@@ -9,19 +9,21 @@
     import {
         getStorageStrategy,
         getStore,
-        clearAllStores, selectedProfileStore,
+        clearAllStores, selectedGlobalStore, selectedCampaignStore,
     } from "../../core/entities/persist/stores";
     import type { EntityStorageManager } from "../../core/entities/persist/entityStorageManager";
     import type { Entity } from "../../core/entities/entity";
     import type { Deletable } from "../../core/entities/deletable";
-    import type { Stores } from "svelte/store";
+    import {get, type Stores} from "svelte/store";
     import { ListBox, ListBoxItem } from "@skeletonlabs/skeleton";
     import { Profile } from "../../core/entities/profile/profile";
+    import type {GlobalEntity} from "../../core/entities/profile/globalEntity";
 
     let campaigns: Campaign[] = [];
+    let globalEntity: GlobalEntity;
     let profile: Profile = new Profile();
     let tableManager: TableManager;
-    let narrativeMediumType: NarrativeMediumTypes = NarrativeMediumTypes.Book;
+    let narrativeMediumType: NarrativeMediumTypes = NarrativeMediumTypes.RPG;
     const narrativeMediumOptions = Object.values(NarrativeMediumTypes);
 
     function nothing(tabIndex: number){
@@ -30,93 +32,70 @@
     export let changeTab: (tabIndex: number) => void = nothing;
 
     onMount(async () => {
-        console.log("profile on mount")
-        let profileStore = await getStore('profileStore');
-        let profiles = await profileStore.getAllEntities() as Profile[];
-
-        if(profiles.length === 0) {
-            return;
+        let tmpGlobal = get(selectedGlobalStore);
+        if(tmpGlobal !== null){
+            globalEntity = tmpGlobal;
         }
 
-        for (const p of profiles) {
-            if(p.isSelected){
-                profile = p;
-                narrativeMediumType = p.narrativeMediumType || NarrativeMediumTypes.Book;
-                console.log("selected profile found", profile);
-                break;
-            }
+        if(globalEntity.currentProfile !== null){
+            profile = globalEntity.currentProfile;
+            narrativeMediumType = profile.narrativeMediumType;
         }
-
-        if(!profile){
-            profile = profiles[0];
-            profile.isSelected = true;
-            selectedProfileStore.set(profile);
-            narrativeMediumType = profile.narrativeMediumType || NarrativeMediumTypes.Book;
-            console.log("Profile is selected because no was", profile);
-        }
-
         await loadCampaigns();
     });
 
     async function loadCampaigns() {
         let storageStrategy = await getStorageStrategy();
         tableManager = await TableManager.getInstance(storageStrategy, new FunctionFactory());
-        let campaignStore = await getStore('campaignStore');
-        campaigns = await campaignStore.getAllEntities() as Campaign[];
+        if(profile.campaigns){
+            campaigns = profile.campaigns;
+        }else{
+            profile.campaigns = [];
+            campaigns = [];
+        }
+
+        console.log("Campaigns in profile: ",campaigns);
+    }
+
+    async function saveGlobal(globalEntity: GlobalEntity) {
+        let globalStore = await getStore('globalStore');
+        await globalStore.saveEntity(globalEntity);
     }
 
     async function viewCampaignDetails(campaign: Campaign) {
-        let campaignStore = await getStore('campaignStore');
-        let campaigns = await campaignStore.getAllEntities() as Campaign[];
-        for (const c of campaigns) {
-            c.isSelected = false;
-            await campaignStore.saveEntity(c);
-        }
-        campaign.isSelected = true;
-        await campaignStore.saveEntity(campaign);
+        selectedCampaignStore.set(campaign);
+        globalEntity.currentCampaign = campaign;
+        await saveGlobal(globalEntity);
         changeTab(2);
-        console.log("profile view details clicked")
+        console.log("profile view details clicked", campaigns)
     }
 
     async function addNewCampaign() {
-        console.log("create new campaign with ", profile)
-        let newCampaign = new CampaignCreator(tableManager)
+        console.log("create new campaign with ", profile);
+        let newCampaign = await new CampaignCreator(tableManager)
             .withNarrativeMedium(profile.narrativeMediumType)
             .create()
-            .getCreation() as Campaign;
-        let campaignStore = await getStore('campaignStore');
-        await campaignStore.saveEntity(newCampaign);
-        await loadCampaigns();
+        let nCampaign = newCampaign.getCreation() as Campaign;
+        profile.campaigns.push(nCampaign);
+        campaigns = profile.campaigns;
+
+        await saveProfile(profile);
+    }
+
+    async function saveProfile(profile: Profile){
+        let profileStore = await getStore('profileStore');
+        await profileStore.saveEntity(profile);
     }
 
     async function deleteCampaign(campaign: Campaign) {
         if (confirm(`Are you sure you want to delete the campaign "${campaign.name || 'Unnamed Campaign'}"? This will also delete all related entities.`)) {
             try {
-                const campaignStore = await getStore('campaignStore') as unknown as EntityStorageManager<Campaign>;
-                campaigns = await campaignStore.getAllEntities();
-                let newSelection = false;
-                if(campaign.isSelected && campaigns.length > 1){
-                    newSelection = true;
+                let index = profile.campaigns.indexOf(campaign);
+                if(index > -1){
+                    profile.campaigns.splice(index);
+                    await saveProfile(profile);
                 }
-                const getTypedStore = async (storeName: string): Promise<EntityStorageManager<Entity & Deletable>> => {
-                    return await getStore(storeName as keyof Stores) as EntityStorageManager<Entity & Deletable>;
-                };
-                if (typeof campaign.prepareForDeletion === 'function') {
-                    await campaignStore.cascadeDelete(campaign, getTypedStore);
-                } else {
-                    const newCampaign = Object.assign(new Campaign(), campaign);
-                    await campaignStore.cascadeDelete(newCampaign, getTypedStore);
-                }
-
-                console.log("filter out campaign with id", campaign.id);
-                campaigns = await campaignStore.getAllEntities();
-                console.log("campaigns after filtering",campaigns)
-                if(newSelection){
-                    let newSelectedCampaign = campaigns[0];
-                    newSelectedCampaign.isSelected = true;
-                    await campaignStore.saveEntity(newSelectedCampaign);
-                }
-
+                campaigns = profile.campaigns;
             } catch (error) {
                 console.error('Error deleting campaign:', error);
                 alert('An error occurred while deleting the campaign. Please check the console for more details.');
@@ -152,14 +131,22 @@
     async function handleNarrativeMediumChange(newType: NarrativeMediumTypes) {
         narrativeMediumType = newType;
         profile.narrativeMediumType = newType;
+        await saveProfile(profile);
+    }
 
-        let profileStore = await getStore('profileStore');
-        await profileStore.saveEntity(profile);
+    function gotoStart(){
+        changeTab(0);
     }
 </script>
 
-<div class="p-4 bg-gray-100 min-h-screen">
-    <h1 class="text-3xl font-bold text-gray-800 mb-6">Profile: {profile?.id || 'No Profile Selected'}</h1>
+{#if profile.id < 0}
+    <div class="p-4 bg-gray-100 min-h-screen">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">No profile selected</h1>
+        <button class="mt-3 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200" on:click={gotoStart}>Goto Start</button>
+    </div>
+    {:else}
+        <div class="p-4 bg-gray-100 min-h-screen">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Profile: {profile?.id}</h1>
 
     <div class="mb-6">
         <label for="narrativeMediumType" class="block text-sm font-medium text-gray-700">Narrative Medium Type</label>
@@ -233,3 +220,4 @@
         <p class="text-gray-600">No campaigns available.</p>
     {/if}
 </div>
+    {/if}

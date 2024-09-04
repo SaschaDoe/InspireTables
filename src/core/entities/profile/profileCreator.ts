@@ -5,10 +5,10 @@ import {Profile} from "./profile";
 import {getStore} from "../persist/stores";
 
 export class ProfileCreator extends BaseCreator {
-    create(): CreationResult {
+    async create(){
         const profile = new Profile();
         const creationResult = this.initializeCreation(profile);
-
+        await this.setId(profile);
         return creationResult
     }
     async persist(entity: Entity): Promise<void> {

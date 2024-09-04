@@ -95,7 +95,7 @@ export class IllnessCreator extends BaseCreator{
         new AttributeDefinition().withName('environmentalResilience').withTable(EnvironmentalResilienceTableName),
     ];
 
-    create(): CreationResult {
+    async create() {
         let illness = new Illness();
 
         illness.adjective = new IllnessAdjectiveGenerator().withDice(this.dice).generate();
@@ -120,7 +120,7 @@ export class IllnessCreator extends BaseCreator{
         let contagiousness = this.dice.rollInterval(0,intensityLevels.length-1);
         this.calculateContagiousness(illness, contagiousness);
         this.calculateKnown(illness);
-
+        await this.setId(illness);
         return new CreationResult();
     }
 

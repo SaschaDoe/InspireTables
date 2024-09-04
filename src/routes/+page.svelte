@@ -10,7 +10,7 @@
 	import StartComponent from "$lib/StartComponents/StartComponent.svelte";
 	import {onMount} from "svelte";
 	import {getStore, selectedGlobalStore, selectedProfileStore} from "../core/entities/persist/stores";
-	import type {GlobalEntity} from "../core/entities/profile/globalEntity";
+	import {GlobalEntity} from "../core/entities/profile/globalEntity";
 	import type {Profile} from "../core/entities/profile/profile";
 	import ProfileComponent from "$lib/ProfileComponents/ProfileComponent.svelte";
 	let isDragging = false;
@@ -22,22 +22,36 @@
 	export let selectedAdventure: Writable<Adventure | null> = writable(null);
 
 	onMount(async () => {
-		if(get(selectedGlobalStore) === null){
+		let selectedGlobal = get(selectedGlobalStore);
+		if(!selectedGlobal){
+			console.log("no selected Global")
 			let globalStore = await getStore('globalStore');
 			let globals = await globalStore.getAllEntities() as GlobalEntity[];
-			let global = globals[0];
-			selectedGlobalStore.set(global);
+			if(globals.length > 0){
+				let global = globals[0];
+				selectedGlobalStore.set(global);
+				console.log("global from store set: ", global);
+			}else{
+				let newGlobal = new GlobalEntity();
+				await globalStore.saveEntity(newGlobal);
+				selectedGlobalStore.set(newGlobal);
+				console.log("new global set: ", newGlobal);
+			}
 		}
-
-		if(get(selectedProfileStore) === null){
+		let selectedProfile = get(selectedProfileStore);
+		if(!selectedProfile){
 			let globalEntity = get(selectedGlobalStore);
 			let profileStore = await getStore('profileStore');
 			let profiles = await profileStore.getAllEntities() as Profile[];
-			if(globalEntity !== null){
+			console.log("profiles: ", profiles);
+			if(globalEntity && globalEntity.currentProfile){
 				if(profiles.some(p => p.id === globalEntity.currentProfile?.id)){
 					selectedProfileStore.set(globalEntity.currentProfile);
+					console.log("globally defined profile selected: ", globalEntity.currentProfile);
 				}
 			}
+		}else{
+			console.log("selected profile: ", selectedProfile);
 		}
 	})
 

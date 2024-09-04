@@ -5,9 +5,8 @@ import type {Table} from "../../tables/table";
 
 export class Profile extends AutoDeletableEntity{
     name = "";
-    campaign = new Campaign();
+    campaigns: Campaign[] = [];
     narrativeMediumType = NarrativeMediumTypes.RPG;
-    isSelected = false;
 
     selectedSubTables: Table[] = [];
     selectedAltTables: Table[] = [];
