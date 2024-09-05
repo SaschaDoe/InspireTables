@@ -5,7 +5,7 @@ export const mainGenresWithProbabilities: [string, number][] = [
     ["action", 10],
     ["adventure", 10],
     ["sciFi", 10], //50%
-    ["myth", 10],
+    ["myth", 9],
     ["war", 8],
     ["horror", 7],
     ["crime", 7],
@@ -16,6 +16,7 @@ export const mainGenresWithProbabilities: [string, number][] = [
     ["thriller", 2],
     ["love", 1],
     ["comedy", 1],
+    ["performance", 1]
 ];
 
 export const MainGenreTableName = "Main Genre";
@@ -34,7 +35,7 @@ export const mainGenresWithProbabilitiesForBooks: [string, number][] = [
     ["action", 8],
     ["adventure", 8],
     ["sciFi", 8],
-    ["mystery", 10],
+    ["mystery", 9],
     ["love", 20],
     ["thriller", 7],
     ["crime", 6],
@@ -45,6 +46,7 @@ export const mainGenresWithProbabilitiesForBooks: [string, number][] = [
     ["western", 1],
     ["myth", 2],
     ["explorer", 1],
+    ["performance", 1],
 ];
 
 export const MainGenreBooksTableName = "Main Genre - Books";
@@ -63,7 +65,7 @@ export const mainGenresWithProbabilitiesForBooksAlt1: [string, number][] = [
     ["action", 8],
     ["adventure", 8],
     ["sciFi", 8],
-    ["mystery", 10],
+    ["mystery", 9],
     ["love", 25],
     ["thriller", 7],
     ["crime", 6],
@@ -74,6 +76,7 @@ export const mainGenresWithProbabilitiesForBooksAlt1: [string, number][] = [
     ["western", 1],
     ["myth", 2],
     ["explorer", 1],
+    ["performance", 1],
 ];
 
 export const MainGenreBooksAlt1TableName = "Main Genre - Books - Alt - V1";

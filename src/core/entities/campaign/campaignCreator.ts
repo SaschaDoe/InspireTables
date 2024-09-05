@@ -9,6 +9,13 @@ import {Settings} from "./settings";
 import {WorldCreator} from "../world/worldCreator";
 import type {World} from "../world/world";
 import {getStore} from "../persist/stores";
+import {RollResult} from "../../tables/rollResult";
+import {ComparisonResult, RelationalOperator} from "../../tables/comparisonResult";
+import {GeneralThemesTable} from "../../tables/content/genre/theme/generalThemesTable";
+import {IntervalResult} from "../../tables/intervalResult";
+import type {Table} from "../../tables/table";
+import {FantasyThemesTable} from "../../tables/content/genre/theme/fantasyThemesTable";
+import {genreToSubGenreMap} from "../../tables/content/genre/genreToSubGenreMap";
 
 export class CampaignCreator extends BaseCreator {
     narrativeMedium: NarrativeMediumTypes = NarrativeMediumTypes.RPG;
@@ -28,8 +35,51 @@ export class CampaignCreator extends BaseCreator {
         campaign.settings = new Settings();
         campaign.settings.narrativeMediumType = this.narrativeMedium;
         campaign.genreMix = genreCreationResult.getCreation() as GenreMix;
+        let numberOfThemes = this.dice.rollInterval(2,5);
+        let rollResult = new RollResult()
+            .withInterval(2,3,"number of themes", numberOfThemes);
+        genreCreationResult.addRollResult(rollResult);
+        for(let i = 0; i < numberOfThemes; i++){
+            let comparisonResult = new ComparisonResult(
+                this.dice.getRandom(),
+                RelationalOperator.GREATER,
+                0.7,
+                "has general theme");
+            let rollResul = new RollResult().withComparisonResult(comparisonResult);
+            genreCreationResult.addRollResult(rollResult);
+
+            let themeResult: RollResult;
+            if(comparisonResult.compare()){
+                themeResult = new GeneralThemesTable().withDice(this.dice).roll();
+                genreCreationResult.addRollResult(themeResult);
+            }else{
+                let randomChosenGenreName = this.getRandomWeightedGenre(campaign.genreMix.genreWeights);
+                let randomChosenGenre = genreToSubGenreMap[randomChosenGenreName];
+                console.log(randomChosenGenre);
+                let table = this.tableManager.getTable(randomChosenGenre);
+                themeResult = table.withDice(this.dice).roll();
+                genreCreationResult.addRollResult(themeResult);
+
+            }
+            campaign.themes.push(themeResult.combinedString);
+        }
         await this.setId(campaign);
         return creationResult;
+    }
+
+    getRandomWeightedGenre(genreWeights: Map<string, number>): string {
+        const totalWeight = Array.from(genreWeights.values()).reduce((sum, weight) => sum + weight, 0);
+        let randomNumber = this.dice.getRandom() * totalWeight;
+
+        for (const [genre, weight] of genreWeights.entries()) {
+            randomNumber -= weight;
+            if (randomNumber <= 0) {
+                return genre;
+            }
+        }
+
+        // Fallback in case of rounding errors
+        return Array.from(genreWeights.keys())[0];
     }
 
     async generateWorld(campaign: Campaign){

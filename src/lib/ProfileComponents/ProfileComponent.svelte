@@ -9,7 +9,7 @@
     import {
         getStorageStrategy,
         getStore,
-        clearAllStores, selectedGlobalStore, selectedCampaignStore,
+        clearAllStores, selectedGlobalStore, selectedCampaignStore, selectedProfileStore, saveSelectedProfile,
     } from "../../core/entities/persist/stores";
     import type { EntityStorageManager } from "../../core/entities/persist/entityStorageManager";
     import type { Entity } from "../../core/entities/entity";
@@ -70,6 +70,7 @@
     async function viewCampaignDetails(campaign: Campaign) {
         selectedCampaignStore.set(campaign);
         globalEntity.currentCampaign = campaign;
+        globalEntity.currentCampaignId = campaign.id;
         await saveGlobal(globalEntity);
         changeTab(2);
         console.log("profile view details clicked", campaigns)
@@ -81,6 +82,14 @@
             .withNarrativeMedium(profile.narrativeMediumType)
             .create()
         let nCampaign = newCampaign.getCreation() as Campaign;
+        let campaignStore = await getStore('campaignStore');
+        await campaignStore.saveEntity(nCampaign);
+
+        //TODO IdSave
+        profile.campaignIds.push(nCampaign.id);
+
+        await saveSelectedProfile(profile);
+
         profile.campaigns.push(nCampaign);
         campaigns = profile.campaigns;
 

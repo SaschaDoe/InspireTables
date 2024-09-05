@@ -41,6 +41,23 @@ import {
     UnrealisticLessProbableLowTechIllnessAdjectiveTable
 } from "./content/illness/adjective/unrealisticLessProbableLowTechIllnessAdjectiveTable";
 import {RealisticLowTechIllnessAdjectiveTable} from "./content/illness/adjective/realisticLowTechIllnessAdjectiveTable";
+import {GeneralThemesTable} from "./content/genre/theme/generalThemesTable";
+import {FantasyThemesTable} from "./content/genre/theme/fantasyThemesTable";
+import {CrimeSubGenreTable} from "./content/genre/crimeSubGenreTable";
+import {ExplorerSubGenreTable} from "./content/genre/explorerSubGenreTable";
+import {FantasySubGenreTable} from "./content/genre/fantasySubGenreTable";
+import {GangsterSubGenreTable} from "./content/genre/gangsterSubGenreTable";
+import {HeistSubGenreTable} from "./content/genre/heistSubGenreTable";
+import {HorrorSubGenreTable} from "./content/genre/horrorSubGenreTable";
+import {InternalGenreTable} from "./content/genre/internalGenreTable";
+import {LoveSubGenreTable} from "./content/genre/loveSubGenreTable";
+import {MemoirSubGenreTable, MemoirSubGenreTableName} from "./content/genre/memoirSubGenreTable";
+import {MythSubGenreTable} from "./content/genre/mythicSubGenreTable";
+import {PerformanceSubGenreTable} from "./content/genre/performanceSubGenreTable";
+import {SciFiSubGenreTable} from "./content/genre/sciFiSubGenreTable";
+import {ThrillerSubGenreTable} from "./content/genre/thrillerSubGenreTable";
+import {WarSubGenreTable} from "./content/genre/warSubGenreTable";
+import {WesternSubGenreTable} from "./content/genre/westernSubGenreTable";
 
 export const IllnessCategoryName = "Illness";
 export const OtherCategoryName = "Other";
@@ -53,12 +70,33 @@ export function allCategories(): Category[] {
         .withTable(new CharacterTable())
     allCategories.push(characterCategory);
 
+    let themeCategory = new Category()
+        .withName("Theme")
+        .withTable(new GeneralThemesTable())
+        .withTable(new FantasyThemesTable());
+    allCategories.push(themeCategory);
+
     let genreCategory = new Category()
         .withName("Genres")
         .withTable(new AllGenreTable())
         .withTable(new MainGenreTable())
         .withTable(new ActionSubGenreTable())
-        .withTable(new ComedySubGenreTable());
+        .withTable(new ComedySubGenreTable())
+        .withTable(new CrimeSubGenreTable())
+        .withTable(new ExplorerSubGenreTable())
+        .withTable(new FantasySubGenreTable())
+        .withTable(new GangsterSubGenreTable())
+        .withTable(new HeistSubGenreTable())
+        .withTable(new HorrorSubGenreTable())
+        .withTable(new InternalGenreTable())
+        .withTable(new LoveSubGenreTable())
+        .withTable(new MemoirSubGenreTable)
+        .withTable(new MythSubGenreTable())
+        .withTable(new PerformanceSubGenreTable())
+        .withTable(new SciFiSubGenreTable())
+        .withTable(new ThrillerSubGenreTable())
+        .withTable(new WarSubGenreTable())
+        .withTable(new WesternSubGenreTable())
     allCategories.push(genreCategory);
 
     let illnessCategory = new Category()

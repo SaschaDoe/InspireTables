@@ -43,7 +43,7 @@
 			let globalEntity = get(selectedGlobalStore);
 			let profileStore = await getStore('profileStore');
 			let profiles = await profileStore.getAllEntities() as Profile[];
-			console.log("profiles: ", profiles);
+
 			if(globalEntity && globalEntity.currentProfile){
 				if(profiles.some(p => p.id === globalEntity.currentProfile?.id)){
 					selectedProfileStore.set(globalEntity.currentProfile);
@@ -106,15 +106,15 @@
 
 <div class="flex h-screen">
 	<div id="left-panel" class="w-1/2 border-r border-gray-300">
-
-
+		<TabGroup bind:selected={activeTab}>
+			<Tab class="text-blue-500" bind:group={tabSet} name="tab3" value={4}>Entities</Tab>
+			<Tab class="text-blue-500" bind:group={tabSet} name="tab4" value={5}>Tables</Tab>
+		</TabGroup>
 		<TabGroup bind:selected={activeTab}>
 			<Tab class="text-blue-500" bind:group={tabSet} name="tab1" value={0}>Start</Tab>
 			<Tab class="text-blue-500" bind:group={tabSet} name="tab1" value={1}>Profile</Tab>
 			<Tab class="text-blue-500" bind:group={tabSet} name="tab2" value={2}>Campaign</Tab>
 			<Tab class="text-blue-500" bind:group={tabSet} name="tab3" value={3}>Adventure</Tab>
-			<Tab class="text-blue-500" bind:group={tabSet} name="tab3" value={4}>Entities</Tab>
-			<Tab class="text-blue-500" bind:group={tabSet} name="tab4" value={5}>Tables</Tab>
 			<svelte:fragment slot="panel">
 				{#if tabSet === 0}
 					<StartComponent {changeTab}></StartComponent>

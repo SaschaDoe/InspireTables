@@ -5,11 +5,12 @@ import {CreationResult} from "../creationResult";
 import {BaseCreator} from "../baseCreator";
 import type {Genre} from "./genre";
 import {NarrativeMediumTypes} from "../campaign/narrativeMediumTypes";
+import {RollResult} from "../../tables/rollResult";
 
 export class GenreMixCreator extends BaseCreator {
     narrativeMedium: NarrativeMediumTypes = NarrativeMediumTypes.RPG;
 
-    withNarrativeMedium(narrativeMedium: NarrativeMediumTypes){
+    withNarrativeMedium(narrativeMedium: NarrativeMediumTypes) {
         this.narrativeMedium = narrativeMedium;
         return this;
     }
@@ -18,19 +19,86 @@ export class GenreMixCreator extends BaseCreator {
         let genreMix = new GenreMix();
 
         let creationResult = new CreationResult();
-        let primaryGenreCreationResult = await new GenreCreator(this.tableManager)
-            .withNarrativeMedium(this.narrativeMedium)
-            .create();
+        let primaryGenreCreationResult = await this.createUniqueGenre(genreMix);
         creationResult.addCreationResult(primaryGenreCreationResult);
-        let genre = primaryGenreCreationResult.getCreation() as Genre;
-        if(genre){
-            genreMix.primaryGenre = genre;
+        genreMix.primaryGenre = primaryGenreCreationResult.getCreation() as Genre;
+
+        let numberOfGenres = this.dice.rollInterval(1, 4);
+        let numberOfGenresRollResult = new RollResult().withInterval(1, 4, "number of genres", numberOfGenres);
+        creationResult.addRollResult(numberOfGenresRollResult);
+
+        for (let i = 0; i < numberOfGenres; i++) {
+            let genreCreationResult = await this.createUniqueGenre(genreMix);
+            creationResult.addCreationResult(genreCreationResult);
+            genreMix.subGenres.push(genreCreationResult.getCreation() as Genre);
+        }
+
+        let remainingWeight = 100;
+
+        // Assign weight to primary genre
+        let primaryGenreWeight = this.dice.rollInterval(20, 80);
+        let primaryGenreWeightResult = new RollResult().withInterval(20, 80, "primary genre weight", primaryGenreWeight);
+        creationResult.addRollResult(primaryGenreWeightResult);
+
+        genreMix.genreWeights.set(genreMix.primaryGenre.fullName, primaryGenreWeight);
+        remainingWeight -= primaryGenreWeight;
+
+        // Assign weights to sub-genres
+        for (let i = 0; i < genreMix.subGenres.length; i++) {
+            let subGenre = genreMix.subGenres[i];
+            let weight: number;
+
+            if (i === genreMix.subGenres.length - 1) {
+                // Last sub-genre gets all remaining weight
+                weight = remainingWeight;
+            } else {
+                // Other sub-genres get a portion of remaining weight
+                let min = 1;
+                let max = remainingWeight - (genreMix.subGenres.length - i - 1);
+                weight = this.dice.rollInterval(min, max);
+                let genreWeightResult = new RollResult().withInterval(min, max, `genre weight for ${subGenre.fullName}`, weight);
+                creationResult.addRollResult(genreWeightResult);
+                remainingWeight -= weight;
+            }
+
+            genreMix.genreWeights.set(subGenre.fullName, weight);
+
+            let subGenreWeightResult = new RollResult().withInterval(1, 100, `${subGenre.fullName} weight`, weight);
+            creationResult.addRollResult(subGenreWeightResult);
         }
 
         creationResult.addCreation(genreMix);
 
         return creationResult;
     }
+
+    async createUniqueGenre(genreMix: GenreMix): Promise<CreationResult> {
+        let genreCreationResult;
+        let genre: Genre;
+
+        do {
+            genreCreationResult = await new GenreCreator(this.tableManager)
+                .withNarrativeMedium(this.narrativeMedium)
+                .create();
+            genre = genreCreationResult.getCreation() as Genre;
+        } while (this.isGenreDuplicate(genreMix, genre));
+
+        return genreCreationResult;
+    }
+
+    isGenreDuplicate(genreMix: GenreMix, otherGenre: Genre): boolean {
+        // Combine primary genre and sub-genres into one array
+        const allGenres = [genreMix.primaryGenre, ...genreMix.subGenres].filter(Boolean);
+
+        // Check if any genre in the list matches the logic you provided
+        return allGenres.some(genre =>
+            genre?.fullName === otherGenre.fullName
+            ||
+            genre?.name === otherGenre.name &&
+            otherGenre.subGenreName === ""
+        );
+    }
+
     async persist(genreMix: GenreMix): Promise<void> {
         console.log("persist genreMix", genreMix.id);
         try {

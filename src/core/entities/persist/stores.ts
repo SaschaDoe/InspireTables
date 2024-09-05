@@ -1,5 +1,5 @@
 // stores.ts
-import {writable} from "svelte/store";
+import {get, writable} from "svelte/store";
 
 
 import type { StorageStrategy } from "./storageStrategy";
@@ -18,6 +18,38 @@ export const selectedGlobalStore = writable<GlobalEntity | null>(null);
 export const selectedCampaignStore = writable<Campaign | null>(null);
 export const selectedSubTables = writable<Table[]>([]);
 export const selectedAltTables = writable<Table[]>([]);
+
+export async function getSelectedCampaign(){
+    let profileFromWritable = get(selectedCampaignStore);
+    if(profileFromWritable !== null){
+        let profileStore = await getStore('campaignStore');
+        let profile = await profileStore.getEntity(profileFromWritable.id);
+        if(profile === null){
+            throw new Error("Profile is selected but not in store!")
+        }
+        return profile as Campaign;
+    }
+    return null;
+}
+
+export async function getSelectedProfile(){
+    let profileFromWritable = get(selectedProfileStore);
+    if(profileFromWritable !== null){
+        let profileStore = await getStore('profileStore');
+        let profile = await profileStore.getEntity(profileFromWritable.id);
+        if(profile === null){
+            throw new Error("Profile is selected but not in store!")
+        }
+        return profile as Profile;
+    }
+    return null;
+}
+
+export async function saveSelectedProfile(profile: Profile){
+    selectedProfileStore.set(profile);
+    let profileStore = await getStore('profileStore');
+    await profileStore.saveEntity(profile);
+}
 
 // Function to trigger an update
 export function triggerTableUpdate() {

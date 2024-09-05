@@ -7,7 +7,6 @@ export class GenreMix extends AutoDeletableEntity {
     //they actually play or contradict etc. 
 
     primaryGenre: Genre = new Genre(); // The dominant genre in the mix
-    mainGenres: Genre[] = [];
     subGenres: Genre[] = []; // e.g., ["Action(hero)", "Mystery(noir)"] or ["Action", ""] if no subgenre
     genreWeights: Map<string, number> = new Map(); // Relative weights of each genre
 

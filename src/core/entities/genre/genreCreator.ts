@@ -4,6 +4,9 @@ import {CreationResult} from "../creationResult";
 import {MainGenreBooksTableName, MainGenreTableName} from "../../tables/content/genre/mainGenres";
 import {NarrativeMediumTypes} from "../campaign/narrativeMediumTypes";
 import type {Table} from "../../tables/table";
+import {ComparisonResult, RelationalOperator} from "../../tables/comparisonResult";
+import {RollResult} from "../../tables/rollResult";
+import {genreToSubGenreMap} from "../../tables/content/genre/genreToSubGenreMap";
 
 export class GenreCreator extends BaseCreator {
     private narrativeMedium: NarrativeMediumTypes = NarrativeMediumTypes.RPG;
@@ -17,9 +20,7 @@ export class GenreCreator extends BaseCreator {
         let genre = new Genre();
         let creationResult = new CreationResult();
         let mainGenreTable: Table;
-        console.log("create genre!!!");
         if(this.narrativeMedium === NarrativeMediumTypes.Book){
-            console.log("Genre Books are used");
             mainGenreTable = this.tableManager.getTable(MainGenreBooksTableName);
         }else{
             mainGenreTable = this.tableManager.getTable(MainGenreTableName);
@@ -29,6 +30,24 @@ export class GenreCreator extends BaseCreator {
         creationResult.addRollResult(mainGenreRollResult);
 
         genre.name = mainGenreRollResult.combinedString;
+
+        let comparisonResult = new ComparisonResult(
+            this.dice.getRandom(),
+            RelationalOperator.GREATER,
+            0.8,
+            "is sub genre");
+        let isSubGenreResult = new RollResult().withComparisonResult(comparisonResult);
+        creationResult.addRollResult(isSubGenreResult);
+        let hasSubGenre = comparisonResult.compare();
+
+        if(hasSubGenre){
+            let subGenreTableTitle = genreToSubGenreMap[genre.name];
+            let subGenreTable = this.tableManager.getTable(subGenreTableTitle);
+            let subGenreResult = subGenreTable.withDice(this.dice).roll();
+            creationResult.addRollResult(subGenreResult);
+            genre.subGenreName = subGenreResult.combinedString;
+        }
+
         await this.setId(genre);
         creationResult.addCreation(genre);
         return creationResult;

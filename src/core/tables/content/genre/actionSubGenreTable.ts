@@ -7,10 +7,12 @@ const actionSubGenres: string[] = [
     "disaster",
 ];
 
+export const ActionSubGenreTableName = "Action sub genres";
+
 export class ActionSubGenreTable extends Table {
     constructor() {
         super();
-        this.title = "Action Sub Genres";
+        this.title = ActionSubGenreTableName;
         this.addEntriesFromList(actionSubGenres);
     }
 }

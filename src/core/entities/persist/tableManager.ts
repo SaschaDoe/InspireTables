@@ -4,8 +4,9 @@ import type {FunctionFactory} from "../../tables/core/entry/functionFactory";
 import type {StorageStrategy} from "./storageStrategy";
 import {MainGenreTable} from "../../tables/content/genre/mainGenres";
 import type {Table} from "../../tables/table";
-import {selectedGlobalStore, selectedProfileStore} from "./stores";
+import {getStorageStrategy, selectedGlobalStore, selectedProfileStore} from "./stores";
 import {get} from "svelte/store";
+import {allCategories} from "../../tables/allCategories";
 
 export class TableManager {
     private static instance: TableManager;
@@ -20,28 +21,32 @@ export class TableManager {
     }
 
     static async getInstance(storageStrategy: StorageStrategy, functionFactory: FunctionFactory): Promise<TableManager> {
-        if (!TableManager.instance) {
+        if(!TableManager.instance){
             TableManager.instance = new TableManager(storageStrategy, functionFactory);
             await TableManager.instance.initialize();
         }
+
         return TableManager.instance;
     }
 
     private async initialize(): Promise<void> {
         // Define your default categories and tables here
+        /*
         const defaultCategories: Category[] = [
             new Category().withName("Genres").withTable(new MainGenreTable()),
             // Add other default categories and tables here
         ];
-
+        */
+        const defaultCategories = allCategories();
         // Load stored tables or use defaults
         const loadedTables = await this.tableStorageManager.getTablesWithThereSubTablesFrom('/tables/', defaultCategories);
-
+        console.log("loaded tables",loadedTables);
         this.categories = mapCategories(defaultCategories, loadedTables);
         this.populateTableMap();
     }
 
     private populateTableMap(): void {
+        console.log("propulate table map", this.categories)
         for (const category of this.categories) {
             for (const table of category.tables) {
                 this.tableMap.set(table.title, table);
@@ -56,6 +61,7 @@ export class TableManager {
      getTable(tableName: string): Table {
         const table = this.tableMap.get(tableName);
         if (!table) {
+            console.log(this.tableMap)
             throw new Error(`get Table: ${tableName} not found.`);
         }
 

@@ -5,8 +5,9 @@
     import { FunctionFactory } from "../../core/tables/core/entry/functionFactory";
     import { AdventureCreator } from "../../core/entities/adventure/adventureCreator";
     import {
+        getSelectedProfile,
         getStorageStrategy,
-        getStore, selectedGlobalStore,
+        getStore, selectedGlobalStore, selectedProfileStore,
     } from "../../core/entities/persist/stores";
     import type { EntityStorageManager } from "../../core/entities/persist/entityStorageManager";
     import type { Entity } from "../../core/entities/entity";
@@ -18,6 +19,8 @@
     import ButtonComponent from "$lib/Shared/ButtonComponent.svelte";
     import {CampaignCreator} from "../../core/entities/campaign/campaignCreator";
     import type {GlobalEntity} from "../../core/entities/profile/globalEntity";
+    import type {Profile} from "../../core/entities/profile/profile";
+    import GenreMixComponent from "$lib/CampaignComponents/GenreMixComponent.svelte";
 
     let globalEntity: GlobalEntity;
     let adventures: Adventure[] = [];
@@ -26,19 +29,30 @@
     let campaignName = "";
     let campaignDescription = "";
     let narrativeMediumType: NarrativeMediumTypes = NarrativeMediumTypes.Book;  // Initialize with a default value
-
+    let profile: Profile;
     $: worldGenerated = campaign.world.id > -1;
 
     async function generateWorld() {
         let campaignCreator = new CampaignCreator(tableManager)
             .withNarrativeMedium(campaign.settings.narrativeMediumType);
         await campaignCreator.generateWorld(campaign);
-        await saveCampaign(campaign);
+        console.log("Campaign in Profile: ", get(selectedProfileStore));
+        console.log("World in campaign here: ", campaign)
+
+        let campaignStore = await getStore('campaignStore');
+        await campaignStore.saveEntity(campaign);
+
+        console.log("Campaign in store: ", campaign);
+
+        //await saveCampaign(campaign);
         campaign = { ...campaign };
     }
 
     async function saveCampaign(campaign: Campaign){
-
+        let profile = get(selectedProfileStore);
+        if(profile){
+            await profile.saveCampaign(campaign);
+        }
     }
 
     const popupCombobox: PopupSettings = {
@@ -62,17 +76,17 @@
     onMount(async () => {
         let storageStrategy = await getStorageStrategy();
         tableManager = await TableManager.getInstance(storageStrategy, new FunctionFactory());
+
         let tmpGlobal = get(selectedGlobalStore);
         if(tmpGlobal !== null){
             globalEntity = tmpGlobal;
         }
+        let campaignStore = await getStore('campaignStore');
+
         if(globalEntity.currentCampaign !== null){
-            campaign = globalEntity.currentCampaign;
-            console.log(globalEntity.id);
+            campaign = await campaignStore.getEntity(globalEntity.currentCampaignId) as Campaign;
         }
         adventures = campaign.adventures;
-        console.log("campaign: ", campaign);
-        console.log("adventures", adventures);
     });
 
     async function updateCampaign() {
@@ -187,6 +201,7 @@
 
             <div class="bg-white shadow-md rounded-lg p-4">
                 <div class="mb-4">
+                    <GenreMixComponent genreMix={campaign.genreMix}></GenreMixComponent>
                     <label for="campaignName" class="block text-sm font-medium text-gray-700">Campaign Name</label>
                     <input
                             type="text"
@@ -229,14 +244,14 @@
             {#if !worldGenerated}
                 <button
                         on:click={generateWorld}
-                        class="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-200 text-xl font-bold"
+                        class="px-2 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-200 text-lg font-bold mx-2"
                 >
-                    Generate World
+                    World gen
                 </button>
             {:else}
                 <button
                         on:click={() => changeTab(4)}
-                        class="mt-3 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200"
+                        class="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200 text-lg font-bold mx-2"
                 >
                     Goto Entities
                 </button>

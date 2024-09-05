@@ -2,8 +2,13 @@ import type {StorageStrategy} from "./storageStrategy";
 
 export class BrowserStorageStrategy implements StorageStrategy {
     loadFileFromExactPath(path: string): Promise<string> {
-        throw new Error("Method not implemented.");
+        const data = localStorage.getItem(path);
+        if (data === null) {
+            return Promise.reject(new Error(`File not found at path: ${path}`));
+        }
+        return Promise.resolve(data);
     }
+
     async doesDirectoryExists(path: string): Promise<boolean> {
         return Promise.resolve(true);
     }
@@ -19,7 +24,8 @@ export class BrowserStorageStrategy implements StorageStrategy {
     async loadAllFilesIn(path: string): Promise<string[]> {
         const filePaths: string[] = [];
         const prefix = path.endsWith('/') ? path : path + '/';
-
+        console.log(prefix);
+        console.log(localStorage);
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
             if (key && key.startsWith(prefix)) {

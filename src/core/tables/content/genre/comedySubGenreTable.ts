@@ -9,10 +9,12 @@ const comedySubGenres = [
     "spoof",
 ]
 
+export const ComedySubGenreTableName = "Comedy sub genres";
+
 export class ComedySubGenreTable extends Table {
     constructor() {
         super();
-        this.title = "Comedy Sub GenreMix";
+        this.title = ComedySubGenreTableName;
         this.addEntriesFromList(comedySubGenres);
     }
 }

@@ -8,4 +8,5 @@ export class GlobalEntity extends AutoDeletableEntity{
     selectedAltTables: Table[] = [];
     currentProfile: Profile | null = null;
     currentCampaign: Campaign | null = null;
+    currentCampaignId: number = -1;
 }

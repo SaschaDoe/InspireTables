@@ -127,6 +127,17 @@ export class EntityStorageManager<T extends Entity & Deletable> {
         return this.entities || [];
     }
 
+    async getEntity(id: number){
+        await this.initializeStorage();
+        let entities =  this.entities || [];
+        for (const entity of entities) {
+            if(entity.id === id){
+                return entity;
+            }
+        }
+        return null;
+    }
+
     async saveSpecificEntities(entities: T[]): Promise<void> {
         for (let entity of entities) {
             await this.saveEntity(entity);

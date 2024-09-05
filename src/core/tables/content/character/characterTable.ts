@@ -5,8 +5,10 @@ import {FunctionEntry} from "../../core/entry/functionEntry";
 import {functionFactory} from "../../core/entry/functionFactory";
 import type {TableManager} from "../../../entities/persist/tableManager";
 
-export function NewCharacter(input: any, tableManager: TableManager):any{
-    return new CharacterCreator(tableManager).create();
+export function NewCharacter(input: any, tableManager: TableManager| null):any{
+    if(tableManager !== null){
+        return new CharacterCreator(tableManager).create();
+    }
     //How to know about the illness this should be also an entity...
     //Show illness and character as Components and say if you will persist them...
 }

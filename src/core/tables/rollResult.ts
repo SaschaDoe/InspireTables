@@ -1,6 +1,8 @@
 import {Entry} from "./core/entry/entry";
 import {ComparisonResult} from "./comparisonResult";
 import type {CreationResult} from "../entities/creationResult";
+import {IntervalResult} from "./intervalResult";
+import type {Dice} from "./dice";
 
 export class RollResult {
     entry: Entry = new Entry();
@@ -8,6 +10,7 @@ export class RollResult {
     creationResults: CreationResult[] = [];
     rolledIndex = -1;
     comparison: ComparisonResult | null = null;
+    intervalResult: IntervalResult | null = null;
 
     withEntry(entry: Entry){
         this.entry = entry;
@@ -17,6 +20,20 @@ export class RollResult {
     public withComparisonResult(comparisonResult: ComparisonResult): RollResult {
         this.comparison = comparisonResult;
         return this;
+    }
+
+    public withIntervalResult(intervalResult: IntervalResult): RollResult {
+        this.intervalResult = intervalResult;
+        return this;
+    }
+
+    public withInterval(min: number, max: number, description: string, result: number): RollResult {
+        let numberOfThemesResult = new IntervalResult()
+            .withMin(min)
+            .withMax(max)
+            .withDescription(description)
+            .withResult(result);
+        return this.withIntervalResult(numberOfThemesResult);
     }
 
     addCreationResult(creationResults: CreationResult){
