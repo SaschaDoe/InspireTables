@@ -7,7 +7,6 @@ const sciFiSubGenres = [
     "cyberpunk",
     "post-apocalyptic",
     "space opera", //mostly no earth
-    "climate fiction",
     "alternate history",
     "first contact",
     "parallel universe",

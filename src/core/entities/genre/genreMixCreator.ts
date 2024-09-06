@@ -22,8 +22,12 @@ export class GenreMixCreator extends BaseCreator {
         let primaryGenreCreationResult = await this.createUniqueGenre(genreMix);
         creationResult.addCreationResult(primaryGenreCreationResult);
         genreMix.primaryGenre = primaryGenreCreationResult.getCreation() as Genre;
-
-        let numberOfGenres = this.dice.rollInterval(1, 4);
+        let min = 0;
+        let hasJustOneGenre = this.dice.getRandom() > 0.8;
+        if(!hasJustOneGenre){
+            min = 1;
+        }
+        let numberOfGenres = this.dice.rollInterval(min, 4);
         let numberOfGenresRollResult = new RollResult().withInterval(1, 4, "number of genres", numberOfGenres);
         creationResult.addRollResult(numberOfGenresRollResult);
 
@@ -36,11 +40,15 @@ export class GenreMixCreator extends BaseCreator {
         let remainingWeight = 100;
 
         // Assign weight to primary genre
-        let primaryGenreWeight = this.dice.rollInterval(20, 80);
+        let primaryGenreWeight = this.dice.rollInterval(40, 70);
+        if(numberOfGenres === 0){
+            primaryGenreWeight = 100;
+        }
         let primaryGenreWeightResult = new RollResult().withInterval(20, 80, "primary genre weight", primaryGenreWeight);
         creationResult.addRollResult(primaryGenreWeightResult);
 
         genreMix.genreWeights.set(genreMix.primaryGenre.fullName, primaryGenreWeight);
+        console.log("GenreMix: ",genreMix);
         remainingWeight -= primaryGenreWeight;
 
         // Assign weights to sub-genres

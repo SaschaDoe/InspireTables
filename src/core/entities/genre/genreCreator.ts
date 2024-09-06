@@ -7,6 +7,7 @@ import type {Table} from "../../tables/table";
 import {ComparisonResult, RelationalOperator} from "../../tables/comparisonResult";
 import {RollResult} from "../../tables/rollResult";
 import {genreToSubGenreMap} from "../../tables/content/genre/genreToSubGenreMap";
+import {techLevelsWithProbabilities} from "../../tables/content/other/techLevelTable";
 
 export class GenreCreator extends BaseCreator {
     private narrativeMedium: NarrativeMediumTypes = NarrativeMediumTypes.RPG;
@@ -40,13 +41,20 @@ export class GenreCreator extends BaseCreator {
         creationResult.addRollResult(isSubGenreResult);
         let hasSubGenre = comparisonResult.compare();
 
-        if(hasSubGenre){
+        if(hasSubGenre && genre.name != "adventure"){
+            console.log(genre.name);
             let subGenreTableTitle = genreToSubGenreMap[genre.name];
+            console.log(subGenreTableTitle);
             let subGenreTable = this.tableManager.getTable(subGenreTableTitle);
             let subGenreResult = subGenreTable.withDice(this.dice).roll();
             creationResult.addRollResult(subGenreResult);
             genre.subGenreName = subGenreResult.combinedString;
         }
+
+        let techLevelVariation = this.dice.rollInterval(1,techLevelsWithProbabilities.length);
+        let baseLevelTech = this.dice.rollInterval(0,techLevelsWithProbabilities.length-1);
+
+        genre.technologyLevels
 
         await this.setId(genre);
         creationResult.addCreation(genre);

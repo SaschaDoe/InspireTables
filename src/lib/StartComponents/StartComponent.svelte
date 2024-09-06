@@ -53,6 +53,7 @@
         globalEntity.currentProfile = profile;
         let globalStore = await getStore('globalStore');
         await globalStore.saveEntity(globalEntity);
+        selectedGlobalStore.set(globalEntity);
         changeTab(1);
     }
 

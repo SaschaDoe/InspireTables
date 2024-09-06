@@ -32,6 +32,12 @@ export async function getSelectedCampaign(){
     return null;
 }
 
+export async function saveSelectedCampaign(campaign: Campaign){
+    selectedCampaignStore.set(campaign);
+    let campaignStore = await getStore('campaignStore');
+    await campaignStore.saveEntity(campaign);
+}
+
 export async function getSelectedProfile(){
     let profileFromWritable = get(selectedProfileStore);
     if(profileFromWritable !== null){

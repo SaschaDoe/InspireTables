@@ -58,6 +58,12 @@ import {SciFiSubGenreTable} from "./content/genre/sciFiSubGenreTable";
 import {ThrillerSubGenreTable} from "./content/genre/thrillerSubGenreTable";
 import {WarSubGenreTable} from "./content/genre/warSubGenreTable";
 import {WesternSubGenreTable} from "./content/genre/westernSubGenreTable";
+import {TechLevelTable} from "./content/other/techLevelTable";
+import {AmountTable} from "./content/other/amountTable";
+import {DifficultyLevelTable} from "./content/other/difficultTable";
+import {HeightTable} from "./content/other/heightTable";
+import {RealismTable} from "./content/other/realismTable";
+import {SpeedTable} from "./content/other/speedTable";
 
 export const IllnessCategoryName = "Illness";
 export const OtherCategoryName = "Other";
@@ -121,11 +127,18 @@ export function allCategories(): Category[] {
 
     let otherCategory = new Category()
         .withName(OtherCategoryName)
+        .withTable(new AmountTable())
+        .withTable(new DifficultyLevelTable())
+        .withTable(new HeightTable())
+        .withTable(new ProbabilityTable())
+        .withTable(new RealismTable())
+        .withTable(new SpeedTable())
         .withTable(new TimeTable())
         .withTable(new StrengthTable())
         .withTable(new ProbabilityTable())
         .withTable(new GenderTable())
-        .withTable(new ImpactTable());
+        .withTable(new ImpactTable())
+        .withTable(new TechLevelTable());
     allCategories.push(otherCategory);
 
     return allCategories;

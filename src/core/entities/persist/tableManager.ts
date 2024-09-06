@@ -37,6 +37,7 @@ export class TableManager {
             // Add other default categories and tables here
         ];
         */
+        console.log("initialize")
         const defaultCategories = allCategories();
         // Load stored tables or use defaults
         const loadedTables = await this.tableStorageManager.getTablesWithThereSubTablesFrom('/tables/', defaultCategories);
