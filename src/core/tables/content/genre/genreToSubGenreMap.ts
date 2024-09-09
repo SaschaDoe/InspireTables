@@ -1,19 +1,19 @@
-import {LoveSubGenreTableName} from "./loveSubGenreTable";
-import {MemoirSubGenreTableName} from "./memoirSubGenreTable";
-import {ActionSubGenreTableName} from "./actionSubGenreTable";
-import {ComedySubGenreTableName} from "./comedySubGenreTable";
-import {CrimeSubGenreTableName} from "./crimeSubGenreTable";
-import {ExplorerSubGenreTableName} from "./explorerSubGenreTable";
-import {FantasySubGenreTableName} from "./fantasySubGenreTable";
-import {GangsterSubGenreTableName} from "./gangsterSubGenreTable";
-import {HeistSubGenreTableName} from "./heistSubGenreTable";
-import {HorrorSubGenreTableName} from "./horrorSubGenreTable";
-import {MythSubGenreTableName} from "./mythicSubGenreTable";
-import {SciFiSubGenreTableName} from "./sciFiSubGenreTable";
-import {PerformanceSubGenreName} from "./performanceSubGenreTable";
-import {ThrillerSubGenreTableName} from "./thrillerSubGenreTable";
-import {WarSubGenreTableName} from "./warSubGenreTable";
-import {WesternSubGenreTableName} from "./westernSubGenreTable";
+import {LoveSubGenreTableName} from "./love/loveSubGenreTable";
+import {MemoirSubGenreTableName} from "./memoir/memoirSubGenreTable";
+import {ActionSubGenreTableName} from "./action/actionSubGenreTable";
+import {ComedySubGenreTableName} from "./comedy/comedySubGenreTable";
+import {CrimeSubGenreTableName} from "./crime/crimeSubGenreTable";
+import {ExplorerSubGenreTableName} from "./explorer/explorerSubGenreTable";
+import {FantasySubGenreTableName} from "./fantasy/fantasySubGenreTable";
+import {GangsterSubGenreTableName} from "./gangster/gangsterSubGenreTable";
+import {HeistSubGenreTableName} from "./heist/heistSubGenreTable";
+import {HorrorSubGenreTableName} from "./horror/horrorSubGenreTable";
+import {MythSubGenreTableName} from "./mythic/mythicSubGenreTable";
+import {SciFiSubGenreTableName} from "./sciFi/sciFiSubGenreTable";
+import {PerformanceSubGenreName} from "./performance/performanceSubGenreTable";
+import {ThrillerSubGenreTableName} from "./thriller/thrillerSubGenreTable";
+import {WarSubGenreTableName} from "./war/warSubGenreTable";
+import {WesternSubGenreTableName} from "./western/westernSubGenreTable";
 
 export const genreToSubGenreMap: { [genre: string]: string } = {
     "love": LoveSubGenreTableName,

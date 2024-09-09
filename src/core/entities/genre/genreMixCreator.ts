@@ -51,16 +51,13 @@ export class GenreMixCreator extends BaseCreator {
         console.log("GenreMix: ",genreMix);
         remainingWeight -= primaryGenreWeight;
 
-        // Assign weights to sub-genres
         for (let i = 0; i < genreMix.subGenres.length; i++) {
             let subGenre = genreMix.subGenres[i];
             let weight: number;
 
             if (i === genreMix.subGenres.length - 1) {
-                // Last sub-genre gets all remaining weight
                 weight = remainingWeight;
             } else {
-                // Other sub-genres get a portion of remaining weight
                 let min = 1;
                 let max = remainingWeight - (genreMix.subGenres.length - i - 1);
                 weight = this.dice.rollInterval(min, max);

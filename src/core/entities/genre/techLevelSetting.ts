@@ -1,11 +1,18 @@
-export class TechLevelSetting{
-    base = 0;
-    variation = 0;
-    delta = 0;
+import type {TechLevels} from "../../tables/content/other/techLevelTable";
 
+export class TechLevelSetting {
+    base: string = "";
+    variation: number = 0;
+    delta: number = 0;
+    baseIndex: number = -1;
 
-    withBase(base: number) {
-        this.base = base;
+    with(baseString: string) {
+        this.base = baseString;
+        return this;
+    }
+
+    withBase(baseIndex: number){
+        this.baseIndex = baseIndex;
         return this;
     }
 

@@ -1,8 +1,8 @@
 import {Table} from "../../table";
 import {Entry} from "../../core/entry/entry";
 import {MainGenreTable} from "./mainGenres";
-import {ComedySubGenreTable} from "./comedySubGenreTable";
-import {ActionSubGenreTable} from "./actionSubGenreTable";
+import {ComedySubGenreTable} from "./comedy/comedySubGenreTable";
+import {ActionSubGenreTable} from "./action/actionSubGenreTable";
 
 export class AllGenreTable extends Table{
     constructor() {

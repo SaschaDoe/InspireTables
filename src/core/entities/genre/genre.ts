@@ -7,7 +7,7 @@ export class Genre extends AutoDeletableEntity{
 
     settings: string[] = []; // Possible settings or worlds
     magicSystemTypes: string[] = []; // Types of magic systems (if applicable) like in high fantasy TODO this are under the settings thing... how to handle that?
-    technologyLevels: string[] = []; // Possible technology  like the genre steamPunk etc
+    technologyLevels: [string, number][] = []; // Possible technology  like the genre steamPunk etc
 
     characterTypes: string[] = []; // Character archetypes or roles
     plotTropes: string[] = []; // Key plot elements TODO: should be a class of itself because there is beginning middle end etc

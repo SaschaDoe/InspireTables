@@ -3,14 +3,13 @@ import { Table } from "../../table";
 export const mainGenresWithProbabilities: [string, number][] = [
     ["fantasy", 20],
     ["action", 10],
-    ["adventure", 10],
     ["sciFi", 10], //50%
     ["myth", 9],
     ["war", 8],
     ["horror", 7],
     ["crime", 7],
-    ["mystery", 5],
-    ["explorer", 4],
+    ["mystery", 10],
+    ["explorer", 9],
     ["western", 3],
     ["drama", 2],
     ["thriller", 2],
@@ -33,11 +32,10 @@ export class MainGenreTable extends Table {
 export const mainGenresWithProbabilitiesForBooks: [string, number][] = [
     ["fantasy", 15],
     ["action", 8],
-    ["adventure", 8],
     ["sciFi", 8],
-    ["mystery", 9],
+    ["mystery", 13],
     ["love", 20],
-    ["thriller", 7],
+    ["thriller", 11],
     ["crime", 6],
     ["drama", 5],
     ["horror", 4],
@@ -62,8 +60,7 @@ export class MainGenreBooksTable extends Table {
 
 export const mainGenresWithProbabilitiesForBooksAlt1: [string, number][] = [
     ["fantasy", 10],
-    ["action", 8],
-    ["adventure", 8],
+    ["action",16],
     ["sciFi", 8],
     ["mystery", 9],
     ["love", 25],

@@ -37,7 +37,7 @@ export class Table {
         }
     }
 
-    protected addProbabilityList(probabilityListWithWords: [string, number][]) {
+    addProbabilityList(probabilityListWithWords: [string, number][]) {
         for (let input of probabilityListWithWords) {
             this.entryList.with(new Entry().withText(input[0]).withProbability(input[1]))
         }
