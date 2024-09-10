@@ -54,12 +54,15 @@ export class CampaignCreator extends BaseCreator {
                 genreCreationResult.addRollResult(themeResult);
             }else{
                 let randomChosenGenreName = this.getRandomWeightedGenre(campaign.genreMix.genreWeights);
+                console.log(randomChosenGenreName);
                 let randomChosenGenre = genreToSubGenreMap[randomChosenGenreName];
-                console.log(randomChosenGenre);
-                let table = this.tableManager.getTable(randomChosenGenre);
-                themeResult = table.withDice(this.dice).roll();
-                genreCreationResult.addRollResult(themeResult);
-
+                if(randomChosenGenre){
+                    console.log(randomChosenGenre);
+                    let table = this.tableManager.getTable(randomChosenGenre);
+                    console.log(table);
+                    themeResult = table.withDice(this.dice).roll();
+                    genreCreationResult.addRollResult(themeResult);
+                }
             }
             campaign.themes.push(themeResult.combinedString);
         }

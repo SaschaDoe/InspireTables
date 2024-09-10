@@ -1,14 +1,14 @@
 import {describe, expect, test} from "vitest";
-import {crimeTechLevelList} from "./crimeTechLevelList";
+import {comedyTechLevelList} from "./comedyTechLevelList";
 
-describe('Crime Tech Level List', () => {
-    test('levels right when big changes made', () => {
-        const totalProbability = crimeTechLevelList.reduce((sum, level) => sum + level[1], 0);
-        expect(totalProbability).toBeCloseTo(100, 0); // Allow for slight rounding errorsq
+describe('Comedy Tech Level List', () => {
+    test('tests comedy tech level list', () => {
+        const totalProbability = comedyTechLevelList.reduce((sum, level) => sum + level[1], 0);
+        expect(totalProbability).toBeCloseTo(100, 0); // Allow for slight rounding errors
     });
 
     test('ensures no probability is under 0.01', () => {
-        const lowProbabilityLevels = crimeTechLevelList
+        const lowProbabilityLevels = comedyTechLevelList
             .filter(([_, probability]) => probability < 0.01)
             .map(([techLevel, probability]) => `${techLevel}: ${probability}`);
 

@@ -6,9 +6,9 @@ export const testList: [string, number][] = [
 ];
 
 export const bigTestList: [string, number][] = [
-    ["test1", 100],
-    ["test2", 100],
-    ["test3", 100],
+    ["test1", 33.33],
+    ["test2", 33.33],
+    ["test3", 33.33],
 ];
 
 describe('reduce list', () => {
@@ -37,9 +37,9 @@ describe('reduce list', () => {
 
         expect(reducedTestList.length).toBe(3);
         expect(reducedTestList[0][0]).toBe("test1");
-        expect(reducedTestList[0][1]).toBe(100);
+        expect(reducedTestList[0][1]).toBe(50);
         expect(reducedTestList[1][0]).toBe("test2");
-        expect(reducedTestList[1][1]).toBe(100);
+        expect(reducedTestList[1][1]).toBe(50);
         expect(reducedTestList[2][0]).toBe("test3");
         expect(reducedTestList[2][1]).toBe(0);
     });
@@ -49,10 +49,10 @@ describe('reduce list', () => {
 
         expect(reducedTestList.length).toBe(3);
         expect(reducedTestList[0][0]).toBe("test1");
-        expect(reducedTestList[0][1]).toBe(100);
+        expect(reducedTestList[0][1]).toBeCloseTo(33.3333);
         expect(reducedTestList[1][0]).toBe("test2");
-        expect(reducedTestList[1][1]).toBe(100);
+        expect(reducedTestList[1][1]).toBeCloseTo(33.3333);
         expect(reducedTestList[2][0]).toBe("test3");
-        expect(reducedTestList[2][1]).toBe(100);
+        expect(reducedTestList[2][1]).toBeCloseTo(33.34);
     });
 });

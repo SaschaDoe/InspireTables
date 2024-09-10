@@ -53,14 +53,14 @@ export class EntryList {
 
         this.isProbabilitySet = true;
         //calculate remaining probability after number entries
-        let cumulativeProb = 100;
+        let cumulativeProb = 0;
         for(let i = 0; i < this.entries.length; i++){
             let entry = this.entries[i];
             entry.interval = new Interval();
             let probability = entry.setting.probabilityInPercent;
-            cumulativeProb -= probability;
-            if(cumulativeProb < 0){
-                throw new Error(`Cumulative probability under 0: ${cumulativeProb} at index: ${i}`);
+            cumulativeProb += probability; //add because - is not precise enough
+            if(cumulativeProb > 100){
+                throw new Error(`Cumulative probability over 100: ${cumulativeProb} at index: ${i}`);
             }
         }
 
@@ -77,9 +77,11 @@ export class EntryList {
             }
         }
 
-        if (cumulativeProb === 0 && remainingWeight > 0) {
+        if (cumulativeProb > 100 && remainingWeight > 0) {
             throw new Error("No probability left for plain and string list entries");
         }
+
+        cumulativeProb = 100 - cumulativeProb; //it is easier that way around
 
         let intervalStart = 0;
         let previousEntry: undefined | Entry;

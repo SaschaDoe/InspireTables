@@ -6,6 +6,7 @@ import {BaseCreator} from "../baseCreator";
 import type {Genre} from "./genre";
 import {NarrativeMediumTypes} from "../campaign/narrativeMediumTypes";
 import {RollResult} from "../../tables/rollResult";
+import {addList} from "../../tables/content/other/techLevelTable";
 
 export class GenreMixCreator extends BaseCreator {
     narrativeMedium: NarrativeMediumTypes = NarrativeMediumTypes.RPG;
@@ -70,6 +71,12 @@ export class GenreMixCreator extends BaseCreator {
 
             let subGenreWeightResult = new RollResult().withInterval(1, 100, `${subGenre.fullName} weight`, weight);
             creationResult.addRollResult(subGenreWeightResult);
+        }
+
+        genreMix.techList = genreMix.primaryGenre.technologyLevels;
+
+        for (const subGenre of genreMix.subGenres) {
+            genreMix.techList = addList(genreMix.techList,subGenre.technologyLevels);
         }
 
         creationResult.addCreation(genreMix);

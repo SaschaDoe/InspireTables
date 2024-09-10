@@ -7,7 +7,7 @@ import {Table} from "../../tables/table";
 import {ComparisonResult, RelationalOperator} from "../../tables/comparisonResult";
 import {RollResult} from "../../tables/rollResult";
 import {genreToSubGenreMap} from "../../tables/content/genre/genreToSubGenreMap";
-import {reduceList, techLevelsWithProbabilities} from "../../tables/content/other/techLevelTable";
+import {reduceList, techLevelsWithProbabilities, TechLevelTable} from "../../tables/content/other/techLevelTable";
 import {genreToTechLevelMap} from "../../tables/content/genre/genreTechLevelMap";
 
 export class GenreCreator extends BaseCreator {
@@ -45,21 +45,31 @@ export class GenreCreator extends BaseCreator {
         if(hasSubGenre){
             console.log(genre.name);
             let subGenreTableTitle = genreToSubGenreMap[genre.name];
-            console.log(subGenreTableTitle);
-            let subGenreTable = this.tableManager.getTable(subGenreTableTitle);
-            let subGenreResult = subGenreTable.withDice(this.dice).roll();
-            creationResult.addRollResult(subGenreResult);
-            genre.subGenreName = subGenreResult.combinedString;
+            if(subGenreTableTitle){
+                console.log(subGenreTableTitle);
+                let subGenreTable = this.tableManager.getTable(subGenreTableTitle);
+                let subGenreResult = subGenreTable.withDice(this.dice).roll();
+                creationResult.addRollResult(subGenreResult);
+                genre.subGenreName = subGenreResult.combinedString;
+            }
         }
 
         let techLevelVariation = this.dice.rollInterval(1,techLevelsWithProbabilities.length);
+        console.log(genre.name)
         let techLevelProbabilities = genreToTechLevelMap[genre.name];
-        let techLevelTable = new Table();
-        techLevelTable.addProbabilityList(techLevelProbabilities);
+        let techLevelTable: Table;
+        if(techLevelProbabilities){
+            console.log(techLevelProbabilities);
+            techLevelTable = new Table().withTitle(`Tech Level of ${genre.name}`);
+            techLevelTable.addProbabilityList(techLevelProbabilities);
+            console.log(techLevelTable)
+        }else{
+            techLevelTable = new TechLevelTable();
+        }
+
         let techLevelBaseResult = techLevelTable.withDice(this.dice).roll();
         creationResult.addRollResult(techLevelBaseResult);
-        let techLevelBase = techLevelBaseResult.combinedString;
-
+        genre.techLevelBase = techLevelBaseResult.combinedString;
         genre.technologyLevels = reduceList(techLevelProbabilities, techLevelBaseResult.rolledIndex, techLevelVariation);
 
         await this.setId(genre);

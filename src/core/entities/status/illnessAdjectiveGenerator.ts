@@ -1,4 +1,4 @@
-import {techLevels, TechLevelTable} from "../../tables/content/other/techLevelTable";
+import {techLevelsWithProbabilities, TechLevelTable} from "../../tables/content/other/techLevelTable";
 import {realisms, RealismTable} from "../../tables/content/other/realismTable";
 import {Dice} from "../../tables/dice";
 import {probabilities} from "../../tables/content/other/probabilityTable";
@@ -31,7 +31,7 @@ export class IllnessAdjectiveGenerator{
     private dice = new Dice();
     generate(){
         let techLevel = new TechLevelTable().withDice(this.dice).roll().combinedString;
-        let techLevelIndex = techLevels.indexOf(techLevel);
+        let techLevelIndex = techLevelsWithProbabilities.findIndex(([level, _]) => level === techLevel);
 
         let adjectiveProbability = this.dice.getRandom();
 

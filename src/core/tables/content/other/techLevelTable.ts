@@ -17,33 +17,112 @@ export enum TechLevels {
     Intergalactic = "intergalactic",
 }
 
-export function reduceList(list: [string, number][], index: number, variation: number): [string, number][] {
-    let copiedList = list.map(item => [...item]);
+export function reduceList(list: [string, number][], index: number, variation: number) {
+    let copiedList: [string,number][] = list.map(item => [...item]);
+    let totalValue = 0;
+    let nonZeroCount = 0;
 
+    // First pass: set values to 0 for entries outside the range and count non-zero entries
     for (let i = 0; i < copiedList.length; i++) {
         if (i < index || i >= index + variation + 1) {
             copiedList[i][1] = 0;
+        } else {
+            totalValue += copiedList[i][1];
+            nonZeroCount++;
+        }
+    }
+
+    // If all entries are zero, return the list as is
+    if (nonZeroCount === 0) return copiedList;
+
+    // Calculate the scaling factor to make the sum 100
+    const scalingFactor = 100 / totalValue;
+
+    // Second pass: scale the non-zero values
+    for (let i = 0; i < copiedList.length; i++) {
+        if (copiedList[i][1] !== 0) {
+            copiedList[i][1] = Number((copiedList[i][1] * scalingFactor).toFixed(2));
+        }
+    }
+
+    // Final adjustment to ensure sum is exactly 100
+    let sum = copiedList.reduce((acc, item) => acc + item[1], 0);
+    let diff = 100 - sum;
+    if (diff !== 0) {
+        for (let i = copiedList.length - 1; i >= 0; i--) {
+            if (copiedList[i][1] !== 0) {
+                copiedList[i][1] = Number((copiedList[i][1] + diff).toFixed(2));
+                break;
+            }
         }
     }
 
     return copiedList;
 }
 
+export function addList(firstList: [string, number][], secondList: [string, number][]) {
+    // Ensure both lists have the same length
+    if (firstList.length !== secondList.length) {
+        throw new Error("Lists must have the same length");
+    }
+
+    let resultList: [string, number][] = [];
+    let totalSum = 0;
+
+    // First pass: add probabilities and calculate total sum of non-zero values
+    for (let i = 0; i < firstList.length; i++) {
+        const sum = firstList[i][1] + secondList[i][1];
+        if (sum !== 0) {
+            totalSum += sum;
+        }
+        resultList.push([firstList[i][0], sum]);
+    }
+
+    // If all values are zero, return the result as is
+    if (totalSum === 0) {
+        return resultList;
+    }
+
+    // Second pass: normalize non-zero values to sum up to 100
+    const scalingFactor = 100 / totalSum;
+    let finalSum = 0;
+
+    for (let i = 0; i < resultList.length; i++) {
+        if (resultList[i][1] !== 0) {
+            resultList[i][1] = Number((resultList[i][1] * scalingFactor).toFixed(2));
+            finalSum += resultList[i][1];
+        }
+    }
+
+    // Final adjustment to ensure sum is exactly 100
+    let diff = 100 - finalSum;
+    if (diff !== 0) {
+        for (let i = resultList.length - 1; i >= 0; i--) {
+            if (resultList[i][1] !== 0) {
+                resultList[i][1] = Number((resultList[i][1] + diff).toFixed(2));
+                break;
+            }
+        }
+    }
+
+    return resultList;
+}
+
 export const techLevelsWithProbabilities: [string, number][] = [
     [TechLevels.StoneAge, 3],
-    [TechLevels.BronzeAge, 4],
-    [TechLevels.IronAge, 6],
-    [TechLevels.Classical, 8],
-    [TechLevels.Medieval, 16],
-    [TechLevels.Renaissance, 7], //1500 //5.
-    [TechLevels.EarlyModern, 9], //1600
-    [TechLevels.Industrial, 10], //1750 - 1900
-    [TechLevels.Modern, 15], //1900 //8.
-    [TechLevels.AtomicAge, 7],
-    [TechLevels.InformationAge, 14], //10.
-    [TechLevels.Cyber, 11],
-    [TechLevels.SpaceTravel, 5],
-    [TechLevels.Interstellar, 2],
+    [TechLevels.BronzeAge, 3],
+    [TechLevels.IronAge, 5],
+    [TechLevels.Classical, 7],
+    [TechLevels.Medieval, 14],
+    [TechLevels.Renaissance, 6],
+    [TechLevels.EarlyModern, 8],
+    [TechLevels.Industrial, 8],
+    [TechLevels.Modern, 13],
+    [TechLevels.AtomicAge, 6],
+    [TechLevels.InformationAge, 12],
+    [TechLevels.Cyber, 9],
+    [TechLevels.SpaceTravel, 4],
+    [TechLevels.Interstellar, 1],
     [TechLevels.Intergalactic, 1],
 ];
 

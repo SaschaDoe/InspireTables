@@ -14,6 +14,7 @@ import {performanceTechLevelList} from "./performance/performanceTechLevelList";
 import {thrillerTechLevelList} from "./thriller/thrillerTechLevelList";
 import {warTechLevelList} from "./war/warTechLevelList";
 import {westernTechLevelList} from "./western/westernTechLevelList";
+import {mysteryTechLevelList} from "./mystery/mysteryTechLevelList";
 
 
 export const genreToTechLevelMap: { [genre: string]: [string,number][] } = {
@@ -28,6 +29,7 @@ export const genreToTechLevelMap: { [genre: string]: [string,number][] } = {
     "heist": heistTechLevelList,
     "horror": horrorTechLevelList,
     "myth": mythicTechLevelList,
+    "mystery": mysteryTechLevelList,
     "sciFi": sciFiTechLevelList,
     "performance": performanceTechLevelList,
     "thriller": thrillerTechLevelList,

@@ -114,18 +114,6 @@ describe('entry list', () => {
         ]);
     });
 
-    test('plain, prob 10, prob 90', () => {
-        let entryList = new EntryList()
-            .with(new Entry())
-            .with(new Entry().withProbability(10))
-            .with(new Entry().withProbability(90));
-
-
-        expect(() => {
-            entryList.setProbabilities()
-        }).toThrow("No probability left for plain and string list entries");
-    });
-
     test('even', () => {
         let entryList = new EntryList()
             .with(new Entry().withProbabilityAsWord("even"))

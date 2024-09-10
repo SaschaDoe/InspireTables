@@ -26,6 +26,11 @@ export class Table {
         return true;
     }
 
+    withTitle(title: string){
+        this.title = title;
+        return this;
+    }
+
     changeGonzo(gonzoFactor: number){
         this.entryList.gonzoFactor = gonzoFactor;
         this.entryList.setProbabilities();
