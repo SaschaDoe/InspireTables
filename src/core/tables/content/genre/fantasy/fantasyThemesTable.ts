@@ -7,6 +7,7 @@ import {HeroismTheme} from "../../themes/heroismTheme";
 import {UnknownTheme} from "../../themes/unknownTheme";
 import {RealityTheme} from "../../themes/realityTheme";
 import {DavidVsGoliathTheme} from "../../themes/davidVsGoliathTheme";
+import {SoulmatesTheme} from "../../themes/soulmateTheme";
 
 export let fantasyThemes = [
     new MagicTheme().name,
@@ -16,6 +17,7 @@ export let fantasyThemes = [
     new UnknownTheme().name,
     new RealityTheme().name,
     new DavidVsGoliathTheme().name,
+    new SoulmatesTheme().name,
 ];
 
 export const FantasyThemeTableName = "Fantasy Theme";

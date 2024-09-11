@@ -12,6 +12,7 @@ import {LoyaltyTheme} from "../../themes/loyaltyTheme";
 import {PowerTheme} from "../../themes/powerTheme";
 import {CorruptionTheme} from "../../themes/corruptionTheme";
 import {DavidVsGoliathTheme} from "../../themes/davidVsGoliathTheme";
+import {PsychosomaticDualityTheme} from "../../themes/psychosomaticDualityTheme";
 
 export let actionThemes = [
     new HeroismTheme().name,
@@ -23,6 +24,8 @@ export let actionThemes = [
     new PowerTheme().name,
     new CorruptionTheme().name,
     new DavidVsGoliathTheme().name,
+    new PsychosomaticDualityTheme().name,
+    
 ];
 
 export const ActionThemeTableName = "Action Theme";

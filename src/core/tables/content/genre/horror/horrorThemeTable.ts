@@ -17,6 +17,9 @@ import {SurvivalTheme} from "../../themes/survivalTheme";
 import {UnknownTheme} from "../../themes/unknownTheme";
 import {IsolationTheme} from "../../themes/isolationTheme";
 import {InvasionTheme} from "../../themes/invasionTheme";
+import {LossOfControlTheme} from "../../themes/lossOfControl";
+import {PsychosomaticDualityTheme} from "../../themes/psychosomaticDualityTheme";
+import {ApocalypseTheme} from "../../themes/apocalypseTheme";
 
 export let horrorThemes = [
     new CatAndMouseTheme().name,
@@ -30,7 +33,9 @@ export let horrorThemes = [
     new IsolationTheme().name,
     new InvasionTheme().name,
     new JusticeTheme().name,
-    //TODO: Body horror is more than one... it is identity, mind vs body, control, death, social norms...
+    new LossOfControlTheme().name,
+    new PsychosomaticDualityTheme().name,
+    new ApocalypseTheme().name,
 ];
 
 export const HorrorThemeTableName = "Horror Theme";
