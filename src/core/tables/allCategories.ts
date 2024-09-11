@@ -41,8 +41,8 @@ import {
     UnrealisticLessProbableLowTechIllnessAdjectiveTable
 } from "./content/illness/adjective/unrealisticLessProbableLowTechIllnessAdjectiveTable";
 import {RealisticLowTechIllnessAdjectiveTable} from "./content/illness/adjective/realisticLowTechIllnessAdjectiveTable";
-import {GeneralThemesTable} from "./content/genre/theme/generalThemesTable";
-import {FantasyThemesTable} from "./content/genre/theme/fantasyThemesTable";
+import {GeneralThemesTable} from "./content/genre/generalThemesTable";
+import {FantasyThemesTable} from "./content/genre/fantasy/fantasyThemesTable";
 import {CrimeSubGenreTable} from "./content/genre/crime/crimeSubGenreTable";
 import {ExplorerSubGenreTable} from "./content/genre/explorer/explorerSubGenreTable";
 import {FantasySubGenreTable} from "./content/genre/fantasy/fantasySubGenreTable";

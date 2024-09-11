@@ -1,4 +1,4 @@
-import {Table} from "../../../table";
+import {Table} from "../../table";
 
 export const generalThemes: string[] = [
     "love",
@@ -19,7 +19,7 @@ export const generalThemes: string[] = [
     "clash of cultures",
     "role of fate vs. free will",
     "price of ambition",
-    "struggle for freedom"
+    "freedom"
 ];
 
 export const GeneralThemeName = "General theme";

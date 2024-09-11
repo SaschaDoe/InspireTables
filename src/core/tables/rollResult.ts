@@ -3,6 +3,7 @@ import {ComparisonResult} from "./comparisonResult";
 import type {CreationResult} from "../entities/creationResult";
 import {IntervalResult} from "./intervalResult";
 import type {Dice} from "./dice";
+import type {RandomResult} from "./randomResult";
 
 export class RollResult {
     entry: Entry = new Entry();
@@ -10,10 +11,16 @@ export class RollResult {
     creationResults: CreationResult[] = [];
     rolledIndex = -1;
     comparison: ComparisonResult | null = null;
+    randomResult: RandomResult | null = null;
     intervalResult: IntervalResult | null = null;
 
     withEntry(entry: Entry){
         this.entry = entry;
+        return this;
+    }
+
+    public withRandomResult(randomResult: RandomResult): RollResult{
+        this.randomResult = randomResult;
         return this;
     }
 
@@ -43,6 +50,10 @@ export class RollResult {
     get combinedString(): string {
         if (this.comparison) {
             return this.comparison.toString();
+        }
+
+        if(this.randomResult){
+            return this.randomResult.toString();
         }
 
         const parts: string[] = [];

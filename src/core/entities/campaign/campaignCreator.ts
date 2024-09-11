@@ -11,11 +11,13 @@ import type {World} from "../world/world";
 import {getStore} from "../persist/stores";
 import {RollResult} from "../../tables/rollResult";
 import {ComparisonResult, RelationalOperator} from "../../tables/comparisonResult";
-import {GeneralThemesTable} from "../../tables/content/genre/theme/generalThemesTable";
+import {GeneralThemesTable} from "../../tables/content/genre/generalThemesTable";
 import {IntervalResult} from "../../tables/intervalResult";
 import type {Table} from "../../tables/table";
-import {FantasyThemesTable} from "../../tables/content/genre/theme/fantasyThemesTable";
+import {FantasyThemesTable} from "../../tables/content/genre/fantasy/fantasyThemesTable";
 import {genreToSubGenreMap} from "../../tables/content/genre/genreToSubGenreMap";
+import {RandomResult} from "../../tables/randomResult";
+import {genreToThemeMap} from "../../tables/content/themes/genreToThemeTableMap";
 
 export class CampaignCreator extends BaseCreator {
     narrativeMedium: NarrativeMediumTypes = NarrativeMediumTypes.RPG;
@@ -34,7 +36,13 @@ export class CampaignCreator extends BaseCreator {
         creationResult.addCreationResult(genreCreationResult);
         campaign.settings = new Settings();
         campaign.settings.narrativeMediumType = this.narrativeMedium;
+
+        //Gives you also the TechLevel for setting and theme
         campaign.genreMix = genreCreationResult.getCreation() as GenreMix;
+
+        campaign.themes = this.getThemesBy(campaign.genreMix, creationResult);
+        // TODO make attribute or object for campaign.themeStatements
+
         let numberOfThemes = this.dice.rollInterval(2,5);
         let rollResult = new RollResult()
             .withInterval(2,3,"number of themes", numberOfThemes);
@@ -46,14 +54,14 @@ export class CampaignCreator extends BaseCreator {
                 0.7,
                 "has general theme");
             let rollResul = new RollResult().withComparisonResult(comparisonResult);
-            genreCreationResult.addRollResult(rollResult);
+            genreCreationResult.addRollResult(rollResul);
 
             let themeResult: RollResult;
             if(comparisonResult.compare()){
                 themeResult = new GeneralThemesTable().withDice(this.dice).roll();
                 genreCreationResult.addRollResult(themeResult);
             }else{
-                let randomChosenGenreName = this.getRandomWeightedGenre(campaign.genreMix.genreWeights);
+                let randomChosenGenreName = this.getRandomWeightedGenre(campaign.genreMix.genreWeights, creationResult);
                 console.log(randomChosenGenreName);
                 let randomChosenGenre = genreToSubGenreMap[randomChosenGenreName];
                 if(randomChosenGenre){
@@ -62,21 +70,28 @@ export class CampaignCreator extends BaseCreator {
                     console.log(table);
                     themeResult = table.withDice(this.dice).roll();
                     genreCreationResult.addRollResult(themeResult);
+                    campaign.themes.push(themeResult.combinedString);
                 }
             }
-            campaign.themes.push(themeResult.combinedString);
+
         }
         await this.setId(campaign);
         return creationResult;
     }
 
-    getRandomWeightedGenre(genreWeights: Map<string, number>): string {
+    getRandomWeightedGenre(genreWeights: Map<string, number>, creationResult: CreationResult): string {
         const totalWeight = Array.from(genreWeights.values()).reduce((sum, weight) => sum + weight, 0);
-        let randomNumber = this.dice.getRandom() * totalWeight;
+        let randomResult = new RandomResult();
+        let randomNumber = this.dice.getRandom();
+        randomResult.result = randomNumber
+        randomResult.description = "random number for choosing genre from genre mix (with weights)"
+        let rollResult = new RollResult().withRandomResult(randomResult);
+        creationResult.addRollResult(rollResult);
+        let randomWeightedNumber = randomNumber * totalWeight;
 
         for (const [genre, weight] of genreWeights.entries()) {
-            randomNumber -= weight;
-            if (randomNumber <= 0) {
+            randomWeightedNumber -= weight;
+            if (randomWeightedNumber <= 0) {
                 return genre;
             }
         }
@@ -99,5 +114,44 @@ export class CampaignCreator extends BaseCreator {
         let campaign = entity as Campaign;
         let campaignStore = await getStore('campaignStore');
         await campaignStore.saveEntity(campaign);
+    }
+
+    private getThemesBy(genreMix: GenreMix, creationResult: CreationResult) {
+        //TODO: get themes by genre // and tech level...
+        //get theme from genre or from tech
+        let themes: string[] = [];
+        let numberOfThemes = this.getRandomNumberBetween(1,5)
+        let numberOfThemesResult = new RandomResult()
+            .withDescription("random number for number of themes of a campaign 1-5")
+            .withResult(numberOfThemes);
+        let randomOfThemesRollResult = new RollResult().withRandomResult(numberOfThemesResult);
+        creationResult.addRollResult(randomOfThemesRollResult);
+
+        for (let i = 0; i < numberOfThemes; i++) {
+            let comparisonResult = new ComparisonResult(
+                this.dice.getRandom(),
+                RelationalOperator.GREATER,
+                0.7,
+                "theme from tech level not from genre");
+            let rollResul = new RollResult().withComparisonResult(comparisonResult);
+            creationResult.addRollResult(rollResul);
+
+            if(comparisonResult.compare()){
+                //TODO: theme from tech
+            }else{
+                let randomChosenGenreName = this.getRandomWeightedGenre(genreMix.genreWeights, creationResult);
+                console.log(`get theme by genre: ${randomChosenGenreName}`);
+                let themeTable = genreToThemeMap[randomChosenGenreName];
+                let themeResult = this.tableManager.getTable(themeTable).withDice(this.dice).roll();
+                creationResult.addRollResult(themeResult);
+                themes.push(themeResult.combinedString);
+            }
+        }
+
+        return themes;
+    }
+
+    getRandomNumberBetween(min: number, max: number): number {
+        return Math.floor(this.dice.getRandom() * (max - min + 1)) + min;
     }
 }
