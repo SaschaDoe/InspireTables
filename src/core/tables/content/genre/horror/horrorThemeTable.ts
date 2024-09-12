@@ -20,6 +20,10 @@ import {InvasionTheme} from "../../themes/invasionTheme";
 import {LossOfControlTheme} from "../../themes/lossOfControl";
 import {PsychosomaticDualityTheme} from "../../themes/psychosomaticDualityTheme";
 import {ApocalypseTheme} from "../../themes/apocalypseTheme";
+import {InnocenceTheme} from "../../themes/innocenceTheme";
+import {GuiltTheme} from "../../themes/guiltTheme";
+import {TraumaTheme} from "../../themes/traumaTheme";
+import {FutilityOfStruggleTheme} from "../../themes/futilityOfStruggleTheme";
 
 export let horrorThemes = [
     new CatAndMouseTheme().name,
@@ -36,6 +40,10 @@ export let horrorThemes = [
     new LossOfControlTheme().name,
     new PsychosomaticDualityTheme().name,
     new ApocalypseTheme().name,
+    new InnocenceTheme().name,
+    new GuiltTheme().name,
+    new TraumaTheme().name,
+    new FutilityOfStruggleTheme().name,
 ];
 
 export const HorrorThemeTableName = "Horror Theme";

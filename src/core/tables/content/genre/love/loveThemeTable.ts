@@ -15,6 +15,9 @@ import {TabooLoveTheme} from "../../themes/tabooTheme";
 import {LoveTriangleTheme} from "../../themes/loveTriangleTheme";
 import {FakeRelationshipTheme} from "../../themes/fakeRelationshipTheme";
 import {SoulmatesTheme} from "../../themes/soulmateTheme";
+import {InnocenceTheme} from "../../themes/innocenceTheme";
+import {ObsessionTheme} from "../../themes/obsessionTheme";
+import {TrustTheme} from "../../themes/trustTheme";
 
 export let loveThemes = [
     new StarCrossedLoversTheme().name,
@@ -33,6 +36,9 @@ export let loveThemes = [
     new LoveTriangleTheme().name,
     new FakeRelationshipTheme().name,
     new SoulmatesTheme().name,
+    new InnocenceTheme().name,
+    new ObsessionTheme().name,
+    new TrustTheme().name,
 ];
 
 export const LoveThemeTableName = "Love Theme";

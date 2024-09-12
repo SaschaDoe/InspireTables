@@ -16,6 +16,10 @@ import {TruthTheme} from "../../themes/truthTheme";
 import {SearchTheme} from "../../themes/searchTheme";
 import {GreedTheme} from "../../themes/greedTheme";
 import {TeamworkTheme} from "../../themes/teamworkTheme";
+import {BereavementTheme} from "../../themes/bereavementTheme";
+import {RecallTheme} from "../../themes/recallTheme";
+import {AgonyTheme} from "../../themes/agonyTheme";
+import {MentorshipTheme} from "../../themes/mentorshipTheme";
 
 export let crimeThemes = [
     new CatAndMouseTheme().name,
@@ -30,6 +34,10 @@ export let crimeThemes = [
     new SearchTheme().name,
     new GreedTheme().name,
     new TeamworkTheme().name,
+    new BereavementTheme().name,
+    new RecallTheme().name,
+    new AgonyTheme().name,
+    new MentorshipTheme().name,
 ];
 
 export const CrimeThemeTableName = "Crime Theme";

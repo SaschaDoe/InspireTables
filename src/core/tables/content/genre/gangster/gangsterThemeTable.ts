@@ -10,6 +10,8 @@ import {GreedTheme} from "../../themes/greedTheme";
 import {FamilyTheme} from "../../themes/familyTheme";
 import {DavidVsGoliathTheme} from "../../themes/davidVsGoliathTheme";
 import {IsolationTheme} from "../../themes/isolationTheme";
+import {PriceOfSuccessTheme} from "../../themes/priceOfSuccessTheme";
+import {FutilityOfStruggleTheme} from "../../themes/futilityOfStruggleTheme";
 
 export let gangsterThemes = [
     new PowerTheme().name,
@@ -23,6 +25,8 @@ export let gangsterThemes = [
     new FamilyTheme().name,
     new DavidVsGoliathTheme().name,
     new IsolationTheme().name,
+    new PriceOfSuccessTheme().name,
+    new FutilityOfStruggleTheme().name
 ];
 
 export const GangsterThemeTableName = "Gangster Theme";

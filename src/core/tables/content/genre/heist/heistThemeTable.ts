@@ -10,6 +10,7 @@ import {GreedTheme} from "../../themes/greedTheme";
 import {TeamworkTheme} from "../../themes/teamworkTheme";
 import {TechnologicalInnovationTheme} from "../../themes/technologicalInovationTheme";
 import {DavidVsGoliathTheme} from "../../themes/davidVsGoliathTheme";
+import {ObsessionTheme} from "../../themes/obsessionTheme";
 
 export let heistThemes = [
     new JusticeTheme().name,
@@ -18,6 +19,7 @@ export let heistThemes = [
     new TechnologicalInnovationTheme().name,
     new LoyaltyTheme().name,
     new DavidVsGoliathTheme().name,
+    new ObsessionTheme().name,
 ];
 
 export const HeistThemeTableName = "Heist Theme";
