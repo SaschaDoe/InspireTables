@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const TrustThemeName = "trust";
+
 export class TrustTheme extends Theme {
     constructor() {
         super();
-        this.name = "trust";
+        this.name = TrustThemeName;
         this.description = "Explore the complexities of trust, its formation, breakdown, and impact on relationships and society";
 
         this.sources.push(

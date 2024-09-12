@@ -1,40 +1,40 @@
 import {Table} from "../../../table";
-import {JusticeTheme} from "../../themes/justiceTheme";
-import {TruthTheme} from "../../themes/truthTheme";
-import {CatAndMouseTheme} from "../../themes/catAndMouseTheme";
-import {GoodVsEvilTheme} from "../../themes/godVsEvilTheme";
-import {MistakenIdentityTheme} from "../../themes/mistakenIdentity";
-import {PowerTheme} from "../../themes/powerTheme";
-import {SearchTheme} from "../../themes/searchTheme";
-import {IsolationTheme} from "../../themes/isolationTheme";
-import {TeamworkTheme} from "../../themes/teamworkTheme";
-import {TimeTheme} from "../../themes/timeTheme";
-import {UnknownTheme} from "../../themes/unknownTheme";
-import {ObsessionTheme} from "../../themes/obsessionTheme";
-import {RevengeTheme} from "../../themes/revengeTheme";
-import {RecallTheme} from "../../themes/recallTheme";
-import {TrustTheme} from "../../themes/trustTheme";
-import {RealityTheme} from "../../themes/realityTheme";
-import {TechnologicalInnovationTheme} from "../../themes/technologicalInovationTheme";
+import {JusticeThemeName} from "../../themes/justiceTheme";
+import {TruthThemeName} from "../../themes/truthTheme";
+import {CatAndMouseThemeName} from "../../themes/catAndMouseTheme";
+import {GoodVsEvilThemeName} from "../../themes/godVsEvilTheme";
+import {MistakenIdentityThemeName} from "../../themes/mistakenIdentity";
+import {PowerThemeName} from "../../themes/powerTheme";
+import {SearchThemeName} from "../../themes/searchTheme";
+import {IsolationThemeName} from "../../themes/isolationTheme";
+import {TeamworkThemeName} from "../../themes/teamworkTheme";
+import {TimeThemeName} from "../../themes/timeTheme";
+import {UnknownThemeName} from "../../themes/unknownTheme";
+import {ObsessionThemeName} from "../../themes/obsessionTheme";
+import {RevengeThemeName} from "../../themes/revengeTheme";
+import {RecallThemeName} from "../../themes/recallTheme";
+import {TrustThemeName} from "../../themes/trustTheme";
+import {RealityThemeName} from "../../themes/realityTheme";
+import {TechnologicalInnovationThemeName} from "../../themes/technologicalInovationTheme";
 
 export let mysteryThemes = [
-    new JusticeTheme().name,
-    new TruthTheme().name,
-    new CatAndMouseTheme().name,
-    new GoodVsEvilTheme().name,
-    new MistakenIdentityTheme().name,
-    new PowerTheme().name,
-    new SearchTheme().name,
-    new IsolationTheme().name,
-    new TeamworkTheme().name,
-    new TimeTheme().name,
-    new UnknownTheme().name,
-    new ObsessionTheme().name,
-    new RevengeTheme().name,
-    new RecallTheme().name,
-    new TrustTheme().name,
-    new RealityTheme().name,
-    new TechnologicalInnovationTheme().name,
+    JusticeThemeName,
+    TruthThemeName,
+    CatAndMouseThemeName,
+    GoodVsEvilThemeName,
+    MistakenIdentityThemeName,
+    PowerThemeName,
+    SearchThemeName,
+    IsolationThemeName,
+    TeamworkThemeName,
+    TimeThemeName,
+    UnknownThemeName,
+    ObsessionThemeName,
+    RevengeThemeName,
+    RecallThemeName,
+    TrustThemeName,
+    RealityThemeName,
+    TechnologicalInnovationThemeName,
 ];
 
 export const MysteryThemeTableName = "Mystery Theme";

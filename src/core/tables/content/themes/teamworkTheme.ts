@@ -1,10 +1,12 @@
 import {Theme} from "./theme";
 import {Source} from "./source";
 
+export const TeamworkThemeName = "teamwork";
+
 export class TeamworkTheme extends Theme {
     constructor() {
         super();
-        this.name = "teamwork";
+        this.name = TeamworkThemeName;
         this.description = "Explore the concept of teamwork, collaboration, and collective effort across various contexts and genres";
         this.sources.push(
             new Source()

@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const NormalityMadnessBoundaryThemeName = "the thin line between normalcy and madness";
+
 export class NormalityMadnessBoundaryTheme extends Theme {
     constructor() {
         super();
-        this.name = "the thin line between normalcy and madness";
+        this.name = NormalityMadnessBoundaryThemeName;
         this.description = "Exploration of the blurred boundaries between socially accepted behavior and actions deemed abnormal or insane, questioning the nature of sanity and social norms.";
         this.sources.push(
             new Source()

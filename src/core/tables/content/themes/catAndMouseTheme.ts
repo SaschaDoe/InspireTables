@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const CatAndMouseThemeName = "cat and mouse";
+
 export class CatAndMouseTheme extends Theme {
     constructor() {
         super();
-        this.name = "cat and mouse";
+        this.name = CatAndMouseThemeName;
         this.description = "The intense psychological and strategic interplay between two opposing forces, characterized by pursuit, evasion, and complex power dynamics.";
         this.sources.push(
             new Source()

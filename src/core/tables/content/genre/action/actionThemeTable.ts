@@ -1,31 +1,32 @@
-import {MagicTheme} from "../../themes/magicTheme";
-import {DestinyTheme} from "../../themes/destinyTheme";
-import {GoodVsEvilTheme} from "../../themes/godVsEvilTheme";
-import {HeroismTheme} from "../../themes/heroismTheme";
-import {UnknownTheme} from "../../themes/unknownTheme";
-import {RealityTheme} from "../../themes/realityTheme";
+import {GoodVsEvilThemeName} from "../../themes/godVsEvilTheme";
+import {HeroismThemeName} from "../../themes/heroismTheme";
 import {Table} from "../../../table";
-import {RevengeTheme} from "../../themes/revengeTheme";
-import {SurvivalTheme} from "../../themes/survivalTheme";
-import {JusticeTheme} from "../../themes/justiceTheme";
-import {LoyaltyTheme} from "../../themes/loyaltyTheme";
-import {PowerTheme} from "../../themes/powerTheme";
-import {CorruptionTheme} from "../../themes/corruptionTheme";
-import {DavidVsGoliathTheme} from "../../themes/davidVsGoliathTheme";
-import {PsychosomaticDualityTheme} from "../../themes/psychosomaticDualityTheme";
+import {RevengeThemeName} from "../../themes/revengeTheme";
+import {SurvivalThemeName} from "../../themes/survivalTheme";
+import {JusticeThemeName} from "../../themes/justiceTheme";
+import {LoyaltyThemeName} from "../../themes/loyaltyTheme";
+import {PowerThemeName} from "../../themes/powerTheme";
+import {CorruptionThemeName} from "../../themes/corruptionTheme";
+import {DavidVsGoliathThemeName} from "../../themes/davidVsGoliathTheme";
+import {PsychosomaticDualityThemeName} from "../../themes/psychosomaticDualityTheme";
+import {InnocenceThemeName} from "../../themes/innocenceTheme";
+import {TechnologicalInnovationThemeName} from "../../themes/technologicalInovationTheme";
+import {PersonalGrowthThemeName} from "../../themes/personalGrowthTheme";
 
 export let actionThemes = [
-    new HeroismTheme().name,
-    new GoodVsEvilTheme().name,
-    new RevengeTheme().name,
-    new SurvivalTheme().name,
-    new JusticeTheme().name,
-    new LoyaltyTheme().name,
-    new PowerTheme().name,
-    new CorruptionTheme().name,
-    new DavidVsGoliathTheme().name,
-    new PsychosomaticDualityTheme().name,
-    
+    HeroismThemeName,
+    GoodVsEvilThemeName,
+    RevengeThemeName,
+    SurvivalThemeName,
+    JusticeThemeName,
+    LoyaltyThemeName,
+    PowerThemeName,
+    CorruptionThemeName,
+    DavidVsGoliathThemeName,
+    PsychosomaticDualityThemeName,
+    InnocenceThemeName,
+    TechnologicalInnovationThemeName,
+    PersonalGrowthThemeName,
 ];
 
 export const ActionThemeTableName = "Action Theme";

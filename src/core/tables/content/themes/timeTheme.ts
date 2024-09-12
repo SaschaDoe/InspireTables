@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const TimeThemeName = "time";
+
 export class TimeTheme extends Theme {
     constructor() {
         super();
-        this.name = "time";
+        this.name = TimeThemeName;
         this.description = "The exploration of time's nature, impact, and manipulation in narratives, encompassing its passage, perception, and consequences on characters and events.";
         this.sources.push(
             new Source()

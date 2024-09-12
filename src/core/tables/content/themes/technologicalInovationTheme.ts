@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const TechnologicalInnovationThemeName = "technological innovation";
+
 export class TechnologicalInnovationTheme extends Theme {
     constructor() {
         super();
-        this.name = "technological innovation";
+        this.name = TechnologicalInnovationThemeName;
         this.description = "The exploration of new technologies and their impact on individuals, society, and the human condition, often highlighting both the potential benefits and unforeseen consequences of innovation.";
         this.sources.push(
             new Source()

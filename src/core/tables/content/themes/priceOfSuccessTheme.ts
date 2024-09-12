@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const PriceOfSuccessThemeName = "priceOfSuccess";
+
 export class PriceOfSuccessTheme extends Theme {
     constructor() {
         super();
-        this.name = "priceOfSuccess";
+        this.name = PriceOfSuccessThemeName;
         this.description = "Explore the concept of the price of success, including personal, social, and ethical costs associated with achieving goals and ambitions";
         this.sources.push(
             new Source()

@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const SearchThemeName = "search";
+
 export class SearchTheme extends Theme {
     constructor() {
         super();
-        this.name = "search";
+        this.name = SearchThemeName;
         this.description = "The pursuit of something lost, hidden, or desired, often involving physical, emotional, or intellectual exploration.";
         this.sources.push(
             new Source()

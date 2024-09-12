@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const FamilyThemeName = "family";
+
 export class FamilyTheme extends Theme {
     constructor() {
         super();
-        this.name = "family";
+        this.name = FamilyThemeName;
         this.description = "The complex dynamics, relationships, and experiences within immediate and extended family units.";
         this.sources.push(
             new Source()

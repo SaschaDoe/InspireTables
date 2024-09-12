@@ -1,10 +1,12 @@
 import {Theme} from "./theme";
 import {Source} from "./source";
 
+export const DestinyThemeName = "destiny";
+
 export class DestinyTheme extends Theme {
     constructor() {
         super();
-        this.name = "destiny";
+        this.name = DestinyThemeName;
         this.description = "Explore the concept of destiny through various cultural and mythological lenses";
         this.sources.push(
             new Source()

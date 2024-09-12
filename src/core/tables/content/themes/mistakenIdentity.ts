@@ -1,6 +1,8 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const MistakenIdentityThemeName = "mistaken identity";
+
 export class MistakenIdentityTheme extends Theme {
     constructor() {
         super();

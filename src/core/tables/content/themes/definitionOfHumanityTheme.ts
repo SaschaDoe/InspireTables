@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const DefinitionOfHumanityThemeName = "definition-of-humanity";
+
 export class DefinitionOfHumanityTheme extends Theme {
     constructor() {
         super();
-        this.name = "definition-of-humanity";
+        this.name = DefinitionOfHumanityThemeName;
         this.description = "Explore the concept of humanity through comparisons with non-human entities and diverse cultural perspectives";
 
         this.sources.push(

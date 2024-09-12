@@ -1,10 +1,12 @@
 import {Theme} from "./theme";
 import {Source} from "./source";
 
+export const RevengeThemeName = "revenge";
+
 export class RevengeTheme extends Theme {
     constructor() {
         super();
-        this.name = "revenge";
+        this.name = RevengeThemeName;
         this.description = "Explore the concept of revenge, its motivations, consequences, and moral implications";
         this.sources.push(
             new Source()

@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const PublicPerceptionThemeName = "public perception";
+
 export class PublicPerceptionTheme extends Theme {
     constructor() {
         super();
-        this.name = "public perception";
+        this.name = PublicPerceptionThemeName;
         this.description = "Exploration of how public opinion is formed, manipulated, and impacts individuals and society, examining the power of media, rumors, and collective beliefs.";
         this.sources.push(
             new Source()

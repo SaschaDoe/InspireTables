@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const ComingOfAgeThemeName = "coming of age";
+
 export class ComingOfAgeTheme extends Theme {
     constructor() {
         super();
-        this.name = "coming of age";
+        this.name = ComingOfAgeThemeName;
         this.description = "The transitional journey from childhood to adulthood, marked by significant personal growth, self-discovery, and societal challenges.";
         this.sources.push(
             new Source()

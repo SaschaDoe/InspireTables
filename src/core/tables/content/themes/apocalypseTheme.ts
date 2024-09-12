@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const ApocalypseThemeName = "apocalypse";
+
 export class ApocalypseTheme extends Theme {
     constructor() {
         super();
-        this.name = "apocalypse";
+        this.name = ApocalypseThemeName;
         this.description = "Explore the concept of apocalypse, its causes, consequences, and impact on individuals and society across various scenarios and scales";
         this.sources.push(
             new Source()

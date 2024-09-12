@@ -1,10 +1,12 @@
 import {Theme} from "./theme";
 import {Source} from "./source";
 
+export const RealityThemeName = "reality";
+
 export class RealityTheme extends Theme {
     constructor() {
         super();
-        this.name = "reality";
+        this.name = RealityThemeName;
         this.description = "Explore the concept of reality, including its nature, perception, and the boundaries between what's real and what isn't";
         this.sources.push(
             new Source()

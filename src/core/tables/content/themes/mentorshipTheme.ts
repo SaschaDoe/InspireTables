@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const MentorshipThemeName = "mentorship";
+
 export class MentorshipTheme extends Theme {
     constructor() {
         super();
-        this.name = "mentorship";
+        this.name = MentorshipThemeName;
         this.description = "Explore the concept of mentorship in various contexts, including personal development, professional growth, and fictional narratives";
         this.sources.push(
             new Source()

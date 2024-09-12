@@ -1,44 +1,44 @@
 import {Table} from "../../../table";
-import {StarCrossedLoversTheme} from "../../themes/starCrossedLoversTheme";
-import {AttractionTheme} from "../../themes/attractionTheme";
-import {FriendsToLoversTheme} from "../../themes/friendsToLoversTheme";
-import {SecondChanceRomanceTheme} from "../../themes/secondChanceRomanceTheme";
-import {CultureClashesTheme} from "../../themes/cultureClashTheme";
-import {DisillusionmentTheme} from "../../themes/disillusionmentTheme";
-import {FamilyTheme} from "../../themes/familyTheme";
-import {ComingOfAgeTheme} from "../../themes/comingOfAgeTheme";
-import {LoyaltyTheme} from "../../themes/loyaltyTheme";
-import {PersonalGrowthTheme} from "../../themes/personalGrowthTheme";
-import {RevengeTheme} from "../../themes/revengeTheme";
-import {TeamworkTheme} from "../../themes/teamworkTheme";
-import {TabooLoveTheme} from "../../themes/tabooTheme";
-import {LoveTriangleTheme} from "../../themes/loveTriangleTheme";
-import {FakeRelationshipTheme} from "../../themes/fakeRelationshipTheme";
-import {SoulmatesTheme} from "../../themes/soulmateTheme";
-import {InnocenceTheme} from "../../themes/innocenceTheme";
-import {ObsessionTheme} from "../../themes/obsessionTheme";
-import {TrustTheme} from "../../themes/trustTheme";
+import {StarCrossedLoversThemeName} from "../../themes/starCrossedLoversTheme";
+import {AttractionThemeName} from "../../themes/attractionTheme";
+import {FriendsToLoversThemeName} from "../../themes/friendsToLoversTheme";
+import {SecondChanceRomanceThemeName} from "../../themes/secondChanceRomanceTheme";
+import {CultureClashesThemeName} from "../../themes/cultureClashTheme";
+import {DisillusionmentThemeName} from "../../themes/disillusionmentTheme";
+import {FamilyThemeName} from "../../themes/familyTheme";
+import {ComingOfAgeThemeName} from "../../themes/comingOfAgeTheme";
+import {LoyaltyThemeName} from "../../themes/loyaltyTheme";
+import {PersonalGrowthThemeName} from "../../themes/personalGrowthTheme";
+import {RevengeThemeName} from "../../themes/revengeTheme";
+import {TeamworkThemeName} from "../../themes/teamworkTheme";
+import {TabooLoveThemeName} from "../../themes/tabooTheme";
+import {LoveTriangleThemeName} from "../../themes/loveTriangleTheme";
+import {FakeRelationshipThemeName} from "../../themes/fakeRelationshipTheme";
+import {SoulmatesThemeName} from "../../themes/soulmateTheme";
+import {InnocenceThemeName} from "../../themes/innocenceTheme";
+import {ObsessionThemeName} from "../../themes/obsessionTheme";
+import {TrustThemeName} from "../../themes/trustTheme";
 
 export let loveThemes = [
-    new StarCrossedLoversTheme().name,
-    new AttractionTheme().name,
-    new FriendsToLoversTheme().name,
-    new SecondChanceRomanceTheme().name,
-    new CultureClashesTheme().name,
-    new DisillusionmentTheme().name,
-    new FamilyTheme().name,
-    new ComingOfAgeTheme().name,
-    new LoyaltyTheme().name,
-    new PersonalGrowthTheme().name,
-    new RevengeTheme().name,
-    new TeamworkTheme().name,
-    new TabooLoveTheme().name,
-    new LoveTriangleTheme().name,
-    new FakeRelationshipTheme().name,
-    new SoulmatesTheme().name,
-    new InnocenceTheme().name,
-    new ObsessionTheme().name,
-    new TrustTheme().name,
+    StarCrossedLoversThemeName,
+    AttractionThemeName,
+    FriendsToLoversThemeName,
+    SecondChanceRomanceThemeName,
+    CultureClashesThemeName,
+    DisillusionmentThemeName,
+    FamilyThemeName,
+    ComingOfAgeThemeName,
+    LoyaltyThemeName,
+    PersonalGrowthThemeName,
+    RevengeThemeName,
+    TeamworkThemeName,
+    TabooLoveThemeName,
+    LoveTriangleThemeName,
+    FakeRelationshipThemeName,
+    SoulmatesThemeName,
+    InnocenceThemeName,
+    ObsessionThemeName,
+    TrustThemeName,
 ];
 
 export const LoveThemeTableName = "Love Theme";

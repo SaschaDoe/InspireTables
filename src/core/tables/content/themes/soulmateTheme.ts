@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const SoulmatesThemeName = "soulmates";
+
 export class SoulmatesTheme extends Theme {
     constructor() {
         super();
-        this.name = "soulmates";
+        this.name = SoulmatesThemeName;
         this.description = "Explore profound connections between individuals that transcend conventional relationships, across various genres and contexts";
         this.sources.push(
             new Source()

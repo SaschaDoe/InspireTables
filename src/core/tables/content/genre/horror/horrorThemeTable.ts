@@ -4,46 +4,46 @@ import {LoyaltyTheme} from "../../themes/loyaltyTheme";
 import {RevengeTheme} from "../../themes/revengeTheme";
 import {DisillusionmentTheme} from "../../themes/disillusionmentTheme";
 import {CorruptionTheme} from "../../themes/corruptionTheme";
-import {GoodVsEvilTheme} from "../../themes/godVsEvilTheme";
-import {JusticeTheme} from "../../themes/justiceTheme";
+import {GoodVsEvilThemeName} from "../../themes/godVsEvilTheme";
+import {JusticeThemeName} from "../../themes/justiceTheme";
 import {GreedTheme} from "../../themes/greedTheme";
-import {TeamworkTheme} from "../../themes/teamworkTheme";
+import {TeamworkThemeName} from "../../themes/teamworkTheme";
 import {TechnologicalInnovationTheme} from "../../themes/technologicalInovationTheme";
-import {DavidVsGoliathTheme} from "../../themes/davidVsGoliathTheme";
-import {CatAndMouseTheme} from "../../themes/catAndMouseTheme";
-import {DeathTheme} from "../../themes/deathTheme";
-import {NatureAsEnemyTheme} from "../../themes/NatureAsEnemyTheme";
-import {SurvivalTheme} from "../../themes/survivalTheme";
-import {UnknownTheme} from "../../themes/unknownTheme";
-import {IsolationTheme} from "../../themes/isolationTheme";
-import {InvasionTheme} from "../../themes/invasionTheme";
-import {LossOfControlTheme} from "../../themes/lossOfControl";
-import {PsychosomaticDualityTheme} from "../../themes/psychosomaticDualityTheme";
-import {ApocalypseTheme} from "../../themes/apocalypseTheme";
-import {InnocenceTheme} from "../../themes/innocenceTheme";
-import {GuiltTheme} from "../../themes/guiltTheme";
-import {TraumaTheme} from "../../themes/traumaTheme";
-import {FutilityOfStruggleTheme} from "../../themes/futilityOfStruggleTheme";
+import {DavidVsGoliathThemeName} from "../../themes/davidVsGoliathTheme";
+import {CatAndMouseThemeName} from "../../themes/catAndMouseTheme";
+import {DeathThemeName} from "../../themes/deathTheme";
+import {NatureAsEnemyThemeName} from "../../themes/NatureAsEnemyTheme";
+import {SurvivalThemeName} from "../../themes/survivalTheme";
+import {UnknownThemeName} from "../../themes/unknownTheme";
+import {IsolationThemeName} from "../../themes/isolationTheme";
+import {InvasionThemeName} from "../../themes/invasionTheme";
+import {LossOfControlThemeName} from "../../themes/lossOfControl";
+import {PsychosomaticDualityThemeName} from "../../themes/psychosomaticDualityTheme";
+import {ApocalypseThemeName} from "../../themes/apocalypseTheme";
+import {InnocenceThemeName} from "../../themes/innocenceTheme";
+import {GuiltThemeName} from "../../themes/guiltTheme";
+import {TraumaThemeName} from "../../themes/traumaTheme";
+import {FutilityOfStruggleThemeName} from "../../themes/futilityOfStruggleTheme";
 
 export let horrorThemes = [
-    new CatAndMouseTheme().name,
-    new DavidVsGoliathTheme().name,
-    new DeathTheme().name,
-    new GoodVsEvilTheme().name,
-    new NatureAsEnemyTheme().name,
-    new SurvivalTheme().name,
-    new TeamworkTheme().name,
-    new UnknownTheme().name,
-    new IsolationTheme().name,
-    new InvasionTheme().name,
-    new JusticeTheme().name,
-    new LossOfControlTheme().name,
-    new PsychosomaticDualityTheme().name,
-    new ApocalypseTheme().name,
-    new InnocenceTheme().name,
-    new GuiltTheme().name,
-    new TraumaTheme().name,
-    new FutilityOfStruggleTheme().name,
+    CatAndMouseThemeName,
+    DavidVsGoliathThemeName,
+    DeathThemeName,
+    GoodVsEvilThemeName,
+    NatureAsEnemyThemeName,
+    SurvivalThemeName,
+    TeamworkThemeName,
+    UnknownThemeName,
+    IsolationThemeName,
+    InvasionThemeName,
+    JusticeThemeName,
+    LossOfControlThemeName,
+    PsychosomaticDualityThemeName,
+    ApocalypseThemeName,
+    InnocenceThemeName,
+    GuiltThemeName,
+    TraumaThemeName,
+    FutilityOfStruggleThemeName,
 ];
 
 export const HorrorThemeTableName = "Horror Theme";

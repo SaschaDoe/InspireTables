@@ -2,9 +2,8 @@ import {Category, mapCategories} from "../../tables/category";
 import {TableStorageManager} from "./tableStorageManager";
 import type {FunctionFactory} from "../../tables/core/entry/functionFactory";
 import type {StorageStrategy} from "./storageStrategy";
-import {MainGenreTable} from "../../tables/content/genre/mainGenres";
 import type {Table} from "../../tables/table";
-import {getStorageStrategy, selectedGlobalStore, selectedProfileStore} from "./stores";
+import {selectedGlobalStore, selectedProfileStore} from "./stores";
 import {get} from "svelte/store";
 import {allCategories} from "../../tables/allCategories";
 

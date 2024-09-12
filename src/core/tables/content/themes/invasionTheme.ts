@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const InvasionThemeName = "invasion";
+
 export class InvasionTheme extends Theme {
     constructor() {
         super();
-        this.name = "invasion";
+        this.name = InvasionThemeName;
         this.description = "Explore the concept of invasion across various scales: body, home, and society";
         this.sources.push(
             new Source()

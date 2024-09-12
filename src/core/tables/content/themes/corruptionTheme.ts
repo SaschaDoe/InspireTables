@@ -1,10 +1,12 @@
 import {Theme} from "./theme";
 import {Source} from "./source";
 
+export const CorruptionThemeName = "corruption";
+
 export class CorruptionTheme extends Theme {
     constructor() {
         super();
-        this.name = "corruption";
+        this.name = CorruptionThemeName;
         this.description = "Explore the concept of corruption, its causes, manifestations, and consequences in various contexts";
         this.sources.push(
             new Source()

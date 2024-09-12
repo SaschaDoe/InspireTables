@@ -1,25 +1,28 @@
 import {Table} from "../../../table";
-import {PowerTheme} from "../../themes/powerTheme";
-import {LoyaltyTheme} from "../../themes/loyaltyTheme";
-import {RevengeTheme} from "../../themes/revengeTheme";
-import {DisillusionmentTheme} from "../../themes/disillusionmentTheme";
-import {CorruptionTheme} from "../../themes/corruptionTheme";
-import {GoodVsEvilTheme} from "../../themes/godVsEvilTheme";
-import {JusticeTheme} from "../../themes/justiceTheme";
-import {GreedTheme} from "../../themes/greedTheme";
-import {TeamworkTheme} from "../../themes/teamworkTheme";
-import {TechnologicalInnovationTheme} from "../../themes/technologicalInovationTheme";
-import {DavidVsGoliathTheme} from "../../themes/davidVsGoliathTheme";
-import {ObsessionTheme} from "../../themes/obsessionTheme";
+import {LoyaltyThemeName} from "../../themes/loyaltyTheme";
+import {CorruptionThemeName} from "../../themes/corruptionTheme";
+import {JusticeThemeName} from "../../themes/justiceTheme";
+import {GreedThemeName} from "../../themes/greedTheme";
+import {TeamworkThemeName} from "../../themes/teamworkTheme";
+import {TechnologicalInnovationThemeName} from "../../themes/technologicalInovationTheme";
+import {DavidVsGoliathThemeName} from "../../themes/davidVsGoliathTheme";
+import {ObsessionThemeName} from "../../themes/obsessionTheme";
+import {PursuitOfProsperityThemeName} from "../../themes/pursuitOfProsperityTheme";
+import {SearchThemeName} from "../../themes/searchTheme";
+import {UnknownThemeName} from "../../themes/unknownTheme";
 
 export let heistThemes = [
-    new JusticeTheme().name,
-    new GreedTheme().name,
-    new TeamworkTheme().name,
-    new TechnologicalInnovationTheme().name,
-    new LoyaltyTheme().name,
-    new DavidVsGoliathTheme().name,
-    new ObsessionTheme().name,
+    JusticeThemeName,
+    GreedThemeName,
+    TeamworkThemeName,
+    TechnologicalInnovationThemeName,
+    LoyaltyThemeName,
+    DavidVsGoliathThemeName,
+    ObsessionThemeName,
+    CorruptionThemeName,
+    PursuitOfProsperityThemeName,
+    SearchThemeName,
+    UnknownThemeName,
 ];
 
 export const HeistThemeTableName = "Heist Theme";

@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const AfterlifeThemeName = "afterlife";
+
 export class AfterlifeTheme extends Theme {
     constructor() {
         super();
-        this.name = "afterlife";
+        this.name = AfterlifeThemeName;
         this.description = "Explore concepts of the afterlife across various cultures, belief systems, and genres";
         this.sources.push(
             new Source()

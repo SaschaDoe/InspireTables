@@ -1,10 +1,12 @@
 import {Theme} from "./theme";
 import {Source} from "./source";
 
+export const HeroismThemeName = "heroism";
+
 export class HeroismTheme extends Theme {
     constructor() {
         super();
-        this.name = "heroism";
+        this.name = HeroismThemeName;
         this.description = "What makes a normal person a hero?";
         this.sources.push(
             new Source()

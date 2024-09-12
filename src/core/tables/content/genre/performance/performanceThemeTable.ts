@@ -1,34 +1,34 @@
 import {Table} from "../../../table";
-import {BalanceTheme} from "../../themes/balanceTheme";
-import {AgonyTheme} from "../../themes/agonyTheme";
-import {MentorshipTheme} from "../../themes/mentorshipTheme";
-import {PriceOfSuccessTheme} from "../../themes/priceOfSuccessTheme";
-import {ComingOfAgeTheme} from "../../themes/comingOfAgeTheme";
-import {DavidVsGoliathTheme} from "../../themes/davidVsGoliathTheme";
-import {DestinyTheme} from "../../themes/destinyTheme";
-import {FamilyTheme} from "../../themes/familyTheme";
-import {FishOutOfWaterTheme} from "../../themes/fishOutOfWaterTheme";
-import {GreedTheme} from "../../themes/greedTheme";
-import {IsolationTheme} from "../../themes/isolationTheme";
-import {ObsessionTheme} from "../../themes/obsessionTheme";
-import {PublicPerceptionTheme} from "../../themes/publicPerceptionTheme";
-import {TeamworkTheme} from "../../themes/teamworkTheme";
+import {BalanceThemeName} from "../../themes/balanceTheme";
+import {AgonyThemeName} from "../../themes/agonyTheme";
+import {MentorshipThemeName} from "../../themes/mentorshipTheme";
+import {PriceOfSuccessThemeName} from "../../themes/priceOfSuccessTheme";
+import {ComingOfAgeThemeName} from "../../themes/comingOfAgeTheme";
+import {DavidVsGoliathThemeName} from "../../themes/davidVsGoliathTheme";
+import {DestinyThemeName} from "../../themes/destinyTheme";
+import {FamilyThemeName} from "../../themes/familyTheme";
+import {FishOutOfWaterThemeName} from "../../themes/fishOutOfWaterTheme";
+import {GreedThemeName} from "../../themes/greedTheme";
+import {IsolationThemeName} from "../../themes/isolationTheme";
+import {ObsessionThemeName} from "../../themes/obsessionTheme";
+import {PublicPerceptionThemeName} from "../../themes/publicPerceptionTheme";
+import {TeamworkThemeName} from "../../themes/teamworkTheme";
 
 export let performanceThemes = [
-    new BalanceTheme().name,
-    new AgonyTheme().name,
-    new MentorshipTheme().name,
-    new PriceOfSuccessTheme().name,
-    new ComingOfAgeTheme().name,
-    new DavidVsGoliathTheme().name,
-    new DestinyTheme().name,
-    new FamilyTheme().name,
-    new FishOutOfWaterTheme().name,
-    new GreedTheme().name,
-    new IsolationTheme().name,
-    new ObsessionTheme().name,
-    new PublicPerceptionTheme().name,
-    new TeamworkTheme().name,
+    BalanceThemeName,
+    AgonyThemeName,
+    MentorshipThemeName,
+    PriceOfSuccessThemeName,
+    ComingOfAgeThemeName,
+    DavidVsGoliathThemeName,
+    DestinyThemeName,
+    FamilyThemeName,
+    FishOutOfWaterThemeName,
+    GreedThemeName,
+    IsolationThemeName,
+    ObsessionThemeName,
+    PublicPerceptionThemeName,
+    TeamworkThemeName,
     
 ];
 

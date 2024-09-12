@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const TraumaThemeName = "trauma";
+
 export class TraumaTheme extends Theme {
     constructor() {
         super();
-        this.name = "trauma";
+        this.name = TraumaThemeName;
         this.description = "Explore the impact and aftermath of traumatic experiences across various contexts";
         this.sources.push(
             new Source()

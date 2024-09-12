@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const ObsessionThemeName = "obsession";
+
 export class ObsessionTheme extends Theme {
     constructor() {
         super();
-        this.name = "obsession";
+        this.name = ObsessionThemeName;
         this.description = "Explore the consuming nature of obsession and its impacts across various contexts and genres";
 
         this.sources.push(

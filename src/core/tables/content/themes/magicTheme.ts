@@ -1,10 +1,12 @@
 import {Theme} from "./theme";
 import {Source} from "./source";
 
+export const MagicThemeName = "magic";
+
 export class MagicTheme extends Theme {
     constructor() {
         super();
-        this.name = "magic";
+        this.name = MagicThemeName;
         this.description = "Discover the history and how it works and what can it do for you and your dreams";
         this.sources.push(new Source()
             .withName("Harry Potter")

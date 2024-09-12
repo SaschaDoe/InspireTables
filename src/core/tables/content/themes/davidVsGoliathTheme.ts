@@ -1,10 +1,12 @@
 import {Theme} from "./theme";
 import {Source} from "./source";
 
+export const DavidVsGoliathThemeName = "David vs. Goliath"
+
 export class DavidVsGoliathTheme extends Theme {
     constructor() {
         super();
-        this.name = "David vs. Goliath";
+        this.name = DavidVsGoliathThemeName;
         this.description = "Explore the concept of an underdog facing overwhelming odds, using wit, skill, or determination to challenge a seemingly invincible opponent";
         this.sources.push(
             new Source()

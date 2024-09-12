@@ -1,10 +1,12 @@
 import {Theme} from "./theme";
 import {Source} from "./source";
 
+export const SurvivalThemeName = "survival";
+
 export class SurvivalTheme extends Theme {
     constructor() {
         super();
-        this.name = "survival";
+        this.name = SurvivalThemeName;
         this.description = "Explore the human struggle to survive against overwhelming odds and harsh conditions";
         this.sources.push(
             new Source()

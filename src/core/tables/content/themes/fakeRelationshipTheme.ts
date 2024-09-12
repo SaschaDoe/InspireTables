@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const FakeRelationshipThemeName = "fake relationship";
+
 export class FakeRelationshipTheme extends Theme {
     constructor() {
         super();
-        this.name = "fakeRelationship";
+        this.name = FakeRelationshipThemeName;
         this.description = "Explore the dynamics and consequences of pretend romantic partnerships that often lead to real feelings";
         this.sources.push(
             new Source()

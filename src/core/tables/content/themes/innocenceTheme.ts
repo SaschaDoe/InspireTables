@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const InnocenceThemeName = "innocence";
+
 export class InnocenceTheme extends Theme {
     constructor() {
         super();
-        this.name = "innocence";
+        this.name = InnocenceThemeName;
         this.description = "Explore the concept of innocence and its loss across various genres and contexts";
         this.sources.push(
             new Source()

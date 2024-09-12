@@ -1,10 +1,12 @@
 import {Theme} from "./theme";
 import {Source} from "./source";
 
+export const PowerThemeName = "power";
+
 export class PowerTheme extends Theme {
     constructor() {
         super();
-        this.name = "power";
+        this.name = PowerThemeName;
         this.description = "Explore the concept of power, its acquisition, use, abuse, and consequences in various contexts";
         this.sources.push(
             new Source()

@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const DeathThemeName = "death";
+
 export class DeathTheme extends Theme {
     constructor() {
         super();
-        this.name = "death";
+        this.name = DeathThemeName;
         this.description = "Exploration of mortality, its impact on individuals and society, and how humans grapple with the inevitability and mystery of death.";
         this.sources.push(
             new Source()

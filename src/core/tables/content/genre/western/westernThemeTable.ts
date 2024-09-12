@@ -1,46 +1,48 @@
 import {Table} from "../../../table";
-import {PursuitOfProsperityTheme} from "../../themes/pursuitOfProsperityTheme";
-import {ComingOfAgeTheme} from "../../themes/comingOfAgeTheme";
-import {CorruptionTheme} from "../../themes/corruptionTheme";
-import {DeathTheme} from "../../themes/deathTheme";
-import {DisillusionmentTheme} from "../../themes/disillusionmentTheme";
-import {GoodVsEvilTheme} from "../../themes/godVsEvilTheme";
-import {GreedTheme} from "../../themes/greedTheme";
-import {HeroismTheme} from "../../themes/heroismTheme";
-import {InvasionTheme} from "../../themes/invasionTheme";
-import {JusticeTheme} from "../../themes/justiceTheme";
-import {IsolationTheme} from "../../themes/isolationTheme";
-import {NatureAsEnemyTheme} from "../../themes/NatureAsEnemyTheme";
-import {PowerTheme} from "../../themes/powerTheme";
-import {RevengeTheme} from "../../themes/revengeTheme";
-import {SearchTheme} from "../../themes/searchTheme";
-import {SurvivalTheme} from "../../themes/survivalTheme";
-import {TechnologicalInnovationTheme} from "../../themes/technologicalInovationTheme";
-import {UnknownTheme} from "../../themes/unknownTheme";
-import {CultureClashesTheme} from "../../themes/cultureClashTheme";
-import {NostalgiaTheme} from "../../themes/nostalgiaTheme";
+import {PursuitOfProsperityThemeName} from "../../themes/pursuitOfProsperityTheme";
+import {ComingOfAgeThemeName} from "../../themes/comingOfAgeTheme";
+import {CorruptionThemeName} from "../../themes/corruptionTheme";
+import {DeathThemeName} from "../../themes/deathTheme";
+import {DisillusionmentThemeName} from "../../themes/disillusionmentTheme";
+import {GoodVsEvilThemeName} from "../../themes/godVsEvilTheme";
+import {GreedThemeName} from "../../themes/greedTheme";
+import {HeroismThemeName} from "../../themes/heroismTheme";
+import {InvasionThemeName} from "../../themes/invasionTheme";
+import {JusticeThemeName} from "../../themes/justiceTheme";
+import {IsolationThemeName} from "../../themes/isolationTheme";
+import {NatureAsEnemyThemeName} from "../../themes/NatureAsEnemyTheme";
+import {PowerThemeName} from "../../themes/powerTheme";
+import {RevengeThemeName} from "../../themes/revengeTheme";
+import {SearchThemeName} from "../../themes/searchTheme";
+import {SurvivalThemeName} from "../../themes/survivalTheme";
+import {TechnologicalInnovationThemeName} from "../../themes/technologicalInovationTheme";
+import {UnknownThemeName} from "../../themes/unknownTheme";
+import {CultureClashesThemeName} from "../../themes/cultureClashTheme";
+import {NostalgiaThemeName} from "../../themes/nostalgiaTheme";
+import {ChangeThemeName} from "../../themes/changeTheme";
 
 export let westernThemes = [
-    new PursuitOfProsperityTheme().name,
-    new ComingOfAgeTheme().name,
-    new CorruptionTheme().name,
-    new DeathTheme().name,
-    new DisillusionmentTheme().name,
-    new GoodVsEvilTheme().name,
-    new GreedTheme().name,
-    new HeroismTheme().name,
-    new InvasionTheme().name,
-    new JusticeTheme().name,
-    new IsolationTheme().name,
-    new NatureAsEnemyTheme().name,
-    new PowerTheme().name,
-    new RevengeTheme().name,
-    new SearchTheme().name,
-    new SurvivalTheme().name,
-    new TechnologicalInnovationTheme().name,
-    new UnknownTheme().name,
-    new CultureClashesTheme().name,
-    new NostalgiaTheme().name,
+    PursuitOfProsperityThemeName,
+    ComingOfAgeThemeName,
+    CorruptionThemeName,
+    DeathThemeName,
+    DisillusionmentThemeName,
+    GoodVsEvilThemeName,
+    GreedThemeName,
+    HeroismThemeName,
+    InvasionThemeName,
+    JusticeThemeName,
+    IsolationThemeName,
+    NatureAsEnemyThemeName,
+    PowerThemeName,
+    RevengeThemeName,
+    SearchThemeName,
+    SurvivalThemeName,
+    TechnologicalInnovationThemeName,
+    UnknownThemeName,
+    CultureClashesThemeName,
+    NostalgiaThemeName,
+    ChangeThemeName,
 ];
 
 export const WesternThemeTableName = "Western Theme";

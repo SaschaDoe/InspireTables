@@ -1,10 +1,12 @@
 import {Theme} from "./theme";
 import {Source} from "./source";
 
+export const DisillusionmentThemeName = "disillusionment";
+
 export class DisillusionmentTheme extends Theme {
     constructor() {
         super();
-        this.name = "disillusionment";
+        this.name = DisillusionmentThemeName;
         this.description = "Explore the concept of disillusionment, the shattering of ideals, and the gap between expectations and reality";
         this.sources.push(
             new Source()

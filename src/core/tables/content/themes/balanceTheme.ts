@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const BalanceThemeName =  "balance";
+
 export class BalanceTheme extends Theme {
     constructor() {
         super();
-        this.name = "balance";
+        this.name = BalanceThemeName;
         this.description = "Explore the concept of balance in various aspects of life and society";
         this.sources.push(
             new Source()

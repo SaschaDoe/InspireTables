@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const TruthThemeName = "truth";
+
 export class TruthTheme extends Theme {
     constructor() {
         super();
-        this.name = "truth";
+        this.name = TruthThemeName;
         this.description = "Exploration of the nature of truth, its pursuit, manipulation, and impact on individuals and society, including the challenges of discerning and accepting truth in various contexts.";
         this.sources.push(
             new Source()

@@ -1,16 +1,18 @@
 import {Table} from "../../../table";
-import {FishOutOfWaterTheme} from "../../themes/fishOutOfWaterTheme";
-import {MistakenIdentityTheme} from "../../themes/mistakenIdentity";
-import {FamilyTheme} from "../../themes/familyTheme";
-import {ComingOfAgeTheme} from "../../themes/comingOfAgeTheme";
-import {CultureClashesTheme} from "../../themes/cultureClashTheme";
+import {FishOutOfWaterThemeName} from "../../themes/fishOutOfWaterTheme";
+import {MistakenIdentityThemeName} from "../../themes/mistakenIdentity";
+import {FamilyThemeName} from "../../themes/familyTheme";
+import {ComingOfAgeThemeName} from "../../themes/comingOfAgeTheme";
+import {CultureClashesThemeName} from "../../themes/cultureClashTheme";
+import {WhatReallyMattersThemeName} from "../../themes/whatReallyMattersTheme";
 
 export let comedyThemes = [
-    new FishOutOfWaterTheme().name,
-    new MistakenIdentityTheme().name,
-    new FamilyTheme().name,
-    new ComingOfAgeTheme().name,
-    new CultureClashesTheme().name,
+    WhatReallyMattersThemeName,
+    FishOutOfWaterThemeName,
+    MistakenIdentityThemeName,
+    FamilyThemeName,
+    ComingOfAgeThemeName,
+    CultureClashesThemeName,
 ];
 
 export const ComedyThemeTableName = "Comedy Theme";

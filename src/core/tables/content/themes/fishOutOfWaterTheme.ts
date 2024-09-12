@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const FishOutOfWaterThemeName = "fish out of water";
+
 export class FishOutOfWaterTheme extends Theme {
     constructor() {
         super();
-        this.name = "fish out of water";
+        this.name = FishOutOfWaterThemeName;
         this.description = "A character finds themselves in an unfamiliar or uncomfortable environment.";
         this.sources.push(
             new Source()

@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const AgonyThemeName = "agony";
+
 export class AgonyTheme extends Theme {
     constructor() {
         super();
-        this.name = "agony";
+        this.name = AgonyThemeName;
         this.description = "Explore the concept of agony in its various physical, emotional, and existential forms";
         this.sources.push(
             new Source()

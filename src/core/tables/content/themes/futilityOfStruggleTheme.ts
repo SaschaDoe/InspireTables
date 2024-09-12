@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const FutilityOfStruggleThemeName = "futility of struggle";
+
 export class FutilityOfStruggleTheme extends Theme {
     constructor() {
         super();
-        this.name = "futility of struggle";
+        this.name = FutilityOfStruggleThemeName;
         this.description = "Explore the concept of prolonged, difficult efforts that ultimately prove pointless or counterproductive, with a focus on war and broader contexts";
         this.sources.push(
             new Source()

@@ -13,4 +13,5 @@ export class Campaign extends AutoDeletableEntity{
     world: World = new World();
     isSelected = false;
     themes: string[] = [];
+    themeStatements: string[] = [];
 }

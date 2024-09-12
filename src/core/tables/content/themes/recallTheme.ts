@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const RecallThemeName = "recall";
+
 export class RecallTheme extends Theme {
     constructor() {
         super();
-        this.name = "recall";
+        this.name = RecallThemeName;
         this.description = "Explore the intricacies of memory and perception, and how they shape our understanding of reality and self";
 
         this.sources.push(

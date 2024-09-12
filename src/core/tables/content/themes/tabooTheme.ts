@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const TabooLoveThemeName = "tabooLove";
+
 export class TabooLoveTheme extends Theme {
     constructor() {
         super();
-        this.name = "tabooLove";
+        this.name = TabooLoveThemeName;
         this.description = "Explore love that defies societal norms, cultural expectations, or moral boundaries";
         this.sources.push(
             new Source()

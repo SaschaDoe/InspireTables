@@ -1,60 +1,61 @@
 import {Table} from "../../../table";
-import {AgonyTheme} from "../../themes/agonyTheme";
-import {AttractionTheme} from "../../themes/attractionTheme";
-import {BereavementTheme} from "../../themes/bereavementTheme";
-import {ComingOfAgeTheme} from "../../themes/comingOfAgeTheme";
-import {CultureClashesTheme} from "../../themes/cultureClashTheme";
-import {DavidVsGoliathTheme} from "../../themes/davidVsGoliathTheme";
-import {PowerTheme} from "../../themes/powerTheme";
-import {DisillusionmentTheme} from "../../themes/disillusionmentTheme";
-import {FakeRelationshipTheme} from "../../themes/fakeRelationshipTheme";
-import {CorruptionTheme} from "../../themes/corruptionTheme";
-import {FishOutOfWaterTheme} from "../../themes/fishOutOfWaterTheme";
-import {GoodVsEvilTheme} from "../../themes/godVsEvilTheme";
-import {GreedTheme} from "../../themes/greedTheme";
-import {HeroismTheme} from "../../themes/heroismTheme";
-import {InnocenceTheme} from "../../themes/innocenceTheme";
-import {InvasionTheme} from "../../themes/invasionTheme";
-import {IsolationTheme} from "../../themes/isolationTheme";
-import {LoyaltyTheme} from "../../themes/loyaltyTheme";
-import {LossOfControlTheme} from "../../themes/lossOfControl";
-import {JusticeTheme} from "../../themes/justiceTheme";
-import {NormalityMadnessBoundaryTheme} from "../../themes/normalityMadnessBoundaryTheme";
-import {ObsessionTheme} from "../../themes/obsessionTheme";
-import {PersonalGrowthTheme} from "../../themes/personalGrowthTheme";
-import {PriceOfSuccessTheme} from "../../themes/priceOfSuccessTheme";
-import {TrustTheme} from "../../themes/trustTheme";
+import {AgonyThemeName} from "../../themes/agonyTheme";
+import {AttractionThemeName} from "../../themes/attractionTheme";
+import {BereavementThemeName} from "../../themes/bereavementTheme";
+import {ComingOfAgeThemeName} from "../../themes/comingOfAgeTheme";
+import {CultureClashesThemeName} from "../../themes/cultureClashTheme";
+import {DavidVsGoliathThemeName} from "../../themes/davidVsGoliathTheme";
+import {PowerThemeName} from "../../themes/powerTheme";
+import {DisillusionmentThemeName} from "../../themes/disillusionmentTheme";
+import {FakeRelationshipThemeName} from "../../themes/fakeRelationshipTheme";
+import {CorruptionThemeName} from "../../themes/corruptionTheme";
+import {FishOutOfWaterThemeName} from "../../themes/fishOutOfWaterTheme";
+import {GoodVsEvilThemeName} from "../../themes/godVsEvilTheme";
+import {GreedThemeName} from "../../themes/greedTheme";
+import {HeroismThemeName} from "../../themes/heroismTheme";
+import {InnocenceThemeName} from "../../themes/innocenceTheme";
+import {InvasionThemeName} from "../../themes/invasionTheme";
+import {IsolationThemeName} from "../../themes/isolationTheme";
+import {LoyaltyThemeName} from "../../themes/loyaltyTheme";
+import {LossOfControlThemeName} from "../../themes/lossOfControl";
+import {JusticeThemeName} from "../../themes/justiceTheme";
+import {
+    NormalityMadnessBoundaryThemeName
+} from "../../themes/normalityMadnessBoundaryTheme";
+import {ObsessionThemeName} from "../../themes/obsessionTheme";
+import {PersonalGrowthThemeName} from "../../themes/personalGrowthTheme";
+import {PriceOfSuccessThemeName} from "../../themes/priceOfSuccessTheme";
+import {TrustThemeName} from "../../themes/trustTheme";
 import {TruthTheme} from "../../themes/truthTheme";
-import {TraumaTheme} from "../../themes/traumaTheme";
+import {TraumaThemeName} from "../../themes/traumaTheme";
 
 export let dramaThemes = [
-    new AgonyTheme().name,
-    new AttractionTheme().name,
-    new BereavementTheme().name,
-    new ComingOfAgeTheme().name,
-    new CultureClashesTheme().name,
-    new DavidVsGoliathTheme().name,
-    new PowerTheme().name,
-    new DisillusionmentTheme().name,
-    new FakeRelationshipTheme().name,
-    new CorruptionTheme().name,
-    new FishOutOfWaterTheme().name,
-    new GoodVsEvilTheme().name,
-    new GreedTheme().name,
-    new HeroismTheme().name,
-    new InnocenceTheme().name,
-    new InvasionTheme().name,
-    new IsolationTheme().name,
-    new LoyaltyTheme().name,
-    new LossOfControlTheme().name,
-    new JusticeTheme().name,
-    new NormalityMadnessBoundaryTheme().name,
-    new ObsessionTheme().name,
-    new PersonalGrowthTheme().name,
-    new PriceOfSuccessTheme().name,
-    new TrustTheme().name,
-    new TruthTheme().name,
-    new TraumaTheme().name,
+    AgonyThemeName,
+    AttractionThemeName,
+    BereavementThemeName,
+    ComingOfAgeThemeName,
+    CultureClashesThemeName,
+    DavidVsGoliathThemeName,
+    PowerThemeName,
+    DisillusionmentThemeName,
+    FakeRelationshipThemeName,
+    CorruptionThemeName,
+    FishOutOfWaterThemeName,
+    GoodVsEvilThemeName,
+    GreedThemeName,
+    HeroismThemeName,
+    InnocenceThemeName,
+    InvasionThemeName,
+    IsolationThemeName,
+    LoyaltyThemeName,
+    LossOfControlThemeName,
+    JusticeThemeName,
+    NormalityMadnessBoundaryThemeName,
+    ObsessionThemeName,
+    PersonalGrowthThemeName,
+    PriceOfSuccessThemeName,
+    TrustThemeName,
+    TraumaThemeName,
 ];
 
 export const DramaThemeTableName = "Drama Theme";

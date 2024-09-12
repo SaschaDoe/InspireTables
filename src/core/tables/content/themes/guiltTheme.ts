@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const GuiltThemeName = "guilt";
+
 export class GuiltTheme extends Theme {
     constructor() {
         super();
-        this.name = "guilt";
+        this.name = GuiltThemeName;
         this.description = "Explore the psychological and moral implications of guilt across various contexts";
         this.sources.push(
             new Source()

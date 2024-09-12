@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const BereavementThemeName = "bereavement";
+
 export class BereavementTheme extends Theme {
     constructor() {
         super();
-        this.name = "bereavement";
+        this.name = BereavementThemeName;
         this.description = "Explore the complex emotions and experiences of grief, loss, and mourning across various contexts";
         this.sources.push(
             new Source()

@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const PursuitOfProsperityThemeName = "pursuit of prosperity";
+
 export class PursuitOfProsperityTheme extends Theme {
     constructor() {
         super();
-        this.name = "pursuit of prosperity";
+        this.name = PursuitOfProsperityThemeName;
         this.description = "Explore the universal human aspiration for a better life, including material success, personal fulfillment, and societal progress";
         this.sources.push(
             new Source()

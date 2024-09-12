@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import {Source} from "./source";
 
+export const GoodVsEvilThemeName = "good_vs_evil";
+
 export class GoodVsEvilTheme extends Theme {
     constructor() {
         super();
-        this.name = "good_vs_evil";
+        this.name = GoodVsEvilThemeName;
         this.description = "Explore the eternal struggle between good and evil across various contexts and narratives";
         this.sources.push(
             new Source()

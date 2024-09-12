@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const FriendsToLoversThemeName = "friendsToLovers";
+
 export class FriendsToLoversTheme extends Theme {
     constructor() {
         super();
-        this.name = "friendsToLovers";
+        this.name = FriendsToLoversThemeName;
         this.description = "Explore the transition from platonic friendship to romantic love";
         this.sources.push(
             new Source()

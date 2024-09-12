@@ -1,10 +1,12 @@
 import {Theme} from "./theme";
 import {Source} from "./source";
 
+export const JusticeThemeName = "justice";
+
 export class JusticeTheme extends Theme {
     constructor() {
         super();
-        this.name = "justice";
+        this.name = JusticeThemeName;
         this.description = "Explore the concept of justice, its pursuit, and its various interpretations in society";
         this.sources.push(
             new Source()

@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const DivineThemeName = "divine";
+
 export class DivineTheme extends Theme {
     constructor() {
         super();
-        this.name = "divine";
+        this.name = DivineThemeName;
         this.description = "Explore concepts of divinity, godhood, and the supernatural across various genres and cultural contexts";
         this.sources.push(
             new Source()

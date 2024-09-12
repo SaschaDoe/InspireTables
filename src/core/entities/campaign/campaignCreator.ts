@@ -12,9 +12,6 @@ import {getStore} from "../persist/stores";
 import {RollResult} from "../../tables/rollResult";
 import {ComparisonResult, RelationalOperator} from "../../tables/comparisonResult";
 import {GeneralThemesTable} from "../../tables/content/genre/generalThemesTable";
-import {IntervalResult} from "../../tables/intervalResult";
-import type {Table} from "../../tables/table";
-import {FantasyThemesTable} from "../../tables/content/genre/fantasy/fantasyThemesTable";
 import {genreToSubGenreMap} from "../../tables/content/genre/genreToSubGenreMap";
 import {RandomResult} from "../../tables/randomResult";
 import {genreToThemeMap} from "../../tables/content/themes/genreToThemeTableMap";
@@ -41,7 +38,7 @@ export class CampaignCreator extends BaseCreator {
         campaign.genreMix = genreCreationResult.getCreation() as GenreMix;
 
         campaign.themes = this.getThemesBy(campaign.genreMix, creationResult);
-        // TODO make attribute or object for campaign.themeStatements
+        campaign.themeStatements = this.getStatements(campaign.themes, creationResult);
 
         let numberOfThemes = this.dice.rollInterval(2,5);
         let rollResult = new RollResult()
@@ -153,5 +150,13 @@ export class CampaignCreator extends BaseCreator {
 
     getRandomNumberBetween(min: number, max: number): number {
         return Math.floor(this.dice.getRandom() * (max - min + 1)) + min;
+    }
+
+    private getStatements(themes: string[], creationResult: CreationResult) {
+        let thematicStatements: string[] = [];
+        for (const theme of themes) {
+
+        }
+        return thematicStatements;
     }
 }

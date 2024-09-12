@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const PoliticalPhilosophyThemeName = "political-philosophy";
+
 export class PoliticalPhilosophyTheme extends Theme {
     constructor() {
         super();
-        this.name = "political-philosophy";
+        this.name = PoliticalPhilosophyThemeName;
         this.description = "Explore various political philosophies and systems through diverse fictional works";
 
         this.sources.push(

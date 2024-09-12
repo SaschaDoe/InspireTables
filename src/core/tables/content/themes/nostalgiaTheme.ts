@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const NostalgiaThemeName = "nostalgia";
+
 export class NostalgiaTheme extends Theme {
     constructor() {
         super();
-        this.name = "nostalgia";
+        this.name = NostalgiaThemeName;
         this.description = "Explore the bittersweet longing for the past and its impact on the present and future";
         this.sources.push(
             new Source()

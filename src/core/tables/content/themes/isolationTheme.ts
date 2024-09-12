@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const IsolationThemeName = "isolation";
+
 export class IsolationTheme extends Theme {
     constructor() {
         super();
-        this.name = "isolation";
+        this.name = IsolationThemeName;
         this.description = "Explore the physical, emotional, and psychological effects of isolation in various contexts";
         this.sources.push(
             new Source()

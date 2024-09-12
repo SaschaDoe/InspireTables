@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const PsychosomaticDualityThemeName = "psychosomaticDuality";
+
 export class PsychosomaticDualityTheme extends Theme {
     constructor() {
         super();
-        this.name = "psychosomaticDuality";
+        this.name = PsychosomaticDualityThemeName;
         this.description = "Explore the complex interplay and potential conflicts between mind and body, examining how mental and physical states influence each other across various contexts and realities";
         this.sources.push(
             new Source()

@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const PersonalGrowthThemeName = "personal growth";
+
 export class PersonalGrowthTheme extends Theme {
     constructor() {
         super();
-        this.name = "personal growth";
+        this.name = PersonalGrowthThemeName;
         this.description = "The journey of self-improvement, self-discovery, and transformation that characters undergo, often in response to challenges, experiences, or internal conflicts.";
         this.sources.push(
             new Source()

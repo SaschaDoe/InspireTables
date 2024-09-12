@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const CultureClashesThemeName = "culture clashes";
+
 export class CultureClashesTheme extends Theme {
     constructor() {
         super();
-        this.name = "culture clashes";
+        this.name = CultureClashesThemeName;
         this.description = "The dynamic interplay, conflicts, and growth that arise when different cultural backgrounds, values, and practices intersect or collide.";
         this.sources.push(
             new Source()

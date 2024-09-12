@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const LoveTriangleThemeName = "love triangle";
+
 export class LoveTriangleTheme extends Theme {
     constructor() {
         super();
-        this.name = "loveTriangle";
+        this.name = LoveTriangleThemeName;
         this.description = "Explore the complexities and conflicts arising from romantic entanglements involving three people";
         this.sources.push(
             new Source()

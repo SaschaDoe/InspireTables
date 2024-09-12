@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const LossOfControlThemeName = "lossOfControl";
+
 export class LossOfControlTheme extends Theme {
     constructor() {
         super();
-        this.name = "lossOfControl";
+        this.name = LossOfControlThemeName;
         this.description = "Explore the psychological, social, and existential implications of losing control in various aspects of life";
         this.sources.push(
             new Source()

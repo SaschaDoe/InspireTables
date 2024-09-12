@@ -1,10 +1,12 @@
 import { Theme } from "./theme";
 import { Source } from "./source";
 
+export const NatureAsEnemyThemeName = "nature as an enemy";
+
 export class NatureAsEnemyTheme extends Theme {
     constructor() {
         super();
-        this.name = "nature as an enemy";
+        this.name = NatureAsEnemyThemeName;
         this.description = "The struggle of humans against powerful, indifferent, or hostile natural forces, emphasizing the conflict between civilization and the wild.";
         this.sources.push(
             new Source()

@@ -1,10 +1,12 @@
 import {Theme} from "./theme";
 import {Source} from "./source";
 
+export const GreedThemeName = "greed";
+
 export class GreedTheme extends Theme {
     constructor() {
         super();
-        this.name = "greed";
+        this.name = GreedThemeName;
         this.description = "Explore the concept of greed, its manifestations, consequences, and impact on individuals and society";
         this.sources.push(
             new Source()

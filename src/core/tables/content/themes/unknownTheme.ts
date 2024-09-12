@@ -1,10 +1,12 @@
 import {Theme} from "./theme";
 import {Source} from "./source";
 
+export const UnknownThemeName = "the unknown";
+
 export class UnknownTheme extends Theme {
     constructor() {
         super();
-        this.name = "the unknown";
+        this.name = UnknownThemeName;
         this.description = "Explore the concept of the unknown, encompassing mystery, discovery, and venturing into uncharted territories";
         this.sources.push(
             new Source()

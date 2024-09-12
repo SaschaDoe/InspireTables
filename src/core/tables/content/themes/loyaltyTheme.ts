@@ -1,10 +1,12 @@
 import {Theme} from "./theme";
 import {Source} from "./source";
 
+export const LoyaltyThemeName = "loyalty";
+
 export class LoyaltyTheme extends Theme {
     constructor() {
         super();
-        this.name = "loyalty";
+        this.name = LoyaltyThemeName;
         this.description = "Explore the concept of loyalty, its strengths, challenges, and complexities in various relationships and situations";
         this.sources.push(
             new Source()
