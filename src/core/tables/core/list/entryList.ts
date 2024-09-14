@@ -60,7 +60,7 @@ export class EntryList {
             let probability = entry.setting.probabilityInPercent;
             cumulativeProb += probability; //add because - is not precise enough
             if(cumulativeProb > 100){
-                throw new Error(`Cumulative probability over 100: ${cumulativeProb} at index: ${i}`);
+                console.error(`Cumulative probability over 100: ${cumulativeProb} at index: ${i}`);
             }
         }
 

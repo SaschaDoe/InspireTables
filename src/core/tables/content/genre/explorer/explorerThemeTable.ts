@@ -5,7 +5,7 @@ import {FishOutOfWaterThemeName} from "../../themes/fishOutOfWaterTheme";
 import {SurvivalThemeName} from "../../themes/survivalTheme";
 import {UnknownThemeName} from "../../themes/unknownTheme";
 import {SearchThemeName} from "../../themes/searchTheme";
-import {NatureAsEnemyThemeName} from "../../themes/NatureAsEnemyTheme";
+import {NatureAsEnemyThemeName} from "../../themes/natureAsEnemyTheme";
 import {TimeThemeName} from "../../themes/timeTheme";
 import {TechnologicalInnovationThemeName} from "../../themes/technologicalInovationTheme";
 import {PersonalGrowthThemeName} from "../../themes/personalGrowthTheme";

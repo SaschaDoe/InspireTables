@@ -1,4 +1,3 @@
-import { Entity } from "../entity";
 import {AutoDeletableEntity} from "../deletable";
 
 export class Genre extends AutoDeletableEntity{
@@ -28,4 +27,16 @@ export class Genre extends AutoDeletableEntity{
 
         return this.name;
     }
+}
+
+export function getJustMainGenreName(input: string): string{
+        // Check if the genreName contains a parenthesis
+        let index = input.indexOf('(');
+        if (index !== -1) {
+            // Return the substring before the parenthesis
+            return input.substring(0, index).trim();
+        } else {
+            // Return the original genreName if there's no parenthesis
+            return input.trim();
+        }
 }

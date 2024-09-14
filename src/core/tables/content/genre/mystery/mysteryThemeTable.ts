@@ -39,7 +39,7 @@ export let mysteryThemes = [
 
 export const MysteryThemeTableName = "Mystery Theme";
 
-export class MemoirThemesTable extends Table{
+export class MysteryThemesTable extends Table{
     constructor() {
         super();
         this.title = MysteryThemeTableName;

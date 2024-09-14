@@ -10,7 +10,7 @@ import {HeroismThemeName} from "../../themes/heroismTheme";
 import {InvasionThemeName} from "../../themes/invasionTheme";
 import {JusticeThemeName} from "../../themes/justiceTheme";
 import {IsolationThemeName} from "../../themes/isolationTheme";
-import {NatureAsEnemyThemeName} from "../../themes/NatureAsEnemyTheme";
+import {NatureAsEnemyThemeName} from "../../themes/natureAsEnemyTheme";
 import {PowerThemeName} from "../../themes/powerTheme";
 import {RevengeThemeName} from "../../themes/revengeTheme";
 import {SearchThemeName} from "../../themes/searchTheme";

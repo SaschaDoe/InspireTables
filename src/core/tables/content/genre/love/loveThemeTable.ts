@@ -43,7 +43,7 @@ export let loveThemes = [
 
 export const LoveThemeTableName = "Love Theme";
 
-export class HorrorThemesTable extends Table{
+export class LoveThemesTable extends Table{
     constructor() {
         super();
         this.title = LoveThemeTableName;

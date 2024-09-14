@@ -1,43 +1,45 @@
 import {Table} from "../../../table";
-import {GuiltTheme} from "../../themes/guiltTheme";
-import {BereavementTheme} from "../../themes/bereavementTheme";
-import {CatAndMouseTheme} from "../../themes/catAndMouseTheme";
-import {CorruptionTheme} from "../../themes/corruptionTheme";
-import {DavidVsGoliathTheme} from "../../themes/davidVsGoliathTheme";
-import {DeathTheme} from "../../themes/deathTheme";
-import {GoodVsEvilTheme} from "../../themes/godVsEvilTheme";
-import {GreedTheme} from "../../themes/greedTheme";
-import {IsolationTheme} from "../../themes/isolationTheme";
-import {NormalityMadnessBoundaryTheme} from "../../themes/normalityMadnessBoundaryTheme";
-import {ObsessionTheme} from "../../themes/obsessionTheme";
-import {PowerTheme} from "../../themes/powerTheme";
-import {PublicPerceptionTheme} from "../../themes/publicPerceptionTheme";
-import {SearchTheme} from "../../themes/searchTheme";
-import {RevengeTheme} from "../../themes/revengeTheme";
-import {SurvivalTheme} from "../../themes/survivalTheme";
-import {TruthTheme} from "../../themes/truthTheme";
-import {UnknownTheme} from "../../themes/unknownTheme";
+import {GuiltThemeName} from "../../themes/guiltTheme";
+import {BereavementThemeName} from "../../themes/bereavementTheme";
+import {CatAndMouseThemeName} from "../../themes/catAndMouseTheme";
+import {CorruptionThemeName} from "../../themes/corruptionTheme";
+import {DavidVsGoliathThemeName} from "../../themes/davidVsGoliathTheme";
+import {DeathThemeName} from "../../themes/deathTheme";
+import {GoodVsEvilThemeName} from "../../themes/godVsEvilTheme";
+import {GreedThemeName} from "../../themes/greedTheme";
+import {IsolationThemeName} from "../../themes/isolationTheme";
+import {
+    NormalityMadnessBoundaryThemeName
+} from "../../themes/normalityMadnessBoundaryTheme";
+import {ObsessionThemeName} from "../../themes/obsessionTheme";
+import {PowerThemeName} from "../../themes/powerTheme";
+import {PublicPerceptionThemeName} from "../../themes/publicPerceptionTheme";
+import {SearchThemeName} from "../../themes/searchTheme";
+import {RevengeThemeName} from "../../themes/revengeTheme";
+import {SurvivalThemeName} from "../../themes/survivalTheme";
+import {TruthThemeName} from "../../themes/truthTheme";
+import {UnknownThemeName} from "../../themes/unknownTheme";
 
 
 export let thrillerThemes = [
-    new GuiltTheme().name,
-    new BereavementTheme().name,
-    new CatAndMouseTheme().name,
-    new CorruptionTheme().name,
-    new DavidVsGoliathTheme().name,
-    new DeathTheme().name,
-    new GoodVsEvilTheme().name,
-    new GreedTheme().name,
-    new IsolationTheme().name,
-    new NormalityMadnessBoundaryTheme().name,
-    new ObsessionTheme().name,
-    new PowerTheme().name,
-    new PublicPerceptionTheme().name,
-    new SearchTheme().name,
-    new RevengeTheme().name,
-    new SurvivalTheme().name,
-    new TruthTheme().name,
-    new UnknownTheme().name,
+    GuiltThemeName,
+    BereavementThemeName,
+    CatAndMouseThemeName,
+    CorruptionThemeName,
+    DavidVsGoliathThemeName,
+    DeathThemeName,
+    GoodVsEvilThemeName,
+    GreedThemeName,
+    IsolationThemeName,
+    NormalityMadnessBoundaryThemeName,
+    ObsessionThemeName,
+    PowerThemeName,
+    PublicPerceptionThemeName,
+    SearchThemeName,
+    RevengeThemeName,
+    SurvivalThemeName,
+    TruthThemeName,
+    UnknownThemeName,
 ];
 
 export const ThrillerThemeTableName = "Thriller Theme";

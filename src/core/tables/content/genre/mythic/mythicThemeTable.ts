@@ -11,7 +11,7 @@ import {InvasionThemeName} from "../../themes/invasionTheme";
 import {JusticeThemeName} from "../../themes/justiceTheme";
 import {LoyaltyThemeName} from "../../themes/loyaltyTheme";
 import {MagicThemeName} from "../../themes/magicTheme";
-import {NatureAsEnemyThemeName} from "../../themes/NatureAsEnemyTheme";
+import {NatureAsEnemyThemeName} from "../../themes/natureAsEnemyTheme";
 import {ObsessionThemeName} from "../../themes/obsessionTheme";
 import {PersonalGrowthThemeName} from "../../themes/personalGrowthTheme";
 import {PowerThemeName} from "../../themes/powerTheme";

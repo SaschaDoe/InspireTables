@@ -41,8 +41,7 @@ import {
     UnrealisticLessProbableLowTechIllnessAdjectiveTable
 } from "./content/illness/adjective/unrealisticLessProbableLowTechIllnessAdjectiveTable";
 import {RealisticLowTechIllnessAdjectiveTable} from "./content/illness/adjective/realisticLowTechIllnessAdjectiveTable";
-import {GeneralThemesTable} from "./content/genre/generalThemesTable";
-import {FantasyThemesTable} from "./content/genre/fantasy/fantasyThemesTable";
+import {FantasyThemeTable} from "./content/genre/fantasy/fantasyThemeTable";
 import {CrimeSubGenreTable} from "./content/genre/crime/crimeSubGenreTable";
 import {ExplorerSubGenreTable} from "./content/genre/explorer/explorerSubGenreTable";
 import {FantasySubGenreTable} from "./content/genre/fantasy/fantasySubGenreTable";
@@ -51,7 +50,7 @@ import {HeistSubGenreTable} from "./content/genre/heist/heistSubGenreTable";
 import {HorrorSubGenreTable} from "./content/genre/horror/horrorSubGenreTable";
 import {InternalGenreTable} from "./content/genre/internalGenreTable";
 import {LoveSubGenreTable} from "./content/genre/love/loveSubGenreTable";
-import {MemoirSubGenreTable, MemoirSubGenreTableName} from "./content/genre/memoir/memoirSubGenreTable";
+import {MemoirSubGenreTable} from "./content/genre/memoir/memoirSubGenreTable";
 import {MythSubGenreTable} from "./content/genre/mythic/mythicSubGenreTable";
 import {PerformanceSubGenreTable} from "./content/genre/performance/performanceSubGenreTable";
 import {SciFiSubGenreTable} from "./content/genre/sciFi/sciFiSubGenreTable";
@@ -64,6 +63,23 @@ import {DifficultyLevelTable} from "./content/other/difficultTable";
 import {HeightTable} from "./content/other/heightTable";
 import {RealismTable} from "./content/other/realismTable";
 import {SpeedTable} from "./content/other/speedTable";
+import {ActionThemeTable} from "./content/genre/action/actionThemeTable";
+import {ComedyThemeTable} from "./content/genre/comedy/comedyThemeTable";
+import {CrimeThemeTable} from "./content/genre/crime/crimeThemeTable";
+import {DramaThemeTable} from "./content/genre/drama/dramaThemeTable";
+import {ExplorerThemeTable} from "./content/genre/explorer/explorerThemeTable";
+import {GangsterThemesTable} from "./content/genre/gangster/gangsterThemeTable";
+import {HeistThemesTable} from "./content/genre/heist/heistThemeTable";
+import {HorrorThemesTable} from "./content/genre/horror/horrorThemeTable";
+import {LoveThemesTable} from "./content/genre/love/loveThemeTable";
+import {MemoirThemesTable} from "./content/genre/memoir/memoirThemeTable";
+import {MysteryThemesTable} from "./content/genre/mystery/mysteryThemeTable";
+import {MythicThemesTable} from "./content/genre/mythic/mythicThemeTable";
+import {PerformanceThemesTable} from "./content/genre/performance/performanceThemeTable";
+import {SciFiThemesTable} from "./content/genre/sciFi/sciFiThemeTable";
+import {ThrillerThemesTable} from "./content/genre/thriller/thrillerThemeTable";
+import {WesternThemesTable} from "./content/genre/western/westernThemeTable";
+import {WarThemesTable} from "./content/genre/war/warThemeTable";
 
 export const IllnessCategoryName = "Illness";
 export const OtherCategoryName = "Other";
@@ -78,8 +94,24 @@ export function allCategories(): Category[] {
 
     let themeCategory = new Category()
         .withName("Theme")
-        .withTable(new GeneralThemesTable())
-        .withTable(new FantasyThemesTable());
+        .withTable(new ActionThemeTable())
+        .withTable(new ComedyThemeTable())
+        .withTable(new CrimeThemeTable())
+        .withTable(new DramaThemeTable())
+        .withTable(new ExplorerThemeTable())
+        .withTable(new GangsterThemesTable())
+        .withTable(new FantasyThemeTable())
+        .withTable(new HeistThemesTable())
+        .withTable(new HorrorThemesTable())
+        .withTable(new LoveThemesTable())
+        .withTable(new MemoirThemesTable())
+        .withTable(new MysteryThemesTable())
+        .withTable(new MythicThemesTable())
+        .withTable(new PerformanceThemesTable())
+        .withTable(new SciFiThemesTable())
+        .withTable(new ThrillerThemesTable())
+        .withTable(new WarThemesTable())
+        .withTable(new WesternThemesTable())
     allCategories.push(themeCategory);
 
     let genreCategory = new Category()

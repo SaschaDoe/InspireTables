@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount } from 'svelte'; // Import onMount lifecycle function
+    import { onMount } from 'svelte';
     import { GenreMix } from "../../core/entities/genre/genreMix";
     import GenreComponent from "$lib/CampaignComponents/GenreComponent.svelte";
     import { getSelectedCampaign, getSelectedProfile, getStorageStrategy, saveSelectedCampaign } from "../../core/entities/persist/stores";
@@ -8,9 +8,9 @@
     import { GenreMixCreator } from "../../core/entities/genre/genreMixCreator";
     import { TableManager } from "../../core/entities/persist/tableManager";
     import { FunctionFactory } from "../../core/tables/core/entry/functionFactory";
-    import { RefreshCcw } from 'lucide-svelte'; // Use Lucide's Refresh Icon
+    import { RefreshCcw } from 'lucide-svelte';
 
-    export let genreMix: GenreMix = new GenreMix(); // GenreMix from outside
+    export let genreMix: GenreMix = new GenreMix();
     let campaign = new Campaign();
     let profile = new Profile();
     let primaryWeight = 100;
@@ -28,10 +28,26 @@
     }
 
     // Set up genre mix from the existing one
-    function setupExistingGenreMix() {
-        if (genreMix) {
-            updateWeights(genreMix); // Update weights using the existing genre mix
+    async function setupExistingGenreMix() {
+        // Fetch the selected profile
+        let tmpProfile = await getSelectedProfile();
+        if (tmpProfile !== null) {
+            profile = tmpProfile;
         }
+
+        // Fetch the selected campaign
+        let tmpCampaign = await getSelectedCampaign();
+        if (tmpCampaign !== null) {
+            campaign = tmpCampaign;
+        }
+
+        // Update weights if genreMix exists
+        if (campaign.genreMix) {
+            genreMix = campaign.genreMix;
+            updateWeights(genreMix);
+        }
+
+        console.log("Campaign:", campaign)
     }
 
     // Generate a new genre mix
@@ -57,12 +73,12 @@
         await saveSelectedCampaign(campaign);
 
         genreMix = newGenreMix;
-        updateWeights(genreMix); // Update weights using the new genre mix
+        updateWeights(genreMix);
     }
 
     // On component mount, set up using the existing GenreMix
-    onMount(() => {
-        setupExistingGenreMix(); // Use the existing genre mix from outside
+    onMount(async () => {
+        await setupExistingGenreMix();
     });
 
     async function rollAgain() {
@@ -71,18 +87,16 @@
 </script>
 
 <!-- Genre Mix Layout -->
-<div class="p-4 bg-gray-100 rounded-lg shadow-md">
+<div class="p-4 bg-gray-100 rounded-lg shadow-md ">
     <div class="flex items-center justify-between">
         <h2 class="text-lg font-bold text-black">Genre Mix</h2>
         <button
                 on:click={rollAgain}
                 class="flex items-center justify-center bg-blue-500 hover:bg-blue-700 text-white font-bold p-2 rounded-full transition duration-300 ease-in-out">
-            <!-- Smaller Refresh Icon -->
             <RefreshCcw class="w-4 h-4" />
         </button>
     </div>
 
-    <!-- Primary Genre Section -->
     <section class="mt-4">
         <header class="text-xl font-semibold text-gray-700 mb-2">Primary Genre</header>
         <div class="bg-white p-2 rounded-lg shadow">
@@ -91,16 +105,40 @@
     </section>
 
     {#if subGenreWeights.length > 0}
-    <!-- Sub-genres Section -->
-    <section class="mt-4">
-        <header class="text-xl font-semibold text-gray-700 mb-2">Sub Genres</header>
-        <div class="space-y-2">
-            {#each subGenreWeights as {genre, weight}}
-                <div class="bg-white p-2 rounded-lg shadow">
-                    <GenreComponent genre={genreMix.subGenres.find(subGenre => subGenre.fullName === genre)} weight={weight}></GenreComponent>
-                </div>
-            {/each}
-        </div>
-    </section>
-        {/if}
+        <!-- Sub-genres Section -->
+        <section class="mt-4">
+            <header class="text-xl font-semibold text-gray-700 mb-2">Sub Genres</header>
+            <div class="space-y-2">
+                {#each subGenreWeights as {genre, weight}}
+                    <div class="bg-white p-2 rounded-lg shadow">
+                        <GenreComponent genre={genreMix.subGenres.find(subGenre => subGenre.fullName === genre)} weight={weight}></GenreComponent>
+                    </div>
+                {/each}
+            </div>
+        </section>
+    {/if}
+
+    <!-- Themes Section -->
+    {#if genreMix.themes && genreMix.themes.length > 0}
+        <section class="mt-4">
+            <header class="text-xl font-semibold text-gray-700 mb-2">Themes</header>
+            <div class="space-y-2 text-black">
+                {#each genreMix.themes as theme}
+                    <li class="bg-white p-2 rounded-lg shadow">{theme}</li>
+                {/each}
+            </div>
+        </section>
+    {/if}
+
+    <!-- Theme Statements Section -->
+    {#if genreMix.themeStatements && genreMix.themeStatements.length > 0}
+        <section class="mt-4">
+            <header class="text-xl font-semibold text-gray-700 mb-2">Theme Statements</header>
+            <div class="space-y-2 text-black">
+                {#each genreMix.themeStatements as statement}
+                    <li class="bg-white p-2 rounded-lg shadow">{statement}</li>
+                {/each}
+            </div>
+        </section>
+    {/if}
 </div>

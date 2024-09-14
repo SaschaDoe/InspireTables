@@ -3,10 +3,15 @@ import {getStore} from "../persist/stores";
 import {GenreCreator} from "./genreCreator";
 import {CreationResult} from "../creationResult";
 import {BaseCreator} from "../baseCreator";
-import type {Genre} from "./genre";
+import {type Genre, getJustMainGenreName} from "./genre";
 import {NarrativeMediumTypes} from "../campaign/narrativeMediumTypes";
 import {RollResult} from "../../tables/rollResult";
 import {addList} from "../../tables/content/other/techLevelTable";
+import {themeMap} from "../../tables/content/themes/themes";
+import {generateThematicStatement} from "../../tables/content/themes/theme";
+import {RandomResult} from "../../tables/randomResult";
+import {ComparisonResult, RelationalOperator} from "../../tables/comparisonResult";
+import {genreToThemeTableMap} from "../../tables/content/genre/genreToThemeTable";
 
 export class GenreMixCreator extends BaseCreator {
     narrativeMedium: NarrativeMediumTypes = NarrativeMediumTypes.RPG;
@@ -23,6 +28,7 @@ export class GenreMixCreator extends BaseCreator {
         let primaryGenreCreationResult = await this.createUniqueGenre(genreMix);
         creationResult.addCreationResult(primaryGenreCreationResult);
         genreMix.primaryGenre = primaryGenreCreationResult.getCreation() as Genre;
+        console.log("Primary genre: ",genreMix.primaryGenre)
         let min = 0;
         let hasJustOneGenre = this.dice.getRandom() > 0.8;
         if(!hasJustOneGenre){
@@ -79,9 +85,109 @@ export class GenreMixCreator extends BaseCreator {
             genreMix.techList = addList(genreMix.techList,subGenre.technologyLevels);
         }
 
+        genreMix.themes = this.getThemesBy(genreMix, creationResult);
+        genreMix.themeStatements = this.getStatements(genreMix.themes, creationResult);
+
         creationResult.addCreation(genreMix);
 
         return creationResult;
+    }
+
+    private getStatements(themes: string[], creationResult: CreationResult) {
+        let thematicStatements: string[] = [];
+        for (const themeName of themes) {
+            console.log("theme: ",themeName);
+            let theme = themeMap[themeName];
+            let thematicStatement = generateThematicStatement(theme);
+            thematicStatements.push(thematicStatement)
+        }
+        return thematicStatements;
+    }
+
+    private getThemesBy(genreMix: GenreMix, creationResult: CreationResult) {
+        let themes: string[] = [];
+        let numberOfThemes = this.getRandomNumberBetween(1, 5);
+        let numberOfThemesResult = new RandomResult()
+            .withDescription("random number for number of themes of a campaign 1-5")
+            .withResult(numberOfThemes);
+        let randomOfThemesRollResult = new RollResult().withRandomResult(numberOfThemesResult);
+        creationResult.addRollResult(randomOfThemesRollResult);
+
+        let maxAttempts = 100; // Safeguard to prevent infinite loops
+        let attempts = 0;
+
+        while (themes.length < numberOfThemes && attempts < maxAttempts) {
+            attempts++;
+
+            let comparisonResult = new ComparisonResult(
+                this.dice.getRandom(),
+                RelationalOperator.GREATER,
+                0.7,
+                "theme from tech level not from genre"
+            );
+            let rollResul = new RollResult().withComparisonResult(comparisonResult);
+            creationResult.addRollResult(rollResul);
+
+            let themeResult: RollResult;
+
+            if (comparisonResult.compare()) {
+                //TODO: other
+                let randomChosenGenreName = this.getRandomWeightedGenre(genreMix.genreWeights, creationResult);
+                console.log(`get theme by genre: ${randomChosenGenreName}`);
+                let justMainGenreName = getJustMainGenreName(randomChosenGenreName);
+                let themeTable = genreToThemeTableMap[justMainGenreName];
+                console.log(themeTable);
+                themeResult = this.tableManager.getTable(themeTable).withDice(this.dice).roll();
+                creationResult.addRollResult(themeResult);
+            } else {
+                let randomChosenGenreName = this.getRandomWeightedGenre(genreMix.genreWeights, creationResult);
+                console.log(`get theme by genre: ${randomChosenGenreName}`);
+                let justMainGenreName = getJustMainGenreName(randomChosenGenreName);
+                let themeTable = genreToThemeTableMap[justMainGenreName];
+                console.log(themeTable);
+                themeResult = this.tableManager.getTable(themeTable).withDice(this.dice).roll();
+                creationResult.addRollResult(themeResult);
+            }
+
+            let themeName = themeResult.combinedString;
+
+            if (!themes.includes(themeName)) {
+                themes.push(themeName);
+            }
+        }
+
+        if (attempts === maxAttempts) {
+            console.warn("Maximum attempts reached while generating unique themes.");
+        }
+
+        return themes;
+    }
+
+
+
+    getRandomWeightedGenre(genreWeights: Map<string, number>, creationResult: CreationResult): string {
+        const totalWeight = Array.from(genreWeights.values()).reduce((sum, weight) => sum + weight, 0);
+        let randomResult = new RandomResult();
+        let randomNumber = this.dice.getRandom();
+        randomResult.result = randomNumber
+        randomResult.description = "random number for choosing genre from genre mix (with weights)"
+        let rollResult = new RollResult().withRandomResult(randomResult);
+        creationResult.addRollResult(rollResult);
+        let randomWeightedNumber = randomNumber * totalWeight;
+
+        for (const [genre, weight] of genreWeights.entries()) {
+            randomWeightedNumber -= weight;
+            if (randomWeightedNumber <= 0) {
+                return genre;
+            }
+        }
+
+        // Fallback in case of rounding errors
+        return Array.from(genreWeights.keys())[0];
+    }
+
+    getRandomNumberBetween(min: number, max: number): number {
+        return Math.floor(this.dice.getRandom() * (max - min + 1)) + min;
     }
 
     async createUniqueGenre(genreMix: GenreMix): Promise<CreationResult> {

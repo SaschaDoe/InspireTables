@@ -5,7 +5,6 @@
     import { FunctionFactory } from "../../core/tables/core/entry/functionFactory";
     import { AdventureCreator } from "../../core/entities/adventure/adventureCreator";
     import {
-        getSelectedProfile,
         getStorageStrategy,
         getStore, selectedGlobalStore, selectedProfileStore,
     } from "../../core/entities/persist/stores";
@@ -201,7 +200,7 @@
 
             <div class="bg-white shadow-md rounded-lg p-4">
                 <div class="mb-4">
-                    <GenreMixComponent genreMix={campaign.genreMix}></GenreMixComponent>
+
                     <label for="campaignName" class="block text-sm font-medium text-gray-700">Campaign Name</label>
                     <input
                             type="text"
@@ -235,6 +234,7 @@
                         </ListBox>
                         <div class="arrow bg-surface-100-800-token" />
                     </div>
+                    <GenreMixComponent genreMix={campaign.genreMix}></GenreMixComponent>
                 </div>
             </div>
         </div>

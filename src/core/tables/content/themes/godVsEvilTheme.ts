@@ -49,7 +49,7 @@ export class GoodVsEvilTheme extends Theme {
         ];
     }
 }
-
+/*
 export function generateThematicStatement(theme: Theme): string {
     const subject = getRandomElement(theme.subjects);
     const verb = getRandomElement(theme.verbs);
@@ -77,4 +77,4 @@ export function generateThematicStatement(theme: Theme): string {
 
 function getRandomElement(array: string[]): string {
     return array[Math.floor(Math.random() * array.length)];
-}
+}*/

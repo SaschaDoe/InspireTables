@@ -29,7 +29,7 @@ export let fantasyThemes = [
 
 export const FantasyThemeTableName = "Fantasy Theme";
 
-export class FantasyThemesTable extends Table{
+export class FantasyThemeTable extends Table{
     constructor() {
         super();
         this.title = FantasyThemeTableName;
