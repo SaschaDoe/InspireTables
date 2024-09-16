@@ -1,9 +1,9 @@
-import {GenreMix} from "./genreMix";
+import {GenreMix, type GenreWeights} from "./genreMix";
 import {getStore} from "../persist/stores";
 import {GenreCreator} from "./genreCreator";
 import {CreationResult} from "../creationResult";
 import {BaseCreator} from "../baseCreator";
-import {type Genre, getJustMainGenreName} from "./genre";
+import {type Genre, getGenreFullName, getJustMainGenreName} from "./genre";
 import {NarrativeMediumTypes} from "../campaign/narrativeMediumTypes";
 import {RollResult} from "../../tables/rollResult";
 import {addList} from "../../tables/content/other/techLevelTable";
@@ -12,6 +12,7 @@ import {generateThematicStatement} from "../../tables/content/themes/theme";
 import {RandomResult} from "../../tables/randomResult";
 import {ComparisonResult, RelationalOperator} from "../../tables/comparisonResult";
 import {genreToThemeTableMap} from "../../tables/content/genre/genreToThemeTable";
+import {realThemeMap} from "../../tables/content/genre/realThemeMap";
 
 export class GenreMixCreator extends BaseCreator {
     narrativeMedium: NarrativeMediumTypes = NarrativeMediumTypes.RPG;
@@ -53,8 +54,8 @@ export class GenreMixCreator extends BaseCreator {
         }
         let primaryGenreWeightResult = new RollResult().withInterval(20, 80, "primary genre weight", primaryGenreWeight);
         creationResult.addRollResult(primaryGenreWeightResult);
-
-        genreMix.genreWeights.set(genreMix.primaryGenre.fullName, primaryGenreWeight);
+        let fullName = getGenreFullName(genreMix.primaryGenre.name, genreMix.primaryGenre.subGenreName)
+        genreMix.genreWeights[fullName] =  primaryGenreWeight;
         console.log("GenreMix: ",genreMix);
         remainingWeight -= primaryGenreWeight;
 
@@ -68,14 +69,14 @@ export class GenreMixCreator extends BaseCreator {
                 let min = 1;
                 let max = remainingWeight - (genreMix.subGenres.length - i - 1);
                 weight = this.dice.rollInterval(min, max);
-                let genreWeightResult = new RollResult().withInterval(min, max, `genre weight for ${subGenre.fullName}`, weight);
+                let genreWeightResult = new RollResult().withInterval(min, max, `genre weight for ${fullName}`, weight);
                 creationResult.addRollResult(genreWeightResult);
                 remainingWeight -= weight;
             }
 
-            genreMix.genreWeights.set(subGenre.fullName, weight);
+            genreMix.genreWeights[getGenreFullName(subGenre.name, subGenre.subGenreName)] = weight;
 
-            let subGenreWeightResult = new RollResult().withInterval(1, 100, `${subGenre.fullName} weight`, weight);
+            let subGenreWeightResult = new RollResult().withInterval(1, 100, `${fullName} weight`, weight);
             creationResult.addRollResult(subGenreWeightResult);
         }
 
@@ -87,22 +88,13 @@ export class GenreMixCreator extends BaseCreator {
 
         genreMix.themes = this.getThemesBy(genreMix, creationResult);
         genreMix.themeStatements = this.getStatements(genreMix.themes, creationResult);
-
+        genreMix.realThemeStatements = this.getRealThemeStatements(genreMix.themes, creationResult);
         creationResult.addCreation(genreMix);
 
         return creationResult;
     }
 
-    private getStatements(themes: string[], creationResult: CreationResult) {
-        let thematicStatements: string[] = [];
-        for (const themeName of themes) {
-            console.log("theme: ",themeName);
-            let theme = themeMap[themeName];
-            let thematicStatement = generateThematicStatement(theme);
-            thematicStatements.push(thematicStatement)
-        }
-        return thematicStatements;
-    }
+
 
     private getThemesBy(genreMix: GenreMix, creationResult: CreationResult) {
         let themes: string[] = [];
@@ -165,17 +157,17 @@ export class GenreMixCreator extends BaseCreator {
 
 
 
-    getRandomWeightedGenre(genreWeights: Map<string, number>, creationResult: CreationResult): string {
-        const totalWeight = Array.from(genreWeights.values()).reduce((sum, weight) => sum + weight, 0);
+    getRandomWeightedGenre(genreWeights: GenreWeights, creationResult: CreationResult): string {
+        const totalWeight = Object.values(genreWeights).reduce((sum, weight) => sum + weight, 0);
         let randomResult = new RandomResult();
         let randomNumber = this.dice.getRandom();
-        randomResult.result = randomNumber
-        randomResult.description = "random number for choosing genre from genre mix (with weights)"
+        randomResult.result = randomNumber;
+        randomResult.description = "random number for choosing genre from genre mix (with weights)";
         let rollResult = new RollResult().withRandomResult(randomResult);
         creationResult.addRollResult(rollResult);
         let randomWeightedNumber = randomNumber * totalWeight;
 
-        for (const [genre, weight] of genreWeights.entries()) {
+        for (const [genre, weight] of Object.entries(genreWeights)) {
             randomWeightedNumber -= weight;
             if (randomWeightedNumber <= 0) {
                 return genre;
@@ -183,7 +175,7 @@ export class GenreMixCreator extends BaseCreator {
         }
 
         // Fallback in case of rounding errors
-        return Array.from(genreWeights.keys())[0];
+        return Object.keys(genreWeights)[0];
     }
 
     getRandomNumberBetween(min: number, max: number): number {
@@ -210,7 +202,7 @@ export class GenreMixCreator extends BaseCreator {
 
         // Check if any genre in the list matches the logic you provided
         return allGenres.some(genre =>
-            genre?.fullName === otherGenre.fullName
+            getGenreFullName(genre.name, genre.subGenreName) === getGenreFullName(otherGenre.name, otherGenre.subGenreName)
             ||
             genre?.name === otherGenre.name &&
             otherGenre.subGenreName === ""
@@ -227,5 +219,30 @@ export class GenreMixCreator extends BaseCreator {
             console.error(`Failed to save entities:`, error);
             throw error;
         }
+    }
+
+    private getStatements(themes: string[], creationResult: CreationResult) {
+        let thematicStatements: string[] = [];
+        for (const themeName of themes) {
+            console.log("theme: ",themeName);
+            let theme = themeMap[themeName];
+            let thematicStatement = generateThematicStatement(theme);
+            thematicStatements.push(thematicStatement)
+        }
+        return thematicStatements;
+    }
+
+    private getRealThemeStatements(themes: string[], creationResult: CreationResult) {
+        let thematicStatements: string[] = [];
+        for (const themeName of themes) {
+            console.log("theme: ",themeName);
+            let themeTableName = realThemeMap[themeName];
+            let table = this.tableManager.getTable(themeTableName)
+            let thematicStatementResult = table.withDice(this.dice).roll();
+            creationResult.addRollResult(thematicStatementResult);
+            let statement = thematicStatementResult.combinedString;
+            thematicStatements.push(statement)
+        }
+        return thematicStatements;
     }
 }

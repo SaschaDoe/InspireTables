@@ -63,6 +63,7 @@ import {TrustTheme, TrustThemeName} from "./trustTheme";
 import {UnknownTheme, UnknownThemeName} from "./unknownTheme";
 import {WhatReallyMattersTheme, WhatReallyMattersThemeName} from "./whatReallyMattersTheme";
 import {DivineTheme, DivineThemeName} from "./divineTheme";
+import {TruthTheme, TruthThemeName} from "./truthTheme";
 
 export let themeMap: { [p: string]: Theme };
 themeMap = {
@@ -128,6 +129,7 @@ themeMap = {
     [TraumaThemeName]: new TraumaTheme(),
     [TrustInSocietyThemeName]: new TrustInSocietyTheme(),
     [TrustThemeName]: new TrustTheme(),
+    [TruthThemeName]: new TruthTheme(),
     [UnknownThemeName]: new UnknownTheme(),
     [WhatReallyMattersThemeName]: new WhatReallyMattersTheme(),
 };

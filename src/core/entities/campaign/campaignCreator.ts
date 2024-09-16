@@ -49,6 +49,7 @@ export class CampaignCreator extends BaseCreator {
 
     async persist(entity: Entity): Promise<void> {
         let campaign = entity as Campaign;
+        console.log("persist campaign: ", campaign);
         let campaignStore = await getStore('campaignStore');
         await campaignStore.saveEntity(campaign);
     }

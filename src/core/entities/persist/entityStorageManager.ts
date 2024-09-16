@@ -55,6 +55,7 @@ export class EntityStorageManager<T extends Entity & Deletable> {
         if (jsonString.trim() === '') {
             this.entities = [];
         } else {
+            console.log("load: ", jsonString);
             this.entities = JSON.parse(jsonString) as T[];
         }
         this.notifySubscribers();

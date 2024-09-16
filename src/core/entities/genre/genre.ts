@@ -17,16 +17,14 @@ export class Genre extends AutoDeletableEntity{
     // Mood and pacing
     moodOptions: string[] = [];
     paceOptions: string[] = [];
+}
 
-    //for subGenre it is like "action(superhero)"
-
-    get fullName(){
-        if(this.subGenreName !== ""){
-            return `${this.name}(${this.subGenreName})`;
-        }
-
-        return this.name;
+export function getGenreFullName(name: string, subGenreName: string){
+    if(subGenreName !== ""){
+        return `${name}(${subGenreName})`;
     }
+
+    return name;
 }
 
 export function getJustMainGenreName(input: string): string{

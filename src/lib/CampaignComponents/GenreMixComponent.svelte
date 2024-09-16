@@ -9,6 +9,7 @@
     import { TableManager } from "../../core/entities/persist/tableManager";
     import { FunctionFactory } from "../../core/tables/core/entry/functionFactory";
     import { RefreshCcw } from 'lucide-svelte';
+    import {getGenreFullName} from "../../core/entities/genre/genre";
 
     export let genreMix: GenreMix = new GenreMix();
     let campaign = new Campaign();
@@ -18,11 +19,16 @@
 
     // Function to update weights and genre components
     function updateWeights(genreMix: GenreMix) {
-        primaryWeight = genreMix.genreWeights.get(genreMix.primaryGenre.fullName) as number;
+        console.log("Full genreWeights object:", genreMix.genreWeights);
+        console.log("Primary genre: ", genreMix.primaryGenre);
+        let fullName = getGenreFullName(genreMix.primaryGenre.name, genreMix.primaryGenre.subGenreName);
+        console.log("Primary genre full name:", fullName);
+        primaryWeight = genreMix.genreWeights[fullName] as number;
+        console.log("Primary weight:", primaryWeight);
         subGenreWeights = genreMix.subGenres
             .map((genre) => ({
-                genre: genre.fullName,
-                weight: genreMix.genreWeights.get(genre.fullName) as number,
+                genre: getGenreFullName(genre.name, genre.subGenreName),
+                weight: genreMix.genreWeights[getGenreFullName(genre.name, genre.subGenreName)] as number,
             }))
             .sort((a, b) => b.weight - a.weight);
     }
@@ -111,7 +117,7 @@
             <div class="space-y-2">
                 {#each subGenreWeights as {genre, weight}}
                     <div class="bg-white p-2 rounded-lg shadow">
-                        <GenreComponent genre={genreMix.subGenres.find(subGenre => subGenre.fullName === genre)} weight={weight}></GenreComponent>
+                        <GenreComponent genre={genreMix.subGenres.find(subGenre => getGenreFullName(subGenre.name, subGenre.subGenreName) === genre)} weight={weight}></GenreComponent>
                     </div>
                 {/each}
             </div>

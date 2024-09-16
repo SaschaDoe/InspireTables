@@ -78,10 +78,13 @@
 
     async function addNewCampaign() {
         console.log("create new campaign with ", profile);
-        let newCampaign = await new CampaignCreator(tableManager)
-            .withNarrativeMedium(profile.narrativeMediumType)
-            .create()
+        let campaignCreator = new CampaignCreator(tableManager)
+            .withNarrativeMedium(profile.narrativeMediumType);
+        let newCampaign = await campaignCreator
+            .create();
         let nCampaign = newCampaign.getCreation() as Campaign;
+
+
         let campaignStore = await getStore('campaignStore');
         await campaignStore.saveEntity(nCampaign);
 
@@ -94,6 +97,7 @@
         campaigns = profile.campaigns;
 
         await saveProfile(profile);
+        await campaignCreator.persist(nCampaign);
     }
 
     async function saveProfile(profile: Profile){
