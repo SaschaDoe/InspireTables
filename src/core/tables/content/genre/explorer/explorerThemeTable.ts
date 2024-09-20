@@ -7,7 +7,7 @@ import {UnknownThemeName} from "../../themes/unknownTheme";
 import {SearchThemeName} from "../../themes/searchTheme";
 import {NatureAsEnemyThemeName} from "../../themes/natureAsEnemyTheme";
 import {TimeThemeName} from "../../themes/timeTheme";
-import {TechnologicalInnovationThemeName} from "../../themes/technologicalInovationTheme";
+import {TechnologicalInnovationThemeName} from "../../themes/technologicalInnovationTheme";
 import {PersonalGrowthThemeName} from "../../themes/personalGrowthTheme";
 import {TeamworkThemeName} from "../../themes/teamworkTheme";
 import {IsolationThemeName} from "../../themes/isolationTheme";

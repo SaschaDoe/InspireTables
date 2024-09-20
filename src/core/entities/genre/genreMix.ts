@@ -15,7 +15,6 @@ export class GenreMix extends AutoDeletableEntity {
     techList: [string, number][] = [];
     themes: string[] = [];
     themeStatements: string[] = [];
-    realThemeStatements: string[] = [];
 
     blendIntensity: number = 0; // 0-10 scale, 0 being barely mixed, 10 being deeply intertwined
     genreTransitions: string = ""; // How the story moves between genre elements

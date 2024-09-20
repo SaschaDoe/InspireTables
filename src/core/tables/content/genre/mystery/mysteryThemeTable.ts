@@ -2,8 +2,8 @@ import {Table} from "../../../table";
 import {JusticeThemeName} from "../../themes/justiceTheme";
 import {TruthThemeName} from "../../themes/truthTheme";
 import {CatAndMouseThemeName} from "../../themes/catAndMouseTheme";
-import {GoodVsEvilThemeName} from "../../themes/godVsEvilTheme";
-import {MistakenIdentityThemeName} from "../../themes/mistakenIdentity";
+import {GoodVsEvilThemeName} from "../../themes/goodVsEvilTheme";
+import {MistakenIdentityThemeName} from "../../themes/mistakenIdentityTheme";
 import {PowerThemeName} from "../../themes/powerTheme";
 import {SearchThemeName} from "../../themes/searchTheme";
 import {IsolationThemeName} from "../../themes/isolationTheme";
@@ -15,7 +15,7 @@ import {RevengeThemeName} from "../../themes/revengeTheme";
 import {RecallThemeName} from "../../themes/recallTheme";
 import {TrustThemeName} from "../../themes/trustTheme";
 import {RealityThemeName} from "../../themes/realityTheme";
-import {TechnologicalInnovationThemeName} from "../../themes/technologicalInovationTheme";
+import {TechnologicalInnovationThemeName} from "../../themes/technologicalInnovationTheme";
 
 export let mysteryThemes = [
     JusticeThemeName,

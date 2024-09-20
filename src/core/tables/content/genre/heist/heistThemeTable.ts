@@ -4,7 +4,7 @@ import {CorruptionThemeName} from "../../themes/corruptionTheme";
 import {JusticeThemeName} from "../../themes/justiceTheme";
 import {GreedThemeName} from "../../themes/greedTheme";
 import {TeamworkThemeName} from "../../themes/teamworkTheme";
-import {TechnologicalInnovationThemeName} from "../../themes/technologicalInovationTheme";
+import {TechnologicalInnovationThemeName} from "../../themes/technologicalInnovationTheme";
 import {DavidVsGoliathThemeName} from "../../themes/davidVsGoliathTheme";
 import {ObsessionThemeName} from "../../themes/obsessionTheme";
 import {PursuitOfProsperityThemeName} from "../../themes/pursuitOfProsperityTheme";

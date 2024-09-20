@@ -1,7 +1,7 @@
 import { Theme } from "./theme";
 import {Source} from "./source";
 
-export const GoodVsEvilThemeName = "good_vs_evil";
+export const GoodVsEvilThemeName = "good vs. evil";
 
 export class GoodVsEvilTheme extends Theme {
     constructor() {

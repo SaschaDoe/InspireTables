@@ -11,7 +11,7 @@ import {PowerThemeName} from "../../themes/powerTheme";
 import {PriceOfSuccessThemeName} from "../../themes/priceOfSuccessTheme";
 import {RealityThemeName} from "../../themes/realityTheme";
 import {SurvivalThemeName} from "../../themes/survivalTheme";
-import {TechnologicalInnovationThemeName} from "../../themes/technologicalInovationTheme";
+import {TechnologicalInnovationThemeName} from "../../themes/technologicalInnovationTheme";
 import {TimeThemeName} from "../../themes/timeTheme";
 import {TrustInSocietyThemeName} from "../../themes/trustInSocietyTheme";
 import {UnknownThemeName} from "../../themes/unknownTheme";

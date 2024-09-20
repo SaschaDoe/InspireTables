@@ -1,7 +1,7 @@
 import {Table} from "../../../table";
 import {CatAndMouseThemeName} from "../../themes/catAndMouseTheme";
 import {CorruptionThemeName} from "../../themes/corruptionTheme";
-import {GoodVsEvilThemeName} from "../../themes/godVsEvilTheme";
+import {GoodVsEvilThemeName} from "../../themes/goodVsEvilTheme";
 import {JusticeThemeName} from "../../themes/justiceTheme";
 import {
     NormalityMadnessBoundaryThemeName

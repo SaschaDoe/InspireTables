@@ -4,7 +4,7 @@ import {ApocalypseThemeName} from "../../themes/apocalypseTheme";
 import {DavidVsGoliathThemeName} from "../../themes/davidVsGoliathTheme";
 import {DeathThemeName} from "../../themes/deathTheme";
 import {FamilyThemeName} from "../../themes/familyTheme";
-import {GoodVsEvilThemeName} from "../../themes/godVsEvilTheme";
+import {GoodVsEvilThemeName} from "../../themes/goodVsEvilTheme";
 import {HeroismThemeName} from "../../themes/heroismTheme";
 import {InnocenceThemeName} from "../../themes/innocenceTheme";
 import {InvasionThemeName} from "../../themes/invasionTheme";

@@ -10,7 +10,7 @@ import {DisillusionmentThemeName} from "../../themes/disillusionmentTheme";
 import {FakeRelationshipThemeName} from "../../themes/fakeRelationshipTheme";
 import {CorruptionThemeName} from "../../themes/corruptionTheme";
 import {FishOutOfWaterThemeName} from "../../themes/fishOutOfWaterTheme";
-import {GoodVsEvilThemeName} from "../../themes/godVsEvilTheme";
+import {GoodVsEvilThemeName} from "../../themes/goodVsEvilTheme";
 import {GreedThemeName} from "../../themes/greedTheme";
 import {HeroismThemeName} from "../../themes/heroismTheme";
 import {InnocenceThemeName} from "../../themes/innocenceTheme";

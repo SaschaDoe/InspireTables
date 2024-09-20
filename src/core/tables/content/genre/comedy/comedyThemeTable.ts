@@ -1,6 +1,6 @@
 import {Table} from "../../../table";
 import {FishOutOfWaterThemeName} from "../../themes/fishOutOfWaterTheme";
-import {MistakenIdentityThemeName} from "../../themes/mistakenIdentity";
+import {MistakenIdentityThemeName} from "../../themes/mistakenIdentityTheme";
 import {FamilyThemeName} from "../../themes/familyTheme";
 import {ComingOfAgeThemeName} from "../../themes/comingOfAgeTheme";
 import {CultureClashesThemeName} from "../../themes/cultureClashTheme";

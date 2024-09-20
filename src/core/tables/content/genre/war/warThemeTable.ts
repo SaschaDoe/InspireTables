@@ -8,7 +8,7 @@ import {DeathThemeName} from "../../themes/deathTheme";
 import {DefinitionOfHumanityThemeName} from "../../themes/definitionOfHumanityTheme";
 import {DisillusionmentThemeName} from "../../themes/disillusionmentTheme";
 import {FishOutOfWaterThemeName} from "../../themes/fishOutOfWaterTheme";
-import {GoodVsEvilThemeName} from "../../themes/godVsEvilTheme";
+import {GoodVsEvilThemeName} from "../../themes/goodVsEvilTheme";
 import {GuiltThemeName} from "../../themes/guiltTheme";
 import {HeroismThemeName} from "../../themes/heroismTheme";
 import {InnocenceThemeName} from "../../themes/innocenceTheme";
@@ -24,7 +24,7 @@ import {PsychosomaticDualityThemeName} from "../../themes/psychosomaticDualityTh
 import {RevengeThemeName} from "../../themes/revengeTheme";
 import {SoulmatesThemeName} from "../../themes/soulmateTheme";
 import {SurvivalThemeName} from "../../themes/survivalTheme";
-import {TechnologicalInnovationThemeName} from "../../themes/technologicalInovationTheme";
+import {TechnologicalInnovationThemeName} from "../../themes/technologicalInnovationTheme";
 import {TeamworkThemeName} from "../../themes/teamworkTheme";
 import {TrustThemeName} from "../../themes/trustTheme";
 import {NostalgiaThemeName} from "../../themes/nostalgiaTheme";

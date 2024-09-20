@@ -4,7 +4,7 @@ import {LoyaltyThemeName} from "../../themes/loyaltyTheme";
 import {RevengeThemeName} from "../../themes/revengeTheme";
 import {DisillusionmentThemeName} from "../../themes/disillusionmentTheme";
 import {CorruptionThemeName} from "../../themes/corruptionTheme";
-import {GoodVsEvilThemeName} from "../../themes/godVsEvilTheme";
+import {GoodVsEvilThemeName} from "../../themes/goodVsEvilTheme";
 import {JusticeThemeName} from "../../themes/justiceTheme";
 import {GreedThemeName} from "../../themes/greedTheme";
 import {FamilyThemeName} from "../../themes/familyTheme";

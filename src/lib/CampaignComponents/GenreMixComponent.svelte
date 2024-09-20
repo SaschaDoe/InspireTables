@@ -10,12 +10,14 @@
     import { FunctionFactory } from "../../core/tables/core/entry/functionFactory";
     import { RefreshCcw } from 'lucide-svelte';
     import {getGenreFullName} from "../../core/entities/genre/genre";
+    import OneTimeToolTip from "$lib/OneTimeToolTip.svelte";
 
     export let genreMix: GenreMix = new GenreMix();
     let campaign = new Campaign();
     let profile = new Profile();
     let primaryWeight = 100;
     let subGenreWeights: { genre: string, weight: number }[] = [];
+    let genreMixCreator: GenreMixCreator;
 
     // Function to update weights and genre components
     function updateWeights(genreMix: GenreMix) {
@@ -52,6 +54,10 @@
             genreMix = campaign.genreMix;
             updateWeights(genreMix);
         }
+
+        let storageStrategy = await getStorageStrategy();
+        let tableManager = await TableManager.getInstance(storageStrategy, new FunctionFactory());
+        genreMixCreator = new GenreMixCreator(tableManager);
 
         console.log("Campaign:", campaign)
     }
@@ -90,6 +96,36 @@
     async function rollAgain() {
         await generateNewGenreMix();
     }
+
+    async function addThemeFromGenreMix(){
+        genreMix = genreMixCreator.addTheme(genreMix);
+        await genreMixCreator.persist(genreMix);
+    }
+
+    async function addStatementFromGenreMix() {
+        genreMix = genreMixCreator.addStatement(genreMix, null);
+        await genreMixCreator.persist(genreMix);
+    }
+
+    async function addRealStatementFromGenreMix() {
+        genreMix = genreMixCreator.addRealStatement(genreMix, null);
+        await genreMixCreator.persist(genreMix);
+    }
+
+    async function addStatementFrom(themeName: string) {
+        genreMix = genreMixCreator.addStatement(genreMix, themeName);
+        await genreMixCreator.persist(genreMix);
+    }
+
+    async function addRealStatementFrom(themeName: string) {
+        genreMix = genreMixCreator.addRealStatement(genreMix, themeName);
+        await genreMixCreator.persist(genreMix);
+    }
+
+    async function removeStatement(statement: string){
+        genreMix = genreMixCreator.removeStatement(genreMix, statement);
+        await genreMixCreator.persist(genreMix);
+    }
 </script>
 
 <!-- Genre Mix Layout -->
@@ -124,27 +160,81 @@
         </section>
     {/if}
 
-    <!-- Themes Section -->
     {#if genreMix.themes && genreMix.themes.length > 0}
         <section class="mt-4">
-            <header class="text-xl font-semibold text-gray-700 mb-2">Themes</header>
+            <div class="flex items-center mb-2">
+                <header class="text-xl font-semibold text-gray-700 mr-2">Themes</header>
+                <div class="relative group">
+                    <button on:click={addThemeFromGenreMix} class="bg-blue-500 hover:bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center focus:outline-none">
+                        <span class="text-lg leading-none">+</span>
+                    </button>
+
+                </div>
+            </div>
             <div class="space-y-2 text-black">
                 {#each genreMix.themes as theme}
-                    <li class="bg-white p-2 rounded-lg shadow">{theme}</li>
+                    <li class="bg-white p-2 rounded-lg shadow flex items-center justify-between">
+                        <span>{theme}</span>
+                        <div class="flex items-center">
+                            <div class="relative group mr-2">
+                                <button
+                                        on:click={() => addStatementFrom(theme)}
+                                        class="bg-blue-500 hover:bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center focus:outline-none"
+                                >
+                                    <span class="text-lg leading-none">+</span>
+                                </button>
+                                <OneTimeToolTip text="statement from theme"></OneTimeToolTip>
+                            </div>
+                            <div class="relative group">
+                                <button
+                                        on:click={() => addRealStatementFrom(theme)}
+                                        class="bg-orange-500 hover:bg-orange-600 text-white rounded-full w-6 h-6 flex items-center justify-center focus:outline-none"
+                                >
+                                    <span class="text-lg leading-none">+</span>
+                                </button>
+                                <OneTimeToolTip text="real statement"></OneTimeToolTip>
+
+
+                            </div>
+                        </div>
+                    </li>
                 {/each}
             </div>
         </section>
     {/if}
 
-    <!-- Theme Statements Section -->
-    {#if genreMix.themeStatements && genreMix.themeStatements.length > 0}
-        <section class="mt-4">
-            <header class="text-xl font-semibold text-gray-700 mb-2">Theme Statements</header>
-            <div class="space-y-2 text-black">
-                {#each genreMix.themeStatements as statement}
-                    <li class="bg-white p-2 rounded-lg shadow">{statement}</li>
-                {/each}
+    <section class="mt-4">
+        <div class="flex items-center mb-2">
+            <header class="text-xl font-semibold text-gray-700 mr-2">Statements</header>
+            <div class="relative group mr-2">
+                <button
+                        on:click={addStatementFromGenreMix}
+                        class="bg-blue-500 hover:bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center focus:outline-none"
+                >
+                    <span class="text-lg leading-none">+</span>
+                </button>
+                    <OneTimeToolTip text="generated statement from genre mix"></OneTimeToolTip>
             </div>
-        </section>
-    {/if}
+            <div class="relative group">
+                <button
+                        on:click={addRealStatementFromGenreMix}
+                        class="bg-orange-500 hover:bg-orange-600 text-white rounded-full w-6 h-6 flex items-center justify-center focus:outline-none">
+                    <span class="text-lg leading-none">+</span>
+                </button>
+                <OneTimeToolTip text="real theme statement from genre mix"></OneTimeToolTip>
+            </div>
+        </div>
+        <div class="space-y-2 text-black">
+            {#each genreMix.themeStatements as statement}
+                <li class="bg-white p-2 rounded-lg shadow flex items-center">
+                    <button class="bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center mr-2 flex-shrink-0">
+                        <span on:click={() => removeStatement(statement)} class="text-sm leading-none">-</span>
+                    </button>
+                    <span>{statement}</span>
+                </li>
+            {/each}
+        </div>
+    </section>
+
+
 </div>

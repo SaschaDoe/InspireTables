@@ -1,5 +1,5 @@
 import {Table} from "../../../table";
-import {GoodVsEvilThemeName} from "../../themes/godVsEvilTheme";
+import {GoodVsEvilThemeName} from "../../themes/goodVsEvilTheme";
 import {JusticeThemeName} from "../../themes/justiceTheme";
 import {TeamworkThemeName} from "../../themes/teamworkTheme";
 import {DavidVsGoliathThemeName} from "../../themes/davidVsGoliathTheme";

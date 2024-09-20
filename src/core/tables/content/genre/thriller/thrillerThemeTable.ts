@@ -5,7 +5,7 @@ import {CatAndMouseThemeName} from "../../themes/catAndMouseTheme";
 import {CorruptionThemeName} from "../../themes/corruptionTheme";
 import {DavidVsGoliathThemeName} from "../../themes/davidVsGoliathTheme";
 import {DeathThemeName} from "../../themes/deathTheme";
-import {GoodVsEvilThemeName} from "../../themes/godVsEvilTheme";
+import {GoodVsEvilThemeName} from "../../themes/goodVsEvilTheme";
 import {GreedThemeName} from "../../themes/greedTheme";
 import {IsolationThemeName} from "../../themes/isolationTheme";
 import {

@@ -1,4 +1,4 @@
-import {GoodVsEvilThemeName} from "../../themes/godVsEvilTheme";
+import {GoodVsEvilThemeName} from "../../themes/goodVsEvilTheme";
 import {HeroismThemeName} from "../../themes/heroismTheme";
 import {Table} from "../../../table";
 import {RevengeThemeName} from "../../themes/revengeTheme";
@@ -10,7 +10,7 @@ import {CorruptionThemeName} from "../../themes/corruptionTheme";
 import {DavidVsGoliathThemeName} from "../../themes/davidVsGoliathTheme";
 import {PsychosomaticDualityThemeName} from "../../themes/psychosomaticDualityTheme";
 import {InnocenceThemeName} from "../../themes/innocenceTheme";
-import {TechnologicalInnovationThemeName} from "../../themes/technologicalInovationTheme";
+import {TechnologicalInnovationThemeName} from "../../themes/technologicalInnovationTheme";
 import {PersonalGrowthThemeName} from "../../themes/personalGrowthTheme";
 
 export let actionThemes = [

@@ -12,5 +12,6 @@ export class AllGenreTable extends Table{
         this.entryList.with(new Entry().withTable(new ComedySubGenreTable()))
         this.entryList.with(new Entry().withTable(new ActionSubGenreTable()))
         //TODO Propability of fantasy or sci fi very high / love low
+        //Do I need the table?
     }
 }

@@ -3,7 +3,8 @@
 	import TableList from "$lib/TableComponents/TableList.svelte";
 	import EntityMenu from "$lib/EntityComponents/EntityMenu.svelte";
 	import CampaignComponent from "$lib/CampaignComponents/CampaignComponent.svelte";
-	import {get, type Writable, writable} from "svelte/store";
+	import { get, writable } from "svelte/store";
+	import type { Writable } from "svelte/store";
 	import type {Campaign} from "../core/entities/campaign/campaign";
 	import AdventureComponent from "$lib/AdventureComponents/AdventureComponent.svelte";
 	import type {Adventure} from "../core/entities/adventure/adventure";
