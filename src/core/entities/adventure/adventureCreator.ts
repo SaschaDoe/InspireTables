@@ -4,7 +4,7 @@ import type { Entity } from "../entity";
 import {Adventure} from "./adventure";
 
 export class AdventureCreator extends BaseCreator {
-    create(): CreationResult {
+    async create(): Promise<CreationResult> {
         let adventure = new Adventure();
         return this.initializeCreation(adventure);
     }

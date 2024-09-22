@@ -2,8 +2,6 @@ import type {TableManager} from "./persist/tableManager";
 import {Dice} from "../tables/dice";
 import {CreationResult} from "./creationResult";
 import type {Entity} from "./entity";
-import {getStore} from "./persist/stores";
-import {get} from "svelte/store";
 import {IdGenerator} from "./persist/idGenerator";
 
 export abstract class BaseCreator {

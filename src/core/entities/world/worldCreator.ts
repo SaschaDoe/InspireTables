@@ -6,11 +6,9 @@ import {GenreMix} from "../genre/genreMix";
 
 export class WorldCreator extends BaseCreator {
     private genreMix: GenreMix = new GenreMix();
-    create(): CreationResult {
+    async create(): Promise<CreationResult> {
         let creationResult = new CreationResult();
         let world = new World();
-
-
 
         creationResult.addCreation(world);
         return creationResult;
