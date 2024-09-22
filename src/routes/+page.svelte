@@ -4,10 +4,7 @@
 	import EntityMenu from "$lib/EntityComponents/EntityMenu.svelte";
 	import CampaignComponent from "$lib/CampaignComponents/CampaignComponent.svelte";
 	import { get, writable } from "svelte/store";
-	import type { Writable } from "svelte/store";
-	import type {Campaign} from "../core/entities/campaign/campaign";
 	import AdventureComponent from "$lib/AdventureComponents/AdventureComponent.svelte";
-	import type {Adventure} from "../core/entities/adventure/adventure";
 	import StartComponent from "$lib/StartComponents/StartComponent.svelte";
 	import {onMount} from "svelte";
 	import {getStore, selectedGlobalStore, selectedProfileStore} from "../core/entities/persist/stores";
@@ -19,8 +16,8 @@
 	let initialWidthLeft: number;
 	let tabSet: number = 0;
 
-	export let selectedCampaign: Writable<Campaign | null> = writable(null);
-	export let selectedAdventure: Writable<Adventure | null> = writable(null);
+	export let selectedCampaign = writable(null);
+	export let selectedAdventure = writable(null);
 
 	onMount(async () => {
 		let selectedGlobal = get(selectedGlobalStore);
