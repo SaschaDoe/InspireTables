@@ -127,6 +127,14 @@ import {UnknownThemeName} from "../themes/unknownTheme";
 import {UnknownThemeStatementTableName} from "../themes/unknownThemeStatementTable";
 import {WhatReallyMattersThemeName} from "../themes/whatReallyMattersTheme";
 import {WhatReallyMattersThemeStatementTableName} from "../themes/whatReallyMattersThemeStatementTable";
+import {DutyVsDesireThemeName} from "../themes/dutyVsDesireTheme";
+import {DutyVsDesireThemeStatementTableName} from "../themes/dutyVsDesireThemeStatementTable";
+import {FreedomVsOppressionThemeName} from "../themes/freedomVsOppressionTheme";
+import {FreedomVsOppressionThemeStatementTableName} from "../themes/freedomVsOppressionThemeStatementTable";
+import {PrejudiceThemeName} from "../themes/prejudiceTheme";
+import {PrejudiceThemeStatementTableName} from "../themes/prejudiceThemeStatementTable";
+import {SacrificeThemeName} from "../themes/sacrificeTheme";
+import {SacrificeThemeStatementTableName} from "../themes/sacrificeThemeStatementTable";
 
 export let themeToRealStatementMap: { [key: string]: string } = {
     [AfterlifeThemeName]: AfterlifeThemeStatementTableName,
@@ -146,9 +154,11 @@ export let themeToRealStatementMap: { [key: string]: string } = {
     [DestinyThemeName]: DestinyThemeStatementTableName,
     [DisillusionmentThemeName]: DisillusionmentThemeStatementTableName,
     [DivineThemeName]: DivineThemeStatementTableName,
+    [DutyVsDesireThemeName]: DutyVsDesireThemeStatementTableName,
     [FakeRelationshipThemeName]: FakeRelationshipThemeStatementTableName,
     [FamilyThemeName]: FamilyThemeStatementTableName,
     [FishOutOfWaterThemeName]: FishOutOfWaterThemeStatementTableName,
+    [FreedomVsOppressionThemeName]: FreedomVsOppressionThemeStatementTableName,
     [FriendsToLoversThemeName]: FriendsToLoversThemeStatementTableName,
     [FutilityOfStruggleThemeName]: FutilityOfStruggleThemeStatementTableName,
     [GoodVsEvilThemeName]: GoodVsEvilThemeStatementTableName,
@@ -172,6 +182,7 @@ export let themeToRealStatementMap: { [key: string]: string } = {
     [PersonalGrowthThemeName]: PersonalityGrowthThemeStatementTableName,
     [PoliticalPhilosophyThemeName]: PoliticalPhilosophyThemeStatementTableName,
     [PowerThemeName]: PowerThemeStatementTableName,
+    [PrejudiceThemeName]: PrejudiceThemeStatementTableName,
     [PriceOfSuccessThemeName]: PriceOfSuccessThemeStatementTableName,
     [PsychosomaticDualityThemeName]: PsychosomaticDualityThemeStatementTableName,
     [PublicPerceptionThemeName]: PublicPerceptionThemeStatementTableName,
@@ -179,6 +190,7 @@ export let themeToRealStatementMap: { [key: string]: string } = {
     [RealityThemeName]: RealityThemeStatementTableName,
     [RecallThemeName]: RecallThemeStatementTableName,
     [RevengeThemeName]: RevengeThemeStatementTableName,
+    [SacrificeThemeName]: SacrificeThemeStatementTableName,
     [SearchThemeName]: SearchThemeStatementTableName,
     [SecondChanceRomanceThemeName]: SecondChanceRomanceThemeStatementTableName,
     [SoulmatesThemeName]: SoulmateThemeStatementTableName,

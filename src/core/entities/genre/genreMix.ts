@@ -1,5 +1,6 @@
 import {Genre} from "./genre";
 import {AutoDeletableEntity} from "../deletable";
+import type {ThemeDto} from "./themeDto";
 
 export interface GenreWeights {
     [genre: string]: number;
@@ -13,7 +14,7 @@ export class GenreMix extends AutoDeletableEntity {
     subGenres: Genre[] = []; // e.g., ["Action(hero)", "Mystery(noir)"] or ["Action", ""] if no subgenre
     genreWeights: GenreWeights = {};
     techList: [string, number][] = [];
-    themes: string[] = [];
+    themes: ThemeDto[] = [];
     themeStatements: string[] = [];
 
     blendIntensity: number = 0; // 0-10 scale, 0 being barely mixed, 10 being deeply intertwined

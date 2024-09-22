@@ -1,5 +1,5 @@
-import { Theme } from "./theme";
-import { Source } from "./source";
+import { Theme } from "../../../entities/genre/theme";
+import { Source } from "../../../entities/genre/source";
 
 export const ComingOfAgeThemeName = "coming of age";
 

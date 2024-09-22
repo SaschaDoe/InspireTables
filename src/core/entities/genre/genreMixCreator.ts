@@ -7,14 +7,15 @@ import {type Genre, getGenreFullName, getJustMainGenreName} from "./genre";
 import {NarrativeMediumTypes} from "../campaign/narrativeMediumTypes";
 import {RollResult} from "../../tables/rollResult";
 import {addList} from "../../tables/content/other/techLevelTable";
-import {themeMap} from "../../tables/content/themes/themes";
-import {generateThematicStatement} from "../../tables/content/themes/theme";
+import {themeMap} from "./themes";
+import {generateThematicStatement} from "./theme";
 import {RandomResult} from "../../tables/randomResult";
 import {ComparisonResult, RelationalOperator} from "../../tables/comparisonResult";
 import {genreToThemeTableMap} from "../../tables/content/genre/genreToThemeTable";
 import {genreToRealThemeMap} from "../../tables/content/genre/genreToRealThemeMap";
 import type {Table} from "../../tables/table";
 import {themeToRealStatementMap} from "../../tables/content/genre/themeToRealStatementMap";
+import {ThemeDto} from "./themeDto";
 
 export class GenreMixCreator extends BaseCreator {
     narrativeMedium: NarrativeMediumTypes = NarrativeMediumTypes.RPG;
@@ -122,8 +123,13 @@ export class GenreMixCreator extends BaseCreator {
             console.log(themeTable);
             let themeResult = this.tableManager.getTable(themeTable).withDice(this.dice).roll().combinedString;
 
-            if (!genreMix.themes.includes(themeResult)) {
-                genreMix.themes.push(themeResult);
+            if (!genreMix.themes.some(theme => theme.name === themeResult)) {
+                let themeDto = new ThemeDto();
+                let realTheme = themeMap[themeResult];
+                themeDto.name = themeResult;
+                themeDto.description = realTheme.description;
+                themeDto.sources = realTheme.sources;
+                genreMix.themes.push(themeDto);
                 return genreMix;
             }
 
@@ -137,7 +143,7 @@ export class GenreMixCreator extends BaseCreator {
     public addStatement(genreMix: GenreMix, themeName: string|null){
         if(!themeName){
             let randomThemesIndex = this.dice.rollInterval(0,genreMix.themes.length-1);
-            themeName = genreMix.themes[randomThemesIndex];
+            themeName = genreMix.themes[randomThemesIndex].name;
         }
         let theme = themeMap[themeName];
         let thematicStatement = generateThematicStatement(theme);
@@ -171,6 +177,7 @@ export class GenreMixCreator extends BaseCreator {
 
     private getThemesBy(genreMix: GenreMix, creationResult: CreationResult) {
         let themes: string[] = [];
+        let themeDtos: ThemeDto[] = [];
         let numberOfThemes = this.dice.rollInterval(3,5);
         let numberOfThemesResult = new RandomResult()
             .withDescription("random number for number of themes of a campaign 3-5")
@@ -215,9 +222,16 @@ export class GenreMixCreator extends BaseCreator {
             }
 
             let themeName = themeResult.combinedString;
+            let realTheme = themeMap[themeName];
+            let themeDto = new ThemeDto();
+            themeDto.name = themeName;
+            themeDto.description = realTheme.description;
+            themeDto.sources = realTheme.sources;
+            console.log("dto: ", themeDto);
 
             if (!themes.includes(themeName)) {
                 themes.push(themeName);
+                themeDtos.push(themeDto);
             }
         }
 
@@ -225,7 +239,7 @@ export class GenreMixCreator extends BaseCreator {
             console.warn("Maximum attempts reached while generating unique themes.");
         }
 
-        return themes;
+        return themeDtos;
     }
 
 

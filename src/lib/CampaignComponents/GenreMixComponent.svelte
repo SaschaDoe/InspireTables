@@ -11,6 +11,7 @@
     import { RefreshCcw } from 'lucide-svelte';
     import {getGenreFullName} from "../../core/entities/genre/genre";
     import OneTimeToolTip from "$lib/OneTimeToolTip.svelte";
+    import ThemeComponent from "$lib/CampaignComponents/ThemeComponent.svelte";
 
     export let genreMix: GenreMix = new GenreMix();
     let campaign = new Campaign();
@@ -168,36 +169,15 @@
                     <button on:click={addThemeFromGenreMix} class="bg-blue-500 hover:bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center focus:outline-none">
                         <span class="text-lg leading-none">+</span>
                     </button>
-
                 </div>
             </div>
             <div class="space-y-2 text-black">
                 {#each genreMix.themes as theme}
-                    <li class="bg-white p-2 rounded-lg shadow flex items-center justify-between">
-                        <span>{theme}</span>
-                        <div class="flex items-center">
-                            <div class="relative group mr-2">
-                                <button
-                                        on:click={() => addStatementFrom(theme)}
-                                        class="bg-blue-500 hover:bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center focus:outline-none"
-                                >
-                                    <span class="text-lg leading-none">+</span>
-                                </button>
-                                <OneTimeToolTip text="statement from theme"></OneTimeToolTip>
-                            </div>
-                            <div class="relative group">
-                                <button
-                                        on:click={() => addRealStatementFrom(theme)}
-                                        class="bg-orange-500 hover:bg-orange-600 text-white rounded-full w-6 h-6 flex items-center justify-center focus:outline-none"
-                                >
-                                    <span class="text-lg leading-none">+</span>
-                                </button>
-                                <OneTimeToolTip text="real statement"></OneTimeToolTip>
-
-
-                            </div>
-                        </div>
-                    </li>
+                    <ThemeComponent
+                            {theme}
+                            addStatementFrom={addStatementFrom}
+                            addRealStatementFrom={addRealStatementFrom}
+                    />
                 {/each}
             </div>
         </section>
@@ -206,22 +186,26 @@
     <section class="mt-4">
         <div class="flex items-center mb-2">
             <header class="text-xl font-semibold text-gray-700 mr-2">Statements</header>
-            <div class="relative group mr-2">
-                <button
-                        on:click={addStatementFromGenreMix}
-                        class="bg-blue-500 hover:bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center focus:outline-none"
-                >
-                    <span class="text-lg leading-none">+</span>
-                </button>
-                    <OneTimeToolTip text="generated statement from genre mix"></OneTimeToolTip>
+            <!-- Wrap buttons with OneTimeToolTip -->
+            <div class="mr-2">
+                <OneTimeToolTip text="generated statement from genre mix">
+                    <button
+                            on:click={addStatementFromGenreMix}
+                            class="bg-blue-500 hover:bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center focus:outline-none"
+                    >
+                        <span class="text-lg leading-none">+</span>
+                    </button>
+                </OneTimeToolTip>
             </div>
-            <div class="relative group">
-                <button
-                        on:click={addRealStatementFromGenreMix}
-                        class="bg-orange-500 hover:bg-orange-600 text-white rounded-full w-6 h-6 flex items-center justify-center focus:outline-none">
-                    <span class="text-lg leading-none">+</span>
-                </button>
-                <OneTimeToolTip text="real theme statement from genre mix"></OneTimeToolTip>
+            <div>
+                <OneTimeToolTip text="real theme statement from genre mix">
+                    <button
+                            on:click={addRealStatementFromGenreMix}
+                            class="bg-orange-500 hover:bg-orange-600 text-white rounded-full w-6 h-6 flex items-center justify-center focus:outline-none"
+                    >
+                        <span class="text-lg leading-none">+</span>
+                    </button>
+                </OneTimeToolTip>
             </div>
         </div>
         <div class="space-y-2 text-black">

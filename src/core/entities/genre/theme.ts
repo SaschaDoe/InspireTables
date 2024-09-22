@@ -11,7 +11,6 @@ export class Theme {
     connectors: string[] = [];
     outcomes: string[] = [];
     contexts: string[] = [];
-    statements: string[] = [];
 }
 
 export function generateThematicStatement(theme: Theme): string {

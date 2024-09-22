@@ -1,7 +1,7 @@
 import {describe, expect, test} from "vitest";
 import {mysteryTechLevelList} from "../genre/mystery/mysteryTechLevelList";
 import {UnknownTheme} from "./unknownTheme";
-import {generateThematicStatement} from "./theme";
+import {generateThematicStatement} from "../../../entities/genre/theme";
 
 describe('Unknown theme', () => {
     test('thematic statement', () => {
