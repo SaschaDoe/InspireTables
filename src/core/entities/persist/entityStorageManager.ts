@@ -65,7 +65,7 @@ export class EntityStorageManager<T extends Entity & Deletable> {
         const filePath = this.getFilePath();
        // console.log(this.entities)
         const jsonString = JSON.stringify(this.entities, null, 2);
-       // console.log(jsonString);
+        console.log(jsonString);
         await this.storageStrategy.saveFile(filePath, jsonString);
         this.notifySubscribers();
     }

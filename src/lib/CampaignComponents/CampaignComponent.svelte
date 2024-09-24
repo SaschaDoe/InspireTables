@@ -20,6 +20,7 @@
     import type {GlobalEntity} from "../../core/entities/profile/globalEntity";
     import type {Profile} from "../../core/entities/profile/profile";
     import GenreMixComponent from "$lib/CampaignComponents/GenreMixComponent.svelte";
+    import {TabEnum} from "../../routes/tabEnum";
 
     let globalEntity: GlobalEntity;
     let adventures: Adventure[] = [];
@@ -37,6 +38,9 @@
         await campaignCreator.generateWorld(campaign);
         console.log("Campaign in Profile: ", get(selectedProfileStore));
         console.log("World in campaign here: ", campaign)
+
+        let worldStore = await getStore('worldStore');
+        await worldStore.saveEntity(campaign.world);
 
         let campaignStore = await getStore('campaignStore');
         await campaignStore.saveEntity(campaign);
@@ -116,9 +120,9 @@
     async function addNewAdventure() {
         if (!campaign) return;
 
-        let newAdventure = new AdventureCreator(tableManager)
+        let adventure = await new AdventureCreator(tableManager)
             .create()
-            .getCreation() as Adventure;
+        let newAdventure = adventure.getCreation() as Adventure;
         adventures = [...adventures, newAdventure ];
         campaign.adventures = adventures;
         let adventureStore = await getStore('adventureStore');
@@ -155,7 +159,7 @@
     }
 
     function gotoProfile(){
-        changeTab(1);
+        changeTab(TabEnum.Profile);
     }
 
     let showTooltip = false;
@@ -250,11 +254,17 @@
                 </button>
             {:else}
                 <button
-                        on:click={() => changeTab(4)}
+                        on:click={() => changeTab(TabEnum.Entity)}
                         class="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200 text-lg font-bold mx-2"
                 >
                     Goto Entities
                 </button>
+                <ButtonComponent
+                        text="Goto World"
+                        color="bg-blue-500"
+                        hoverColor="bg-blue-600"
+                        onClick={() => changeTab(TabEnum.World)}
+                />
             {/if}
             <ButtonComponent
                     text="+"

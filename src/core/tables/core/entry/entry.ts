@@ -4,6 +4,7 @@ import {EntryPart} from "./entryPart";
 import {EntrySetting} from "./entrySetting";
 import {Interval} from "../../interval";
 import type {FunctionFactory} from "./functionFactory";
+import {EntryElement} from "../entryElement";
 
 export class Entry {
     public parts: EntryPart[] = [];
@@ -50,6 +51,13 @@ export class Entry {
         return this;
     }
 
+    withEntryElement(element: EntryElement, probability: number = 0){
+        this.withPart((new EntryPart()
+            .withElement(element)));
+        this.setting = new EntrySetting().withProbability(probability);
+        return this;
+    }
+
     get descriptionText(): string {
         return this.parts.map((part) => {
             let output: string;
@@ -57,6 +65,9 @@ export class Entry {
                 output = `{${part.input.title}}`;
             } else if (part.input instanceof FunctionEntry) {
                 output = `{${part.input.description}}`;
+            }
+            else if (part.input instanceof EntryElement){
+                output = part.input.name;
             } else {
                 output = part.input;
             }

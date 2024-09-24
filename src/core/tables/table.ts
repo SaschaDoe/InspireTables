@@ -5,6 +5,7 @@ import {FunctionEntry} from "./core/entry/functionEntry";
 import {EntryList} from "./core/list/entryList";
 import type {FunctionFactory} from "./core/entry/functionFactory";
 import {CreationResult} from "../entities/creationResult";
+import {EntryElement} from "./core/entryElement";
 
 export class Table {
     title: string = "";
@@ -39,6 +40,12 @@ export class Table {
     protected addProbabilityListWithWords(probabilityListWithWords: [string, string][]) {
         for (let input of probabilityListWithWords) {
             this.entryList.with(new Entry().withText(input[1]).withProbabilityAsWord(input[0]))
+        }
+    }
+
+    addFromElements(elements: EntryElement[]) {
+        for(let element of elements){
+            this.entryList.with(new Entry().withEntryElement(element));
         }
     }
 

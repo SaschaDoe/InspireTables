@@ -1,10 +1,11 @@
 import { Table } from "../../table";
 import { FunctionEntry } from "./functionEntry";
 import type { FunctionFactory } from "./functionFactory";
+import {EntryElement} from "../entryElement";
 
 export class EntryPart {
-    public input: string | Table | FunctionEntry = "";
-    public type: 'Text' | 'Table' | 'FunctionEntry' = 'Text';
+    public input: string | Table | EntryElement| FunctionEntry = "";
+    public type: 'Text' | 'Table' | 'EntryElement' | 'FunctionEntry' = 'Text';
 
     withText(text: string) {
         this.input = text;
@@ -36,5 +37,11 @@ export class EntryPart {
         }
 
         return part;
+    }
+
+    withElement(element: EntryElement) {
+        this.input = element;
+        this.type = 'EntryElement';
+        return this;
     }
 }

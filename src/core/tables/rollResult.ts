@@ -4,6 +4,7 @@ import type {CreationResult} from "../entities/creationResult";
 import {IntervalResult} from "./intervalResult";
 import type {Dice} from "./dice";
 import type {RandomResult} from "./randomResult";
+import {EntryElement} from "./core/entryElement";
 
 export class RollResult {
     entry: Entry = new Entry();
@@ -63,7 +64,9 @@ export class RollResult {
             let input = part.input;
             if (typeof input === 'string') {
                 parts.push(input);
-            } else {
+            }else if (input instanceof EntryElement){
+                parts.push(input.name);
+            }else{
                 const nestedResult = this.results[resultIndex++];
                 if (nestedResult) {
                     parts.push(nestedResult.combinedString);

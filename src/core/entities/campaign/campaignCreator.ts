@@ -35,15 +35,14 @@ export class CampaignCreator extends BaseCreator {
         return creationResult;
     }
 
-
-
     async generateWorld(campaign: Campaign){
-        let worldCreationResult = new WorldCreator(this.tableManager)
+        let worldCreationResult = await new WorldCreator(this.tableManager)
             .withGenreMix(campaign.genreMix)
             .create();
         campaign.world = worldCreationResult.getCreation() as World;
         let worldStore = await getStore('worldStore');
         await worldStore.saveEntity(campaign.world);
+        console.log("world after creation: ",campaign.world);
         await this.persist(campaign);
     }
 

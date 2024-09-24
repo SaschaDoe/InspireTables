@@ -11,6 +11,8 @@
 	import {GlobalEntity} from "../core/entities/profile/globalEntity";
 	import type {Profile} from "../core/entities/profile/profile";
 	import ProfileComponent from "$lib/ProfileComponents/ProfileComponent.svelte";
+	import WorldComponent from "$lib/01WorldComponents/WorldComponent.svelte";
+	import {TabEnum} from "./tabEnum";
 	let isDragging = false;
 	let initialX: number;
 	let initialWidthLeft: number;
@@ -105,26 +107,29 @@
 <div class="flex h-screen">
 	<div id="left-panel" class="w-1/2 border-r border-gray-300">
 		<TabGroup bind:selected={activeTab}>
-			<Tab class="text-blue-500" bind:group={tabSet} name="tab3" value={4}>Entities</Tab>
-			<Tab class="text-blue-500" bind:group={tabSet} name="tab4" value={5}>Tables</Tab>
+			<Tab class="text-blue-500" bind:group={tabSet} name="tab3" value={5}>Entities</Tab>
+			<Tab class="text-blue-500" bind:group={tabSet} name="tab4" value={6}>Tables</Tab>
 		</TabGroup>
 		<TabGroup bind:selected={activeTab}>
 			<Tab class="text-blue-500" bind:group={tabSet} name="tab1" value={0}>Start</Tab>
 			<Tab class="text-blue-500" bind:group={tabSet} name="tab1" value={1}>Profile</Tab>
 			<Tab class="text-blue-500" bind:group={tabSet} name="tab2" value={2}>Campaign</Tab>
 			<Tab class="text-blue-500" bind:group={tabSet} name="tab3" value={3}>Adventure</Tab>
+			<Tab class="text-blue-500" bind:group={tabSet} name="tab3" value={4}>World</Tab>
 			<svelte:fragment slot="panel">
-				{#if tabSet === 0}
+				{#if tabSet === TabEnum.Start}
 					<StartComponent {changeTab}></StartComponent>
-				{:else if tabSet === 1}
+				{:else if tabSet === TabEnum.Profile}
 					<ProfileComponent {changeTab}></ProfileComponent>
-				{:else if tabSet === 2}
+				{:else if tabSet === TabEnum.Compaign}
 					<CampaignComponent {changeTab}></CampaignComponent>
-				{:else if tabSet === 3}
+				{:else if tabSet === TabEnum.Adventure}
 					<AdventureComponent {changeTab}></AdventureComponent>
-				{:else if tabSet === 4}
+				{:else if tabSet === TabEnum.World}
+					<WorldComponent {changeTab}></WorldComponent>
+				{:else if tabSet === TabEnum.Entity}
 					<EntityMenu></EntityMenu>
-				{:else if tabSet === 5}
+				{:else if tabSet === TabEnum.Table}
 					<TableList></TableList>
 				{/if}
 			</svelte:fragment>

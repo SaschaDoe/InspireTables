@@ -33,7 +33,7 @@
 
     onMount(async () => {
         let tmpGlobal = get(selectedGlobalStore);
-        if(tmpGlobal !== null){
+        if(tmpGlobal){
             globalEntity = tmpGlobal;
         }else{
             globalEntity = new GlobalEntity();

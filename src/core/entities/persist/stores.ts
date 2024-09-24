@@ -4,15 +4,15 @@ import {get, writable} from "svelte/store";
 
 import type { StorageStrategy } from "./storageStrategy";
 import { BrowserStorageStrategy } from "./browserStorageStrategy";
-import { TauriStorageStrategy } from "./tauriStorageStrategy";
 import {tauri} from "@tauri-apps/api";
 import type {Campaign} from "../campaign/campaign";
-import type {Adventure} from "../adventure/adventure";
 import type {Profile} from "../profile/profile";
 import type {Table} from "../../tables/table";
 import type {GlobalEntity} from "../profile/globalEntity";
+import type {World} from "../world/world";
 
 export const tableUpdateStore = writable(0);
+export const selectedWorldStore = writable<World | null>(null);
 export const selectedProfileStore = writable<Profile | null>(null);
 export const selectedGlobalStore = writable<GlobalEntity | null>(null);
 export const selectedCampaignStore = writable<Campaign | null>(null);
@@ -32,10 +32,19 @@ export async function getSelectedCampaign(){
     return null;
 }
 
-export async function saveSelectedCampaign(campaign: Campaign){
-    selectedCampaignStore.set(campaign);
-    let campaignStore = await getStore('campaignStore');
-    await campaignStore.saveEntity(campaign);
+export async function saveSelectedCampaign(campaign: Campaign|null) {
+    if(campaign){
+        console.log("Save Campaign: ", campaign)
+        selectedCampaignStore.set(campaign);
+        let campaignStore = await getStore('campaignStore');
+        await campaignStore.saveEntity(campaign);
+    }
+}
+
+export async function saveSelectedWorld(world: World){
+    selectedWorldStore.set(world);
+    let worldStore = await getStore('worldStore');
+    await worldStore.saveEntity(world);
 }
 
 export async function getSelectedProfile(){

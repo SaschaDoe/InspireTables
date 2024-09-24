@@ -171,12 +171,18 @@ import {TrustThemeStatementTable} from "./content/themes/trustThemeStatementTabl
 import {TruthThemeStatementTable} from "./content/themes/truthThemeStatementTable";
 import {UnknownThemeStatementTable} from "./content/themes/unknownThemeStatementTable";
 import {WhatReallyMattersThemeStatementTable} from "./content/themes/whatReallyMattersThemeStatementTable";
+import {SphereFormTable, SphereFormTableName} from "./content/world/sphereFormTable";
 
 export const IllnessCategoryName = "Illness";
 export const OtherCategoryName = "Other";
 
 export function allCategories(): Category[] {
     let allCategories: Category[] = [];
+
+    let worldCategory = new Category()
+        .withName("World")
+        .withTable(new SphereFormTable());
+    allCategories.push(worldCategory);
 
     let characterCategory = new Category()
         .withName("Character")
